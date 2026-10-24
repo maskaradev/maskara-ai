@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<!-- subject:start -->
+# RLMask
 
-## Getting Started
+> 미국 RL Eval·데이터 회사가 돈 내고 쓸 서비스 (출제 · AttentionX)
 
-First, run the development server:
+## One-liner
+
+민감정보를 가상 페르소나로 대체해, 개인정보를 보호하면서 데이터의 활용 가치를 유지하는 서비스.
+
+## 서비스 소개
+
+기존 데이터 마스킹은 민감정보를 가리거나 삭제하는 과정에서 분석에 필요한 맥락까지 잃을 수 있습니다.
+이 서비스는 얼굴, 이름, 연령 등의 개인정보를 **일관성 있는 가상 페르소나**로 대체합니다.
+원본의 노출을 줄이면서 데이터의 주요 특성과 관계를 보존해, AI 학습·분석·테스트에 활용할 수 있도록 돕습니다.
+
+## 문제
+
+- 은행, 병원 같은 기관의 데이터는 **외부로 반출할 수 없습니다.** 데이터가 각 기관 안에만 묶여 있습니다.
+- 금융 AI 회사는 모델을 학습시키려면 이 데이터가 필요하지만 받을 방법이 없습니다.
+- 기관이 데이터를 판매할 때도 마스킹이 필수인데, 기존 마스킹은 학습에 필요한 맥락까지 지워 버립니다.
+
+## 제공 방식: 온프레미스 설치형
+
+데이터를 밖으로 가져올 수 없으니 **우리가 데이터가 있는 곳으로 들어갑니다.**
+
+1. 고객사 DB에 **읽기 전용(READ only)** 으로 접근합니다.
+2. 고객사 내부 환경에서 비식별화합니다. 원본은 고객사 밖으로 나가지 않습니다.
+3. 비식별화된 데이터만 반출해 학습·판매에 사용합니다.
+
+- **로컬 LLM**으로 동작합니다. 외부 API를 호출하지 않아 폐쇄망에서도 쓸 수 있습니다.
+- SaaS가 아니라 **설치형 프로그램을 판매**합니다.
+- 고객사 환경에 맞춘 설치와 지속적인 업데이트가 필요하므로, **배포 엔지니어링(deploy engineering)** 역량이 사업의 핵심입니다.
+
+## 타깃 고객
+
+- 학습용 데이터를 필요로 하는 미국 회사 (RL Eval·데이터 회사)
+- 데이터를 보유했지만 반출할 수 없는 기관 (은행, 병원)
+- 이 기관들의 데이터로 모델을 학습시켜야 하는 금융 AI 회사
+<!-- subject:end -->
+
+---
+
+## 개발
+
+> 위 내용은 [`planning/subject.md`](planning/subject.md)에서 자동으로 가져옵니다. README가 아니라 `subject.md`를 수정하세요.
+> `pnpm dev` 실행 시 자동 동기화되며, 수동으로는 `pnpm sync:readme`를 실행합니다.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev        # http://localhost:3000
+pnpm build
+pnpm lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Stack:** Next.js · TypeScript · Tailwind CSS · shadcn/ui (Radix) · Lucide · React Query · Zustand · Zod · next-themes
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| 경로 | 내용 |
+|---|---|
+| `src/app/` | 페이지와 루트 레이아웃 |
+| `src/components/` | 앱 사이드바, 테마 토글, shadcn/ui 컴포넌트 |
+| `src/lib/mock-data.ts` | 임시 목업 데이터 |
+| `planning/` | 기획 문서, 발표자료 (`slides/index.html`), 슬라이드 키트 |
