@@ -6,7 +6,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { Providers } from "@/components/providers"
 import { Tutorial } from "@/components/tutorial"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import "./globals.css"
+import "../globals.css"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
-const TITLE = "Maskara | Mask data locally"
+const TITLE = "Maskara: mask data locally"
 
 // The title is rendered by the root layout rather than set in `metadata`: Next re-renders metadata for
 // each route, so on every client navigation <title> left the DOM for a few ms and the tab showed the URL.
