@@ -10,7 +10,6 @@ export const en = {
     jobs: "Jobs",
     workspace: "Workspace",
     datasets: "Datasets",
-    analysis: "Analysis",
     toggleTheme: "Toggle theme",
   },
   status: { pending: "Pending", running: "Running", succeeded: "Succeeded", failed: "Failed", skipped: "Skipped" },
@@ -461,13 +460,17 @@ export const en = {
         title: "Live job view",
         body: "Watch the agents find PII in images and documents, then paint synthetic replacements over it.",
       },
-      analyze: {
-        title: "Open the analysis",
-        body: "When the run completes, an Analyze button appears here. Click it to explore the masked output.",
+      resultsTab: {
+        title: "See the results",
+        body: "When the run completes, open the Results tab to browse the masked tables, notes, images and documents.",
       },
-      analysis: {
-        title: "Analytics",
-        body: "Query the masked data, or switch to Compare to put it side by side with the original — aggregates should stay the same.",
+      qualityTab: {
+        title: "Privacy & utility",
+        body: "Next, open Privacy & utility to check how well the masking protects people and preserves the data.",
+      },
+      quality: {
+        title: "Privacy & utility report",
+        body: "Privacy checks show that no original identifiers leaked and what was detected; utility metrics show the masked data still analyzes the same.",
       },
     },
   },

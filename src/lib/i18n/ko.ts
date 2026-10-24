@@ -7,7 +7,6 @@ export const ko: Messages = {
     jobs: "작업",
     workspace: "워크스페이스",
     datasets: "데이터셋",
-    analysis: "분석",
     toggleTheme: "테마 전환",
   },
   status: { pending: "대기", running: "실행 중", succeeded: "성공", failed: "실패", skipped: "건너뜀" },
@@ -453,13 +452,17 @@ export const ko: Messages = {
         title: "라이브 작업 화면",
         body: "에이전트가 이미지와 문서에서 개인정보를 찾아내고 합성 값으로 덮어 그리는 과정을 실시간으로 볼 수 있습니다.",
       },
-      analyze: {
-        title: "분석 열기",
-        body: "실행이 끝나면 여기에 분석 버튼이 나타납니다. 클릭해서 마스킹 결과를 살펴보세요.",
+      resultsTab: {
+        title: "결과 보기",
+        body: "실행이 끝나면 결과 탭을 열어 마스킹된 테이블·노트·이미지·문서를 살펴보세요.",
       },
-      analysis: {
-        title: "분석",
-        body: "마스킹된 데이터로 쿼리하거나, 비교로 전환해 원본과 나란히 볼 수 있습니다. 집계 결과는 그대로 유지되어야 합니다.",
+      qualityTab: {
+        title: "개인정보 & 유용성",
+        body: "이어서 개인정보 & 유용성 탭을 열어 마스킹이 개인을 얼마나 잘 보호하고 데이터 가치를 지키는지 확인하세요.",
+      },
+      quality: {
+        title: "개인정보 & 유용성 리포트",
+        body: "개인정보 점검은 원본 식별자가 새어 나가지 않았는지와 무엇이 탐지됐는지, 유용성 지표는 마스킹 후에도 분석 결과가 그대로인지 보여줍니다.",
       },
     },
   },

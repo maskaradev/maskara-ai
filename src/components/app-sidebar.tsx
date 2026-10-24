@@ -1,11 +1,6 @@
 "use client"
 
-import {
-  ChartColumn,
-  Database,
-  ListChecks,
-  type LucideIcon,
-} from "lucide-react"
+import { Database, ListChecks, type LucideIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -32,7 +27,6 @@ type NavItem = { title: keyof Messages["sidebar"]; icon?: LucideIcon; href?: str
 
 const mainNav: NavItem[] = [
   { title: "jobs", icon: ListChecks, href: "/jobs" },
-  { title: "analysis", icon: ChartColumn, href: "/analysis" },
 ]
 
 function isActive(pathname: string, href?: string) {
@@ -120,7 +114,7 @@ function Nav({ pathname }: { pathname: string }) {
   )
 }
 
-/** Demo walkthrough order: datasets → jobs → analysis. */
+/** Demo walkthrough order: datasets → jobs. */
 function StepBadge({ step }: { step: number }) {
   return (
     <SidebarMenuBadge className="right-1.5 size-5 min-w-0 rounded-full bg-sidebar-accent p-0 text-[11px] text-muted-foreground peer-data-active/menu-button:bg-primary peer-data-active/menu-button:text-primary-foreground!">

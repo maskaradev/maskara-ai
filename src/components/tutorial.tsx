@@ -42,7 +42,7 @@ const DATASETS = /^\/datasets$/
 const NEW_JOB = /^\/jobs\/new$/
 const JOB_PAGE = /^\/jobs(\/(?!new$)[^/]+)?$/
 
-// Mirrors the demo path: datasets → samples → new job → AI roles → run → pipeline → live wall → analysis.
+// Mirrors the demo path: datasets → samples → new job → AI roles → run → pipeline → live wall → results → privacy & utility.
 const STEPS: TourStep[] = [
   { id: "welcome" },
   { id: "navDatasets", target: '[data-tour="nav-datasets"]', placement: "right", action: true },
@@ -80,18 +80,19 @@ const STEPS: TourStep[] = [
     noOverlay: true,
   },
   { id: "pipeline", target: '[data-tour="pipeline-graph"]', route: JOB_PAGE, path: "/jobs", wait: 10_000 },
-  { id: "liveWall", target: '[data-tour="live-wall"]', route: JOB_PAGE, path: "/jobs", placement: "top", wait: 15_000, fallback: "analyze" },
+  { id: "liveWall", target: '[data-tour="live-wall"]', route: JOB_PAGE, path: "/jobs", placement: "top", wait: 15_000, fallback: "resultsTab" },
   {
-    id: "analyze",
-    target: '[data-tour="run-actions"]',
+    id: "resultsTab",
+    target: '[data-tour="tab-results"]',
     route: JOB_PAGE,
     path: "/jobs",
-    placement: "bottom-end",
-    // Only appears once the run has output.
-    action: '[data-tour="run-actions"] a[href^="/analysis/"]',
+    placement: "bottom-start",
+    // Clickable only once the run has finished.
+    action: '[data-tour="run-tabs"][data-done] [data-tour="tab-results"]',
     noOverlay: true,
   },
-  { id: "analysis", target: '[data-tour="analysis-source"]', route: /^\/analysis/, path: "/analysis", wait: 10_000, fallback: "analyze" },
+  { id: "qualityTab", target: '[data-tour="tab-quality"]', route: JOB_PAGE, path: "/jobs", placement: "bottom-start", action: true },
+  { id: "quality", target: '[data-tour="quality-view"]', route: JOB_PAGE, path: "/jobs", placement: "top", wait: 5_000 },
 ]
 
 const indexOf = (id: StepId) => STEPS.findIndex((s) => s.id === id)
@@ -232,7 +233,12 @@ export function Tutorial() {
   const controls = useMemo(
     () => ({
       next() {
-        if (current.action) actionElement(current)?.click()
+        if (current.action) {
+          const el = actionElement(current)
+          // Radix tabs switch on mousedown, which a programmatic click() doesn't send.
+          if (el?.role === "tab") el.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, button: 0 }))
+          el?.click()
+        }
         else if (index === STEPS.length - 1) setDismissed(true)
         else setIndex(index + 1)
       },

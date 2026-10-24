@@ -112,10 +112,15 @@ export function RunView({ run }: { run: Run }) {
       <PipelineGraph run={run} now={now} selected={focus} onSelect={selectStage} />
 
       <Tabs value={tab} onValueChange={setTab}>
-        <TabsList>
+        {/* data-done lets the tour wait for the run to finish before pointing at the result tabs. */}
+        <TabsList data-tour="run-tabs" data-done={run.status !== "running" || undefined}>
           <TabsTrigger value="pipeline">{r.tabs.flow}</TabsTrigger>
-          <TabsTrigger value="results">{r.tabs.results}</TabsTrigger>
-          <TabsTrigger value="validation">{r.tabs.quality}</TabsTrigger>
+          <TabsTrigger value="results" data-tour="tab-results">
+            {r.tabs.results}
+          </TabsTrigger>
+          <TabsTrigger value="validation" data-tour="tab-quality">
+            {r.tabs.quality}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="pipeline" className="flex flex-col gap-4 pt-2">
           <LiveWall run={run} />
@@ -139,7 +144,7 @@ export function RunView({ run }: { run: Run }) {
         <TabsContent value="results" className="pt-2">
           <ResultsView run={run} />
         </TabsContent>
-        <TabsContent value="validation" className="pt-2">
+        <TabsContent value="validation" className="pt-2" data-tour="quality-view">
           <QualityView run={run} />
         </TabsContent>
       </Tabs>

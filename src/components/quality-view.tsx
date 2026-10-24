@@ -309,9 +309,9 @@ export function QualityView({ run }: { run: Run }) {
   }
   return (
     <div className="flex flex-col gap-4">
+      {run.report && <PrivacySection run={run} />}
       {utility && <UtilitySection utility={utility} />}
       {run.report?.spans && <DetectionSection report={run.report.spans} />}
-      {run.report && <PrivacySection run={run} />}
     </div>
   )
 }
