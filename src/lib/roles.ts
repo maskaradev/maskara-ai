@@ -93,7 +93,3 @@ export function inferRole(column: string, rows: Row[]): ColumnRole {
   if (/(note|text|comment|description|message|summary)/.test(h) || avgLen > 60) return "free_text"
   return "keep"
 }
-
-export function inferRoles(columns: string[], rows: Row[]): Record<string, ColumnRole> {
-  return Object.fromEntries(columns.map((c) => [c, inferRole(c, rows)]))
-}

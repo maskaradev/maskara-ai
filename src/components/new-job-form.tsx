@@ -237,7 +237,7 @@ export function NewJobForm() {
                             else rowRefs.current.delete(key)
                           }}
                           className={cn(
-                            "-mx-2 grid grid-cols-[1fr_180px] items-center gap-3 rounded-md border-b px-2 py-1.5 transition-all duration-300 last:border-0",
+                            "grid grid-cols-[1fr_180px] items-center gap-3 rounded-md border px-2.5 py-1.5 transition-all duration-300",
                             active === key && "bg-muted ring-1 ring-foreground/20",
                           )}
                         >

@@ -1,7 +1,6 @@
 import Papa from "papaparse"
 
 import { randomId } from "@/lib/hash"
-import { inferRoles } from "@/lib/roles"
 import type { AnswerKey, Dataset, Row, SpanAnswerKey, Table } from "@/lib/types"
 
 export const UPLOAD_LIMITS = { bytesPerFile: 1_000_000, totalRows: 1_000 }
@@ -14,7 +13,8 @@ export function parseCsv(name: string, csv: string): Table {
   const parsed = Papa.parse<Row>(csv.replace(/\r\n?/g, "\n").trim(), { header: true, skipEmptyLines: true })
   if (parsed.errors.length) throw new Error(`${name}: ${parsed.errors[0].message}`)
   const columns = parsed.meta.fields ?? []
-  return { name, columns, rows: parsed.data, roles: inferRoles(columns, parsed.data) }
+  // Every column starts as kept; the user or the AI picks treatments on the new-job screen.
+  return { name, columns, rows: parsed.data, roles: Object.fromEntries(columns.map((c) => [c, "keep"])) }
 }
 
 export function toCsv(columns: string[], rows: Row[]): string {
