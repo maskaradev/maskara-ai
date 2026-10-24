@@ -14,11 +14,13 @@ import { cn } from "@/lib/utils"
 
 export type Phase = "original" | "identify" | "generate"
 
-const PHASES: Phase[] = ["original", "identify", "generate"]
+export const PHASES: Phase[] = ["original", "identify", "generate"]
+
+const rank = (p: Phase) => PHASES.indexOf(p)
 
 export function phaseOf(item: ImageItem, until: Phase = "generate"): Phase {
   const phase = item.status === "generated" ? "generate" : item.status === "identified" ? "identify" : "original"
-  return PHASES[Math.min(PHASES.indexOf(phase), PHASES.indexOf(until))]
+  return PHASES[Math.min(rank(phase), rank(until))]
 }
 
 type Layers = { raster: Raster; repainted: HTMLImageElement | null }
@@ -149,21 +151,21 @@ function drawBar(ctx: CanvasRenderingContext2D, pos: number, vertical: boolean, 
 const SKY = "56,189,248"
 const EMERALD = "16,185,129"
 
-/** One step of the animation; `frame` draws time `t` (ms) and returns true when the step is over. */
-type Step = (t: number) => boolean
+/** One step of the animation: `draw` paints time `t` in [0, duration] ms; played backwards, t runs down. */
+type Step = { duration: number; draw: (t: number) => void }
 
 /** original → identify: the scan bar drops the layout boxes and PII marks as it passes them. */
 function scanStep(ctx: CanvasRenderingContext2D, item: ImageItem, layers: Layers, layout: boolean): Step {
   const { width, height } = ctx.canvas
   const vertical = item.kind === "photo"
   const duration = vertical ? 1100 : 1300
-  return (t) => {
+  const draw = (t: number) => {
     const p = Math.min(1, t / duration)
     const pos = ease(p) * (vertical ? width : height) * 1.04
     drawPhase(ctx, item, "identify", layers, layout, (b) => (vertical ? b.x0 : b.y0) <= pos)
     if (p < 1) drawBar(ctx, pos, vertical, SKY)
-    return p >= 1
   }
+  return { duration, draw }
 }
 
 /** identify → generate for photos: a vertical bar wipes the generated image over the identified one. */
@@ -172,7 +174,7 @@ function sweepStep(ctx: CanvasRenderingContext2D, item: ImageItem, layers: Layer
   const before = offscreen(ctx, (c) => drawPhase(c, item, "identify", layers, layout))
   const after = offscreen(ctx, (c) => drawPhase(c, item, "generate", layers, layout))
   const duration = 1600
-  return (t) => {
+  const draw = (t: number) => {
     const p = Math.min(1, t / duration)
     const x = ease(p) * width
     ctx.clearRect(0, 0, width, height)
@@ -184,8 +186,8 @@ function sweepStep(ctx: CanvasRenderingContext2D, item: ImageItem, layers: Layer
     ctx.drawImage(after, 0, 0)
     ctx.restore()
     if (p < 1) drawBar(ctx, x, true, EMERALD)
-    return p >= 1
   }
+  return { duration, draw }
 }
 
 /** identify → generate for documents: blanks fill with persona values one by one, typed left to right. */
@@ -198,7 +200,7 @@ function typeStep(ctx: CanvasRenderingContext2D, item: ImageItem, layers: Layers
   const glow = 450
   const identified = offscreen(ctx, (c) => drawPhase(c, item, "identify", layers, layout))
   const unit = Math.max(1.5, width / 600)
-  return (t) => {
+  const draw = (t: number) => {
     // The layout boxes fade out first, then the fill starts.
     if (t < fade) {
       ctx.clearRect(0, 0, width, height)
@@ -207,7 +209,7 @@ function typeStep(ctx: CanvasRenderingContext2D, item: ImageItem, layers: Layers
       ctx.globalAlpha = 1 - t / fade
       ctx.drawImage(identified, 0, 0)
       ctx.globalAlpha = 1
-      return false
+      return
     }
     const tt = t - fade
     const k = Math.floor(tt / per)
@@ -250,28 +252,40 @@ function typeStep(ctx: CanvasRenderingContext2D, item: ImageItem, layers: Layers
       ctx.fillRect(Math.min(x, cur.x0 + reach), cur.y0, unit * 1.5, cur.y1 - cur.y0)
       ctx.restore()
     }
-    return tt >= n * per + glow
   }
+  return { duration: fade + n * per + glow, draw }
 }
 
 const HOLD_MS = 450
 
 /**
  * Canvas for one media item that animates whenever the item moves forward a phase (and, with
- * `animateOnMount`, plays original → current phase once on mount). `steps` adds the phase strip.
+ * `animateOnMount`, plays from the original (or the given phase) to the current one on mount).
+ * A controlled `phase` animates there from whatever is shown, backwards too. `steps` adds the phase strip.
  */
 export function LiveCanvas({
   item,
+  phase: requested,
   animateOnMount = false,
+  animate = true,
+  stagger = false,
   layout = true,
   steps = false,
   until = "generate",
   className,
   canvasClassName,
   onCanvas,
+  onPhase,
+  onSettled,
 }: {
   item: ImageItem
-  animateOnMount?: boolean
+  /** Show this phase (capped at how far the item is) instead of following the item. */
+  phase?: Phase
+  animateOnMount?: boolean | Phase
+  /** False draws every change straight away. */
+  animate?: boolean
+  /** Queue behind other staggered canvases that start in the same tick (a batch of items finishing together). */
+  stagger?: boolean
   /** Show the OCR word and layout boxes in the identify phase. */
   layout?: boolean
   steps?: boolean
@@ -280,17 +294,26 @@ export function LiveCanvas({
   className?: string
   canvasClassName?: string
   onCanvas?: (canvas: HTMLCanvasElement) => void
+  /** The phase on screen, including the ones an animation passes through. */
+  onPhase?: (phase: Phase) => void
+  /** The canvas has reached its target phase (may fire again when the item redraws). */
+  onSettled?: () => void
 }) {
   const m = useMessages().agents
   const ref = useRef<HTMLCanvasElement>(null)
   const latest = useRef(item)
+  const callbacks = useRef({ onPhase, onSettled })
   const shown = useRef<{ id: string; phase: Phase } | null>(null)
   const anim = useRef<{ phase: Phase; cancel: () => void } | null>(null)
   const generation = useRef(0)
   const [displayed, setDisplayed] = useState<Phase>("original")
+  const reached = phaseOf(item, until)
+  const target = requested ? PHASES[Math.min(rank(requested), rank(reached))] : reached
+  const controlled = !!requested
 
   useEffect(() => {
     latest.current = item
+    callbacks.current = { onPhase, onSettled }
   })
 
   useEffect(
@@ -305,7 +328,7 @@ export function LiveCanvas({
   )
 
   useEffect(() => {
-    const phase = phaseOf(item, until)
+    const phase = target
     const prev = shown.current?.id === item.id ? shown.current.phase : null
     // An animation towards this phase is already playing; it draws the latest item when it ends.
     if (anim.current && anim.current.phase === phase && prev === phase) return
@@ -314,9 +337,13 @@ export function LiveCanvas({
     const gen = ++generation.current
 
     let from: Phase | null = null
-    if (!reducedMotion()) {
-      if (prev && PHASES.indexOf(phase) > PHASES.indexOf(prev)) from = prev
-      else if (!prev && animateOnMount && phase !== "original") from = "original"
+    if (animate && !reducedMotion()) {
+      // The item only moves forward on its own; going back is for a controlled phase (a picked tab).
+      if (prev) from = rank(phase) > rank(prev) || (controlled && phase !== prev) ? prev : null
+      else if (animateOnMount) {
+        const start = animateOnMount === true ? "original" : animateOnMount
+        if (rank(start) < rank(phase)) from = start
+      }
     }
     shown.current = { id: item.id, phase }
 
@@ -332,8 +359,13 @@ export function LiveCanvas({
       },
     }
     if (from) anim.current = handle
+    const show = (p: Phase) => {
+      setDisplayed(p)
+      callbacks.current.onPhase?.(p)
+    }
 
-    load(item, phase).then(
+    // A backwards animation starts from the later phase, so load what that one needs.
+    load(item, from && rank(from) > rank(phase) ? from : phase).then(
       (layers) => {
         const canvas = ref.current
         if (cancelled || gen !== generation.current || !canvas) return
@@ -345,50 +377,56 @@ export function LiveCanvas({
         const ctx = canvas.getContext("2d")!
         const finish = () => {
           if (anim.current === handle) anim.current = null
-          const now = latest.current.id === item.id && phaseOf(latest.current, until) === phase ? latest.current : item
+          const now = latest.current.id === item.id && phaseOf(latest.current, until) === phaseOf(item, until) ? latest.current : item
           drawPhase(ctx, now, phase, layers, layout)
-          setDisplayed(phase)
+          show(phase)
           onCanvas?.(canvas)
+          callbacks.current.onSettled?.()
         }
         if (!from) return finish()
 
         drawPhase(ctx, item, from, layers, layout)
-        setDisplayed(from)
-        // original → identify → generate, one step per phase boundary, with a short hold between.
-        const path = PHASES.slice(PHASES.indexOf(from), PHASES.indexOf(phase) + 1)
-        const makers = path.slice(1).map((to) =>
-          to === "identify" ? scanStep : item.kind === "document" ? typeStep : sweepStep,
-        )
+        show(from)
+        // One step per phase boundary, with a short hold between; backwards plays the same steps in reverse.
+        const forward = rank(phase) > rank(from)
+        const crossed = PHASES.slice(Math.min(rank(from), rank(phase)) + 1, Math.max(rank(from), rank(phase)) + 1)
+        const path = (forward ? crossed : crossed.toReversed()).map((boundary) => ({
+          make: boundary === "identify" ? scanStep : item.kind === "document" ? typeStep : sweepStep,
+          to: forward ? boundary : PHASES[rank(boundary) - 1],
+        }))
         let index = 0
         const run = () => {
           if (cancelled) return
-          if (index >= makers.length) return finish()
-          const step = makers[index](ctx, item, layers, layout)
-          setDisplayed(path[index + 1])
+          if (index >= path.length) return finish()
+          const step = path[index].make(ctx, item, layers, layout)
+          show(path[index].to)
           const t0 = performance.now()
           const frame = (now: number) => {
             if (cancelled) return
-            if (step(now - t0)) {
+            const t = Math.min(step.duration, now - t0)
+            step.draw(forward ? t : step.duration - t)
+            if (t >= step.duration) {
               index++
-              timer = setTimeout(run, index < makers.length ? HOLD_MS : 0)
+              timer = setTimeout(run, index < path.length ? HOLD_MS : 0)
             } else raf = requestAnimationFrame(frame)
           }
           raf = requestAnimationFrame(frame)
         }
-        timer = setTimeout(run, claimDelay())
+        timer = setTimeout(run, stagger ? claimDelay() : 0)
       },
       () => {
         if (anim.current === handle) anim.current = null
+        callbacks.current.onSettled?.()
       },
     )
-  }, [item, animateOnMount, layout, until, onCanvas])
+  }, [item, target, controlled, animate, animateOnMount, stagger, layout, until, onCanvas])
 
   return (
     <div className={cn("relative", className)}>
       <canvas ref={ref} className={cn("block h-auto w-full rounded border bg-white", canvasClassName)} />
       {steps && (
         <div className="pointer-events-none absolute top-2 left-2 flex items-center gap-1 rounded-full bg-black/60 px-1.5 py-1 text-[11px] font-semibold text-white/50 backdrop-blur-sm">
-          {PHASES.slice(0, PHASES.indexOf(until) + 1).map((p, i) => (
+          {PHASES.slice(0, rank(until) + 1).map((p, i) => (
             <span key={p} className="flex items-center gap-1">
               {i > 0 && <span className="text-white/40">→</span>}
               <span

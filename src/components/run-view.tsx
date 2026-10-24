@@ -1,14 +1,15 @@
 "use client"
 
-import { RotateCw } from "lucide-react"
+import { ChartColumn, RotateCw } from "lucide-react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useMemo, useState } from "react"
+import { useState } from "react"
 
 import { AgentPanel } from "@/components/agent-panel"
 import { DbAgentPanel } from "@/components/db-agent-panel"
 import { LiveWall } from "@/components/live-wall"
 import { PipelineGraph, stageDuration } from "@/components/pipeline-graph"
-import { QualityView, utilityFor } from "@/components/quality-view"
+import { QualityView } from "@/components/quality-view"
 import { ResultsView } from "@/components/results-view"
 import { StatusBadge, formatDuration } from "@/components/status-badge"
 import { Button } from "@/components/ui/button"
@@ -16,28 +17,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useNow } from "@/hooks/use-now"
 import { startRun } from "@/lib/pipeline/run"
 import { useMessages } from "@/lib/i18n"
-import { precision, recall } from "@/lib/pii/span-eval"
 import { STAGE_BY_ID, isExternal } from "@/lib/pipeline/stages"
 import { useAppStore } from "@/lib/store"
 import type { Run, StageId } from "@/lib/types"
 import { cn } from "@/lib/utils"
-
-function SummaryCard({ label, value, detail, tone }: { label: string; value: React.ReactNode; detail?: React.ReactNode; tone?: "good" | "bad" | "warn" }) {
-  return (
-    <div
-      className={cn(
-        "flex flex-col gap-1 rounded-xl border p-4",
-        tone === "good" && "border-emerald-500/30",
-        tone === "bad" && "border-red-500/40 bg-red-500/[0.03]",
-        tone === "warn" && "border-amber-500/40",
-      )}
-    >
-      <div className="text-xs text-muted-foreground">{label}</div>
-      <div className="text-xl font-semibold tracking-tight">{value}</div>
-      {detail && <div className="text-xs text-muted-foreground">{detail}</div>}
-    </div>
-  )
-}
 
 function StageDetail({ run, id, now }: { run: Run; id: StageId; now: number }) {
   const m = useMessages()
@@ -95,8 +78,13 @@ export function RunView({ run }: { run: Run }) {
   const failedStage = (Object.keys(run.stages) as StageId[]).find((id) => run.stages[id].status === "failed")
   const runningStage = (Object.keys(run.stages) as StageId[]).find((id) => run.stages[id].status === "running")
   const focus = selected ?? failedStage ?? runningStage ?? "identify"
-  const leaks = run.report?.leaks.length
-  const utility = useMemo(() => utilityFor(run, m.utility), [run, m.utility])
+  const [tab, setTab] = useState("pipeline")
+
+  // Stage details live in the flow tab, so picking a stage brings it forward.
+  function selectStage(id: StageId) {
+    setSelected(id)
+    setTab("pipeline")
+  }
 
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-5">
@@ -107,62 +95,38 @@ export function RunView({ run }: { run: Run }) {
             <StatusBadge status={run.status} />
           </div>
           <p className="text-xs text-muted-foreground">
-            {run.datasetName} · {r.started(new Date(run.startedAt).toLocaleString(m.localeTag))} · {run.id}
+            {run.datasetName} · {r.started(new Date(run.startedAt).toLocaleString(m.localeTag))} · {formatDuration((run.finishedAt ?? now) - run.startedAt)} · {run.id}
           </p>
         </div>
-        <Button variant="outline" size="sm" disabled={!datasetExists || run.status === "running"} onClick={() => router.push(`/jobs/${startRun(run.datasetId)}`)}>
-          <RotateCw />
-          {r.runAgain}
-        </Button>
+        <div className="flex gap-2">
+          {run.output && (
+            <Button variant="outline" size="sm" asChild>
+              <Link href={`/analysis/${run.id}`}>
+                <ChartColumn />
+                {r.analyze}
+              </Link>
+            </Button>
+          )}
+          <Button variant="outline" size="sm" disabled={!datasetExists || run.status === "running"} onClick={() => router.push(`/jobs/${startRun(run.datasetId)}`)}>
+            <RotateCw />
+            {r.runAgain}
+          </Button>
+        </div>
       </div>
 
       {run.error && (
         <div className="rounded-lg border border-red-500/40 bg-red-500/5 px-4 py-3 text-sm text-red-700 dark:text-red-300">{run.error}</div>
       )}
 
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
-        <SummaryCard
-          label={r.status}
-          value={r.statusValue[run.status]}
-          detail={formatDuration((run.finishedAt ?? now) - run.startedAt)}
-          tone={run.status === "failed" ? "bad" : run.status === "succeeded" ? "good" : undefined}
-        />
-        <SummaryCard label={r.rowsRead} value={run.rowsProcessed} detail={r.fromLocalDb} />
-        <SummaryCard label={r.valuesReplaced} value={run.entitiesReplaced} detail={r.valuesReplacedDetail} />
-        <SummaryCard
-          label={r.leakCheck}
-          value={leaks === undefined ? "—" : r.leaks(leaks)}
-          detail={
-            run.report?.spans
-              ? r.spanKey(Math.round((recall(run.report.spans) ?? 0) * 100), Math.round((precision(run.report.spans) ?? 0) * 100))
-              : run.report?.media
-                ? r.mediaKey(run.report.media.found, run.report.media.total)
-                : r.afterLanes
-          }
-          tone={leaks === undefined ? undefined : leaks === 0 ? "good" : "bad"}
-        />
-        <SummaryCard
-          label={r.utility}
-          value={utility ? r.utilityValue(utility.passed, utility.total) : "—"}
-          detail={r.utilityDetail}
-          tone={!utility ? undefined : utility.passed === utility.total ? "good" : "bad"}
-        />
-        <SummaryCard
-          label={r.apiCalls}
-          value={run.apiCalls}
-          detail={r.apiCallsDetail(run.cacheHits)}
-          tone="warn"
-        />
-      </div>
+      <PipelineGraph run={run} now={now} selected={focus} onSelect={selectStage} />
 
-      <Tabs defaultValue="pipeline">
+      <Tabs value={tab} onValueChange={setTab}>
         <TabsList>
           <TabsTrigger value="pipeline">{r.tabs.flow}</TabsTrigger>
           <TabsTrigger value="results">{r.tabs.results}</TabsTrigger>
           <TabsTrigger value="validation">{r.tabs.quality}</TabsTrigger>
         </TabsList>
         <TabsContent value="pipeline" className="flex flex-col gap-4 pt-2">
-          <PipelineGraph run={run} now={now} selected={focus} onSelect={setSelected} />
           <LiveWall run={run} />
           {(focus === "identify" || focus === "generate") && (
             <section className="rounded-xl border p-4">

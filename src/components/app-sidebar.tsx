@@ -1,13 +1,14 @@
 "use client"
 
 import {
+  ChartColumn,
   Database,
   ListChecks,
   Plus,
   UserRoundCog,
-  Users,
   type LucideIcon,
 } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Suspense } from "react"
@@ -24,9 +25,6 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import { LanguageToggle } from "@/components/language-toggle"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -36,10 +34,7 @@ type NavItem = { title: keyof Messages["sidebar"]; icon?: LucideIcon; href?: str
 
 const mainNav: NavItem[] = [
   { title: "jobs", icon: ListChecks, href: "/jobs" },
-]
-
-const personaNav: NavItem[] = [
-  { title: "personaLibrary", href: "/personas" },
+  { title: "analysis", icon: ChartColumn, href: "/analysis" },
 ]
 
 function isActive(pathname: string, href?: string) {
@@ -56,7 +51,8 @@ export function AppSidebar() {
     <Sidebar variant="inset">
       <SidebarHeader className="px-4 pt-5 pb-3">
         <div className="text-sm font-semibold">RLMask</div>
-        <div className="text-xs text-muted-foreground">AttentionX</div>
+        <Image src="/brand/attentionx-dark.png" alt="AttentionX" width={838} height={126} className="mt-1 h-3.5 w-auto self-start opacity-70 dark:hidden" />
+        <Image src="/brand/attentionx-white.png" alt="AttentionX" width={838} height={126} className="mt-1 hidden h-3.5 w-auto self-start opacity-70 dark:block" />
       </SidebarHeader>
 
       {/* The pathname is unknown while prerendering dynamic routes; render inactive links until it resolves. */}
@@ -120,29 +116,6 @@ function Nav({ pathname }: { pathname: string }) {
                   <Plus />
                 </Link>
               </SidebarMenuAction>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <Users />
-                <span>{m.personas}</span>
-              </SidebarMenuButton>
-              <SidebarMenuSub>
-                {personaNav.map((item) => (
-                  <SidebarMenuSubItem key={item.title}>
-                    {item.href ? (
-                      <SidebarMenuSubButton asChild isActive={isActive(pathname, item.href)}>
-                        <Link href={item.href}>
-                          <span>{m[item.title]}</span>
-                        </Link>
-                      </SidebarMenuSubButton>
-                    ) : (
-                      <SidebarMenuSubButton>
-                        <span>{m[item.title]}</span>
-                      </SidebarMenuSubButton>
-                    )}
-                  </SidebarMenuSubItem>
-                ))}
-              </SidebarMenuSub>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>
