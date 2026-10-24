@@ -121,7 +121,7 @@ export function AiGoalDialog({
             <Button variant="ghost" onClick={() => onOpenChange(false)}>
               {t.cancel}
             </Button>
-            <Button onClick={onRun}>
+            <Button onClick={onRun} data-tour="ai-start">
               <Sparkles />
               {t.goalRun}
               <kbd className="ml-1 rounded bg-primary-foreground/15 px-1 font-sans text-[10.5px]">{t.goalShortcut}</kbd>

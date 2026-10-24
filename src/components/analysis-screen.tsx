@@ -395,7 +395,7 @@ function Analysis({ run }: { run: Run & { output: MaskedTable[] } }) {
             </Select>
           </label>
         )}
-        <div className="flex flex-col gap-1 text-xs text-muted-foreground">
+        <div className="flex flex-col gap-1 text-xs text-muted-foreground" data-tour="analysis-source">
           {a.source}
           <div className="flex rounded-lg border p-0.5">
             {(["masked", "original", "compare"] as Mode[]).map((s) => (

@@ -102,7 +102,6 @@ export type MaskedCell =
   | { kind: "value"; value: string; original: string }
   | { kind: "text"; segments: Segment[]; original: string; agent?: { status: AgentItemStatus; error?: string } }
   | { kind: "image"; original: string; item: number; /** PDFs: page items follow `item` in run.images. */ pages?: number }
-  | { kind: "audio"; original: string; transcript: Segment[]; originalTranscript: string }
 
 export type MaskedTable = {
   name: string
@@ -117,7 +116,6 @@ export type StageId =
   | "persona"
   | "text_identify"
   | "text_generate"
-  | "audio_transcribe"
   | "identify"
   | "generate"
   | "doc_identify"
@@ -194,7 +192,7 @@ export type ImageItem = {
   words: Box[]
   /** Layout blocks from the OCR server. */
   blocks?: LayoutBlock[]
-  /** Photo with its faces repainted as the persona by the GPU repaint model (URL of the cached PNG). */
+  /** Photo with its faces repainted as the persona by the GPU repaint model ("repaint:<id>", kept in IndexedDB). */
   repainted?: string
   regions: ImageRegion[]
   ocr: Segment[]

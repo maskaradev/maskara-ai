@@ -4,9 +4,9 @@ import { Download } from "lucide-react"
 import { useCallback, useRef, useState } from "react"
 
 import { ImageCanvas } from "@/components/image-canvas"
-import { LiveCanvas } from "@/components/live-canvas"
+import { LiveCanvas, PHASE_DOT, PHASES, phaseOf, type Phase } from "@/components/live-canvas"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useMessages } from "@/lib/i18n"
 import type { ImageItem, ImageItemStatus, MediaKind, Run } from "@/lib/types"
 import { cn } from "@/lib/utils"
@@ -29,8 +29,9 @@ export function AgentPanel({ run, agent, lane }: { run: Run; agent: "identify" |
   const a = m.agents
   const images = (run.images ?? []).filter((img) => img.kind === lane)
   const [selected, setSelected] = useState(0)
-  const [showLayout, setShowLayout] = useState(true)
-  const [showOriginal, setShowOriginal] = useState(false)
+  // A picked phase tab (null follows the item); `shown` is what the canvas is on, mid-animation too.
+  const [pick, setPick] = useState<Phase | null>(null)
+  const [shown, setShown] = useState<Phase>("original")
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const onCanvas = useCallback((c: HTMLCanvasElement) => (canvasRef.current = c), [])
 
@@ -40,6 +41,7 @@ export function AgentPanel({ run, agent, lane }: { run: Run; agent: "identify" |
   const item = images[Math.min(selected, images.length - 1)]
   const firstRegions = item.regions.filter((r) => r.first)
   const faces = item.regions.filter((r) => r.visual === "face").length
+  const reached = phaseOf(item, agent)
 
   function download() {
     const url = canvasRef.current?.toDataURL("image/png")
@@ -59,7 +61,11 @@ export function AgentPanel({ run, agent, lane }: { run: Run; agent: "identify" |
             <li key={img.id} className="w-48 shrink-0 lg:w-auto">
               <button
                 type="button"
-                onClick={() => setSelected(i)}
+                onClick={() => {
+                  setSelected(i)
+                  setPick(null)
+                  setShown("original")
+                }}
                 className={cn(
                   "flex w-full cursor-pointer gap-2.5 rounded-lg border p-2 text-left transition-colors hover:bg-muted",
                   i === selected && "border-foreground/25 bg-muted",
@@ -106,22 +112,21 @@ export function AgentPanel({ run, agent, lane }: { run: Run; agent: "identify" |
           </div>
           {ready(item, agent) && (
             <div className="flex items-center gap-3">
-              {agent === "identify" ? (
-                <label className="flex items-center gap-1.5 text-xs">
-                  <Checkbox checked={showLayout} onCheckedChange={(v) => setShowLayout(v === true)} />
-                  {a.showLayout}
-                </label>
-              ) : (
-                <>
-                  <label className="flex items-center gap-1.5 text-xs">
-                    <Checkbox checked={showOriginal} onCheckedChange={(v) => setShowOriginal(v === true)} />
-                    {a.compareOriginal}
-                  </label>
-                  <Button size="sm" variant="outline" onClick={download}>
-                    <Download />
-                    {a.download}
-                  </Button>
-                </>
+              <Tabs value={shown} onValueChange={(v) => setPick(v as Phase)}>
+                <TabsList>
+                  {PHASES.slice(0, PHASES.indexOf(agent) + 1).map((p) => (
+                    <TabsTrigger key={p} value={p} disabled={PHASES.indexOf(p) > PHASES.indexOf(reached)} className="px-2.5">
+                      <span className={cn("size-1.5 rounded-full", PHASE_DOT[p])} />
+                      {a.phases[p]}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+              {agent === "generate" && (
+                <Button size="sm" variant="outline" onClick={download} disabled={shown !== "generate"}>
+                  <Download />
+                  {a.download}
+                </Button>
               )}
             </div>
           )}
@@ -129,23 +134,16 @@ export function AgentPanel({ run, agent, lane }: { run: Run; agent: "identify" |
 
         {ready(item, agent) ? (
           <>
-            {agent === "generate" && showOriginal ? (
-              <div className="grid gap-2 xl:grid-cols-2">
-                <ImageCanvas item={item} mode="original" />
-                <ImageCanvas item={item} mode="generate" onCanvas={onCanvas} />
-              </div>
-            ) : (
-              // Plays original → identified (→ generated) whenever an item is opened or finishes.
-              <LiveCanvas
-                key={item.id}
-                item={item}
-                animateOnMount
-                steps
-                until={agent}
-                layout={agent === "generate" || showLayout}
-                onCanvas={onCanvas}
-              />
-            )}
+            {/* Plays original → identified (→ generated) whenever an item is opened or finishes; the tabs move it back and forth. */}
+            <LiveCanvas
+              key={item.id}
+              item={item}
+              phase={pick ?? undefined}
+              animateOnMount
+              until={agent}
+              onCanvas={onCanvas}
+              onPhase={setShown}
+            />
             <div className="overflow-x-auto rounded-lg border">
               <table className="w-full text-[12.5px]">
                 <thead className="bg-muted/50 text-left text-[11px] text-muted-foreground">

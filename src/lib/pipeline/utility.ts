@@ -99,7 +99,6 @@ function totalVariation(a: Map<string, number>, b: Map<string, number>) {
 function richSegments(cell: MaskedCell, images: ImageItem[]): Segment[] {
   if (cell.kind === "text") return cell.segments
   if (cell.kind === "image") return images.slice(cell.item, cell.item + (cell.pages ?? 1)).flatMap((item) => item.ocr)
-  if (cell.kind === "audio") return cell.transcript
   return []
 }
 
@@ -288,7 +287,7 @@ export function computeUtility(
   for (const t of tables) {
     for (const r of t.rows) {
       for (const cell of Object.values(r)) {
-        if (cell.kind !== "text" && cell.kind !== "audio") continue
+        if (cell.kind !== "text") continue
         for (const s of segmentsOf(cell)) {
           const len = s.entity ? s.entity.original.length : s.text.length
           total += len

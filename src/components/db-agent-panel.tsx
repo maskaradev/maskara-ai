@@ -66,14 +66,7 @@ function DbCell({ cell, role, agent, showOriginal }: { cell: MaskedCell; role: C
       )
     }
     case "text": {
-      if (!cell.agent) {
-        return (
-          <div className="flex flex-col gap-1 text-muted-foreground">
-            <span className="text-[10px] font-medium uppercase">→ {a.otherLane.transcript}</span>
-            <span className="line-clamp-2">{cell.original}</span>
-          </div>
-        )
-      }
+      if (!cell.agent) return <span>{cell.original}</span>
       const { status, error } = cell.agent
       if (agent === "identify" && (status === "identified" || status === "generated")) {
         return <HighlightedText segments={cell.segments} mode="original" className="text-[12.5px]" />
@@ -99,10 +92,9 @@ function DbCell({ cell, role, agent, showOriginal }: { cell: MaskedCell; role: C
       )
     }
     case "image":
-    case "audio":
       return (
         <div className="flex flex-col text-muted-foreground">
-          <span className="text-[10px] font-medium uppercase">→ {a.otherLane[cell.kind]}</span>
+          <span className="text-[10px] font-medium uppercase">→ {a.imageLane}</span>
           <span className="truncate text-[11px]">{cell.original.split("/").at(-1)}</span>
         </div>
       )

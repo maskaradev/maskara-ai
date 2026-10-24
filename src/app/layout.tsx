@@ -1,8 +1,10 @@
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { Geist, Geist_Mono } from "next/font/google"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { Providers } from "@/components/providers"
+import { Tutorial } from "@/components/tutorial"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import "./globals.css"
 
@@ -17,7 +19,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "RLMask",
+  title: "RLMask | Synthetic persona masking for AI training data",
   description:
     "Replace sensitive data with consistent synthetic personas while keeping it useful for AI training.",
 }
@@ -31,10 +33,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full">
         <Providers>
-          <SidebarProvider>
+          <SidebarProvider className="md:h-svh md:overflow-hidden">
             <AppSidebar />
-            <SidebarInset className="min-w-0">{children}</SidebarInset>
+            <SidebarInset className="min-w-0 md:overflow-y-auto">{children}</SidebarInset>
           </SidebarProvider>
+          {/* Reads the pathname, which is unknown while prerendering dynamic routes. */}
+          <Suspense>
+            <Tutorial />
+          </Suspense>
         </Providers>
       </body>
     </html>

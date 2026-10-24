@@ -1,6 +1,6 @@
 "use client"
 
-import { Bot, Cloud, Database, FlaskConical, Laptop } from "lucide-react"
+import { Bot, Cloud, Database, Laptop } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 
 import { StatusBadge, formatDuration } from "@/components/status-badge"
@@ -25,7 +25,6 @@ const LOCATION_ICON: Record<StageLocation, typeof Laptop> = {
   "external-api": Cloud,
   "gpu-repaint": Cloud,
   "llm-api": Cloud,
-  mock: FlaskConical,
 }
 
 const EDGE_COLOR: Record<StageState["status"], string> = {
@@ -71,7 +70,7 @@ export function PipelineGraph({
   const scale = fit ? Math.max(MIN_SCALE, Math.min(1, available / outer)) : 1
 
   return (
-    <div className="relative">
+    <div className="relative" data-tour="pipeline-graph">
       {available < outer && (
         <div className="absolute top-2 right-2 z-10 flex overflow-hidden rounded-md border bg-card text-[11px]">
           {[true, false].map((isFit) => (
@@ -145,7 +144,6 @@ export function PipelineGraph({
                     s.status === "running" && "border-sky-500/60",
                     s.status === "failed" && "border-red-500/60",
                     s.status === "skipped" && "border-dashed opacity-60",
-                    def.mock && "border-dashed bg-card/60",
                     def.agent && "border-violet-500/50 shadow-sm",
                   )}
                   style={{ left: 16 + x(def.col), top: y(def.lane), width: W, height: H }}
@@ -157,9 +155,6 @@ export function PipelineGraph({
                   <div className="flex items-center gap-1.5 truncate text-[13px] leading-tight font-semibold">
                     {def.agent && <Bot className="size-3.5 shrink-0 text-violet-600 dark:text-violet-400" />}
                     <span className="truncate">{m.stages[def.id].label}</span>
-                    {def.mock && (
-                      <span className="shrink-0 rounded border border-dashed px-1 text-[9.5px] font-medium text-muted-foreground">{m.mock}</span>
-                    )}
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="h-1 flex-1 overflow-hidden rounded bg-muted">

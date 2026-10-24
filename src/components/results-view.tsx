@@ -5,7 +5,6 @@ import { useState } from "react"
 
 import { HighlightedText } from "@/components/highlighted-text"
 import { ImageCanvas } from "@/components/image-canvas"
-import { MaskedVoiceButton } from "@/components/masked-voice-button"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toCsv } from "@/lib/datasets"
@@ -13,7 +12,7 @@ import { useMessages } from "@/lib/i18n"
 import { segmentsToText } from "@/lib/mask"
 import type { ImageItem, MaskedCell, MaskedTable, Run, Segment } from "@/lib/types"
 
-const RICH = new Set(["free_text", "transcript", "image", "audio"])
+const RICH = new Set(["free_text", "transcript", "image"])
 const PAGE = 25
 
 function exportValue(cell: MaskedCell): string {
@@ -24,8 +23,6 @@ function exportValue(cell: MaskedCell): string {
       return segmentsToText(cell.segments)
     case "image":
       return "[masked image]"
-    case "audio":
-      return "[masked audio]"
   }
 }
 
@@ -45,7 +42,11 @@ function ValueCell({ cell }: { cell: MaskedCell }) {
   return (
     <div className="flex flex-col">
       <span className={changed ? "font-medium" : undefined}>{cell.value}</span>
-      {changed && <span className="text-[11px] text-muted-foreground line-through">{cell.original}</span>}
+      {changed && (
+        <span aria-hidden className="text-[11px] text-muted-foreground blur-[3px] select-none">
+          {cell.original}
+        </span>
+      )}
     </div>
   )
 }
@@ -123,8 +124,7 @@ function RecordCards({ table, images }: { table: MaskedTable; images: ImageItem[
   const m = useMessages().results
   const [limit, setLimit] = useState(10)
   const simple = table.columns.filter((c) => !RICH.has(table.roles[c]))
-  const hasAudio = table.columns.some((c) => table.roles[c] === "audio")
-  const rich = table.columns.filter((c) => RICH.has(table.roles[c]) && !(hasAudio && table.roles[c] === "transcript"))
+  const rich = table.columns.filter((c) => RICH.has(table.roles[c]))
 
   return (
     <div className="flex flex-col gap-4">
@@ -182,26 +182,6 @@ function RecordCards({ table, images }: { table: MaskedTable; images: ImageItem[
                     ) : (
                       <span className="text-xs text-muted-foreground">{m.notProcessed}</span>
                     )
-                  }
-                />
-              )
-            }
-            if (cell.kind === "audio") {
-              return (
-                <Compare
-                  key={c}
-                  label={`${c} · ${m.speech}`}
-                  original={
-                    <div className="flex flex-col gap-2">
-                      <audio controls src={cell.original} className="h-8 w-full" />
-                      <HighlightedText segments={cell.transcript} mode="original" />
-                    </div>
-                  }
-                  masked={
-                    <div className="flex flex-col gap-2">
-                      <MaskedVoiceButton script={segmentsToText(cell.transcript)} />
-                      <HighlightedText segments={cell.transcript} mode="masked" />
-                    </div>
                   }
                 />
               )

@@ -16,6 +16,13 @@ export type Phase = "original" | "identify" | "generate"
 
 export const PHASES: Phase[] = ["original", "identify", "generate"]
 
+/** Colour dot for each phase in phase tabs. */
+export const PHASE_DOT: Record<Phase, string> = {
+  original: "bg-foreground/40",
+  identify: "bg-sky-500",
+  generate: "bg-emerald-500",
+}
+
 const rank = (p: Phase) => PHASES.indexOf(p)
 
 export function phaseOf(item: ImageItem, until: Phase = "generate"): Phase {
@@ -26,7 +33,7 @@ export function phaseOf(item: ImageItem, until: Phase = "generate"): Phase {
 type Layers = { raster: Raster; repainted: HTMLImageElement | null }
 
 function load(item: ImageItem, phase: Phase): Promise<Layers> {
-  const repaint = phase === "generate" && item.repainted ? loadImage(item.repainted) : null
+  const repaint = phase === "generate" && item.repainted ? loadImage(item.repainted).catch(() => null) : null
   return Promise.all([loadRaster(item), repaint]).then(([raster, repainted]) => ({ raster, repainted }))
 }
 

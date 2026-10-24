@@ -4,7 +4,7 @@ import { Maximize2, Play, RotateCcw } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import { ITEM_STYLE } from "@/components/agent-panel"
-import { LiveCanvas, PHASES, phaseOf, type Phase } from "@/components/live-canvas"
+import { LiveCanvas, PHASE_DOT, PHASES, phaseOf, type Phase } from "@/components/live-canvas"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -22,12 +22,6 @@ const RUSH_MS = 350
 const RUSH_AT = 4
 
 const rank = (p: Phase) => PHASES.indexOf(p)
-
-const PHASE_DOT: Record<Phase, string> = {
-  original: "bg-foreground/40",
-  identify: "bg-sky-500",
-  generate: "bg-emerald-500",
-}
 
 type Spot = { id: string; from: Phase; to: Phase; n: number }
 
@@ -178,7 +172,7 @@ export function LiveWall({ run }: { run: Run }) {
       : null
 
   return (
-    <section className="flex flex-col gap-3 rounded-xl border p-4">
+    <section className="flex flex-col gap-3 rounded-xl border p-4" data-tour="live-wall">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="relative flex size-2">

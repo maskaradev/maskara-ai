@@ -1,15 +1,9 @@
-import { createHash } from "node:crypto"
-import { mkdir, readFile, writeFile } from "node:fs/promises"
-import { join } from "node:path"
-
-import { REPAINT_DIR } from "@/lib/face/repaint-cache"
-
 // Proxy to the on-prem face repaint model on the GPU box (Funnel path /face-inpaint → :8200): POST /v1/repaint, multipart image + persona
 // (+ prompt) → the whole image as PNG with every face repainted as that persona. The same persona
 // always gets the same face, so a patient looks the same in every photo.
 //
-// Repainted images are too big for localStorage, so they're cached on disk here and the run only keeps
-// their URL (GET /api/faces/repaint/<id>).
+// Nothing is kept here: the PNG goes straight back to the browser, which keeps it in IndexedDB
+// (lib/face/repaint-store.ts). Serverless hosts like Vercel have no writable disk anyway.
 
 const DEFAULT_URL = "https://gx10-a4ea.tail0fa1f7.ts.net:8443/face-inpaint"
 const TIMEOUT_MS = 180_000
@@ -42,18 +36,11 @@ export async function POST(request: Request) {
   if (!(file instanceof Blob) || !persona) return Response.json({ error: "Expected multipart fields: file, persona." }, { status: 400 })
   if (file.size > MAX_BYTES) return Response.json({ error: "Image is larger than 20 MB." }, { status: 413 })
 
-  const bytes = Buffer.from(await file.arrayBuffer())
-  const id = createHash("sha256").update(bytes).update(`\0${persona}\0${prompt}`).digest("hex").slice(0, 32)
-  const path = join(REPAINT_DIR, `${id}.png`)
-  const url = `/api/faces/repaint/${id}`
-  const cached = await readFile(path).then(() => true, () => false)
-  if (cached) return Response.json({ url, cached: true })
-
   const base = (process.env.FACE_REPAINT_URL || DEFAULT_URL).replace(/\/+$/, "")
   const down = await reachable(base)
   if (down) return Response.json({ error: `Face repaint server at ${base} is unreachable (${down}).` }, { status: 502 })
   const body = new FormData()
-  body.append("image", new Blob([bytes], { type: file.type || "image/png" }), file instanceof File && file.name ? file.name : "image.png")
+  body.append("image", file, file instanceof File && file.name ? file.name : "image.png")
   body.append("persona", persona)
   if (prompt) body.append("prompt", prompt)
   let res: Response
@@ -67,13 +54,10 @@ export async function POST(request: Request) {
   if (!res.ok) return Response.json({ error: `Face repaint error ${res.status}: ${(await res.text()).slice(0, 300)}` }, { status: 502 })
   if (!res.headers.get("content-type")?.startsWith("image/")) return Response.json({ error: "Face repaint did not return an image." }, { status: 502 })
 
-  await mkdir(REPAINT_DIR, { recursive: true })
-  await writeFile(path, Buffer.from(await res.arrayBuffer()))
-  return Response.json({
-    url,
-    cached: false,
-    faces: Number(res.headers.get("x-faces") ?? NaN),
-    seed: res.headers.get("x-seed"),
-    elapsedMs: Number(res.headers.get("x-elapsed-ms") ?? NaN),
-  })
+  const headers = new Headers({ "Content-Type": res.headers.get("content-type")!, "Cache-Control": "no-store" })
+  for (const name of ["x-faces", "x-seed", "x-elapsed-ms"]) {
+    const value = res.headers.get(name)
+    if (value) headers.set(name, value)
+  }
+  return new Response(res.body, { headers })
 }

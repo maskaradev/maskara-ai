@@ -22,7 +22,6 @@ import {
   streetCore,
 } from "@/lib/mask"
 import { CITIES, normalizeSex, shiftIsoDate } from "@/lib/personas"
-import { mockDetect } from "@/lib/pipeline/mock-detector"
 import { isPdf, pdfPageCount } from "@/lib/pipeline/pdf"
 import { emptyStages } from "@/lib/pipeline/stages"
 import { computeUtility } from "@/lib/pipeline/utility"
@@ -276,7 +275,6 @@ async function execute(runId: string, dataset: Dataset) {
     type MediaCell = { cell: Cell; first: number; count: number }
     const photoCells: MediaCell[] = []
     const docCells: MediaCell[] = []
-    const audioCells: (Cell & { transcriptColumn: string | null })[] = []
 
     await stage("scan", async (p) => {
       p.setTotal(tables.length)
@@ -284,13 +282,12 @@ async function execute(runId: string, dataset: Dataset) {
         const counts: Record<string, number> = {}
         t.columns.forEach((c) => (counts[t.roles[c]] = (counts[t.roles[c]] ?? 0) + 1))
         p.log(`${t.name}: ${Object.entries(counts).map(([role, n]) => `${n} ${role}`).join(", ")}`)
-        const transcriptColumn = colsWithRole(t, "transcript")[0] ?? null
         const label = (row: Row, ri: number) => row[t.columns[0]] || `${t.name}#${ri + 1}`
         t.rows.forEach((row, ri) => {
           const key = rowKey(t, row)
-          for (const c of colsWithRole(t, "free_text")) if (row[c]?.trim()) textCells.push({ table: ti, row: ri, column: c, rowKey: key, label: label(row, ri) })
+          // Transcripts are text like any other; speech recognition is not part of the MVP, so recordings are redacted.
+          for (const c of [...colsWithRole(t, "free_text"), ...colsWithRole(t, "transcript")]) if (row[c]?.trim()) textCells.push({ table: ti, row: ri, column: c, rowKey: key, label: label(row, ri) })
           for (const c of colsWithRole(t, "image")) if (row[c]) imageCells.push({ table: ti, row: ri, column: c, rowKey: key, label: label(row, ri) })
-          for (const c of colsWithRole(t, "audio")) if (row[c]) audioCells.push({ table: ti, row: ri, column: c, rowKey: key, label: label(row, ri), transcriptColumn })
         })
         p.tick()
       })
@@ -317,8 +314,7 @@ async function execute(runId: string, dataset: Dataset) {
       }
       const pageTotal = docCells.reduce((n, d) => n + d.count, 0)
       p.log(
-        `Work: ${photoCells.length} photos, ${docCells.length} PDFs (${pageTotal} pages) and ${textCells.length} free-text cells for the agents, ` +
-          `${audioCells.length} recordings (mock-up)`,
+        `Work: ${photoCells.length} photos, ${docCells.length} PDFs (${pageTotal} pages) and ${textCells.length} free-text cells for the agents`,
       )
       update((r) => ({ ...r, images: imageItems }))
 
@@ -329,13 +325,13 @@ async function execute(runId: string, dataset: Dataset) {
           for (const c of t.columns) {
             const v = row[c] ?? ""
             const role = t.roles[c]
-            if (!v || !["free_text", "transcript", "image", "audio"].includes(role)) out[c] = { kind: "value", value: v, original: v }
+            if (v && role === "audio") out[c] = { kind: "value", value: "[REDACTED]", original: v }
+            else if (!v || !["free_text", "transcript", "image"].includes(role)) out[c] = { kind: "value", value: v, original: v }
             else if (role === "image") {
               const media = [...photoCells, ...docCells].find(({ cell: x }) => x.table === ti && x.row === ri && x.column === c)
               out[c] = { kind: "image", original: mediaUrl(dataset, v), item: media?.first ?? -1, ...(media && media.count > 1 ? { pages: media.count } : {}) }
             }
-            else if (role === "audio") out[c] = { kind: "audio", original: mediaUrl(dataset, v), transcript: [], originalTranscript: "" }
-            else out[c] = { kind: "text", segments: [{ text: v }], original: v, ...(role === "free_text" && v.trim() ? { agent: { status: "pending" as const } } : {}) }
+            else out[c] = { kind: "text", segments: [{ text: v }], original: v, ...(v.trim() ? { agent: { status: "pending" as const } } : {}) }
           }
           output[ti].rows.push(out)
         }),
@@ -370,32 +366,6 @@ async function execute(runId: string, dataset: Dataset) {
       p.log(`${ctx.personas.size - before} new personas; ${before} reused from earlier runs`)
     })
 
-    const mockContext = (key: string | null) => ({
-      patientName: key ? (ctx.patients.get(key)?.name ?? null) : null,
-      providers: providerNames,
-    })
-
-    // Mock-up lane: uses the transcript column instead of speech recognition.
-    const audioStub = async () => {
-      if (!audioCells.length) return skip("audio_transcribe", "No audio columns.")
-      await stage("audio_transcribe", (p) => {
-        p.setTotal(audioCells.length)
-        p.log("Mock-up: uses the provided transcript column and the rule-based detector. No API calls.")
-        audioCells.forEach((cell) => {
-          if (!cell.transcriptColumn) throw new Error("No transcript column. Speech recognition is not part of the MVP.")
-          const transcript = tables[cell.table].rows[cell.row][cell.transcriptColumn] ?? ""
-          const entities = mockDetect(transcript, mockContext(cell.rowKey))
-          const result = maskText(ctx, transcript, entities, cell.rowKey)
-          recordText(result, entities, cell.label)
-          const row = output[cell.table].rows[cell.row]
-          const audio = row[cell.column] as Extract<MaskedCell, { kind: "audio" }>
-          row[cell.column] = { ...audio, transcript: result.segments, originalTranscript: transcript }
-          row[cell.transcriptColumn] = { kind: "text", segments: result.segments, original: transcript }
-          p.tick()
-        })
-      })
-    }
-
     // Text-DB lane: identification agent (schema roles + LLM) -> generation agent (mapping table).
     const textEntities: (DetectedEntity[] | null)[] = []
     const textSpans: (EntitySpan[] | null)[] = []
@@ -420,7 +390,8 @@ async function execute(runId: string, dataset: Dataset) {
               setCell(cell, { kind: "text", segments: [{ text }], original: text, agent: { status: "identifying" } })
               publishText()
               try {
-                const entities = await detect(text, detectContext(cell.rowKey, "clinical_text"))
+                const source = tables[cell.table].roles[cell.column] === "transcript" ? "transcript" : "clinical_text"
+                const entities = await detect(text, detectContext(cell.rowKey, source))
                 const spans = locateEntities(text, entities)
                 textEntities[i] = entities
                 textSpans[i] = spans
@@ -738,8 +709,7 @@ async function execute(runId: string, dataset: Dataset) {
       })
     const photoLane = afterText(identifyAgent(), generateAgent)
     const docLane = afterText(identifyDocs(), generateDocs)
-    const audioLane = textLane.then(audioStub)
-    firstFailure(await Promise.allSettled([textLane, photoLane, docLane, audioLane]))
+    firstFailure(await Promise.allSettled([textLane, photoLane, docLane]))
 
     let report: ValidationReport | undefined
     await stage("validate", (p) => {
@@ -803,8 +773,6 @@ function residualText(cell: MaskedCell, images: ImageItem[]): string {
       return untouched(cell.segments)
     case "image":
       return untouched(images.slice(cell.item, cell.item + (cell.pages ?? 1)).flatMap((item) => item.ocr))
-    case "audio":
-      return untouched(cell.transcript)
   }
 }
 
@@ -839,7 +807,7 @@ function validate(
     let total = 0
     for (const [record, key] of Object.entries(dataset.answerKey)) {
       const found = (mediaEntities.get(record) ?? []).map((e) => normalize(e.text)).filter((e) => e.length >= 2)
-      // Audio runs on the mock-up lane, so only the image half of the answer key is scored.
+      // Recordings are redacted rather than transcribed, so only the image half of the answer key is scored.
       for (const value of key.image) {
         total++
         const v = normalize(value)

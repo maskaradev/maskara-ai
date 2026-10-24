@@ -27,8 +27,8 @@ export function ImageCanvas({
 
   useEffect(() => {
     let cancelled = false
-    // Generated photos take their faces from the repainted image when the GPU repaint model produced one.
-    const repaint = mode === "generate" && item.repainted ? loadImage(item.repainted) : null
+    // Generated photos take their faces from the repainted image when there is one (else paintRegions blanks them).
+    const repaint = mode === "generate" && item.repainted ? loadImage(item.repainted).catch(() => null) : null
     Promise.all([loadRaster(item), repaint]).then(([img, repainted]) => {
       const canvas = ref.current
       if (cancelled || !canvas) return

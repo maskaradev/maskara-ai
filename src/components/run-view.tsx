@@ -98,7 +98,7 @@ export function RunView({ run }: { run: Run }) {
             {run.datasetName} · {r.started(new Date(run.startedAt).toLocaleString(m.localeTag))} · {formatDuration((run.finishedAt ?? now) - run.startedAt)} · {run.id}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2" data-tour="run-actions">
           {run.output && (
             <Button variant="outline" size="sm" asChild>
               <Link href={`/analysis/${run.id}`}>

@@ -1,3 +1,4 @@
+import { getRepaint, putRepaint, REPAINT_PREFIX } from "@/lib/face/repaint-store"
 import { hash53 } from "@/lib/hash"
 import { renderPdfPage } from "@/lib/pipeline/pdf"
 import type { Box, FaceBox, ImageItem, ImageRegion, LayoutBlock, LayoutKind, OcrDocument, OcrWord, Point, VisualKind } from "@/lib/types"
@@ -8,14 +9,25 @@ export type Raster = HTMLImageElement | HTMLCanvasElement
 export const rasterSize = (r: Raster) =>
   r instanceof HTMLImageElement ? { width: r.naturalWidth, height: r.naturalHeight } : { width: r.width, height: r.height }
 
+/** Loads a URL, or a "repaint:<id>" reference to a repainted photo kept in IndexedDB. */
 export async function loadImage(url: string): Promise<HTMLImageElement> {
+  let src = url
+  if (url.startsWith(REPAINT_PREFIX)) {
+    const png = await getRepaint(url.slice(REPAINT_PREFIX.length))
+    if (!png) throw new Error(`Could not load ${url}`)
+    src = URL.createObjectURL(png)
+  }
   const img = new Image()
   img.crossOrigin = "anonymous"
-  await new Promise<void>((resolve, reject) => {
-    img.onload = () => resolve()
-    img.onerror = () => reject(new Error(`Could not load ${url}`))
-    img.src = url
-  })
+  try {
+    await new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve()
+      img.onerror = () => reject(new Error(`Could not load ${url}`))
+      img.src = src
+    })
+  } finally {
+    if (src !== url) URL.revokeObjectURL(src)
+  }
   return img
 }
 
@@ -100,19 +112,27 @@ export async function ocrAroundFaces(img: HTMLImageElement, faces: FaceBox[], na
 }
 
 /**
- * Repaints every face in a photo as the persona (on-prem GPU model, through /api/faces/repaint, which
- * caches the result). Returns the URL of the repainted image.
+ * Repaints every face in a photo as the persona (on-prem GPU model, through /api/faces/repaint) and keeps
+ * the result in IndexedDB, keyed by photo + persona + prompt. Returns a "repaint:<id>" reference for loadImage.
  */
 export async function repaintFaces(src: string, persona: string, prompt: string): Promise<string> {
   const file = await fetch(src).then((r) => r.blob())
+  const key = new Blob([file, `\0${persona}\0${prompt}`])
+  const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", await key.arrayBuffer()))
+  const id = Array.from(digest.subarray(0, 16), (b) => b.toString(16).padStart(2, "0")).join("")
+  if (await getRepaint(id)) return REPAINT_PREFIX + id
+
   const form = new FormData()
   form.append("file", file, src.split("/").pop()?.split("?")[0] || "image.png")
   form.append("persona", persona)
   form.append("prompt", prompt)
   const res = await fetch("/api/faces/repaint", { method: "POST", body: form })
-  const body = await res.json().catch(() => ({}))
-  if (!res.ok) throw new Error(body.error ?? `Face repaint failed (${res.status})`)
-  return body.url as string
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error(body.error ?? `Face repaint failed (${res.status})`)
+  }
+  await putRepaint(id, await res.blob())
+  return REPAINT_PREFIX + id
 }
 
 /**

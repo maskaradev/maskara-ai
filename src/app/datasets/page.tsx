@@ -1,6 +1,6 @@
 "use client"
 
-import { AlertTriangle, Database, Eye, FilePlus2, FileText, Hospital, Stethoscope, Trash2, Upload, Users } from "lucide-react"
+import { AlertTriangle, Database, DatabaseZap, Eye, FilePlus2, Trash2, Upload } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -24,6 +24,7 @@ import type { Dataset } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 const PREVIEW_ROWS = 50
+const SAMPLE_LOADERS = [loadHospitalSample, loadNemotronSample, loadSyntheaSample, loadPersonasSample]
 
 function MaskedValue({ value, revealed }: { value: string; revealed: boolean }) {
   if (!value) return null
@@ -184,10 +185,7 @@ export default function DatasetsPage() {
   const [error, setError] = useState<string | null>(null)
 
   const selected = datasets.find((d) => d.id === selectedId) ?? datasets[0]
-  const hasSample = datasets.some((d) => d.id === "sample-hospital")
-  const hasNemotron = datasets.some((d) => d.id === "sample-nemotron-pii")
-  const hasSynthea = datasets.some((d) => d.id === "sample-synthea")
-  const hasPersonas = datasets.some((d) => d.id === "sample-nemotron-personas")
+  const hasSamples = datasets.some((d) => d.id.startsWith("sample-"))
 
   useEffect(() => {
     const onQuota = () => setError(t.quotaFull)
@@ -195,18 +193,16 @@ export default function DatasetsPage() {
     return () => window.removeEventListener(QUOTA_EVENT, onQuota)
   }, [t.quotaFull])
 
-  async function loadSample(load: () => Promise<Dataset> = loadHospitalSample) {
+  async function loadSamples() {
     setLoading(true)
     setError(null)
-    try {
-      const d = await load()
-      upsertDataset(d)
-      setSelectedId(d.id)
-    } catch (e) {
-      setError(e instanceof Error ? e.message : t.loadFailed)
-    } finally {
-      setLoading(false)
-    }
+    const results = await Promise.allSettled(SAMPLE_LOADERS.map((load) => load()))
+    const loaded = results.flatMap((r) => (r.status === "fulfilled" ? [r.value] : []))
+    loaded.forEach((d) => upsertDataset(d))
+    if (loaded[0]) setSelectedId(loaded[0].id)
+    const failed = results.find((r) => r.status === "rejected")
+    if (failed) setError(failed.reason instanceof Error ? failed.reason.message : t.loadFailed)
+    setLoading(false)
   }
 
   return (
@@ -214,23 +210,11 @@ export default function DatasetsPage() {
       <PageHeader trail={t.trail} />
       <main className="flex flex-1 flex-col gap-6 px-6 py-8">
         <div className="flex flex-wrap justify-end gap-2">
-          <Button variant="outline" onClick={() => loadSample()} disabled={loading}>
-            <Hospital />
-            {hasSample ? t.reloadSample : t.loadSample}
+          <Button onClick={loadSamples} disabled={loading} data-tour="load-samples">
+            <DatabaseZap />
+            {hasSamples ? t.reloadAll : t.loadAll}
           </Button>
-          <Button variant="outline" onClick={() => loadSample(loadNemotronSample)} disabled={loading}>
-            <FileText />
-            {hasNemotron ? t.reloadNemotron : t.loadNemotron}
-          </Button>
-          <Button variant="outline" onClick={() => loadSample(loadSyntheaSample)} disabled={loading}>
-            <Stethoscope />
-            {hasSynthea ? t.reloadSynthea : t.loadSynthea}
-          </Button>
-          <Button variant="outline" onClick={() => loadSample(loadPersonasSample)} disabled={loading}>
-            <Users />
-            {hasPersonas ? t.reloadPersonas : t.loadPersonas}
-          </Button>
-          <Button variant={uploading ? "secondary" : "default"} onClick={() => setUploading(!uploading)} disabled>
+          <Button variant={uploading ? "secondary" : "outline"} onClick={() => setUploading(!uploading)} disabled>
             <Upload />
             {t.upload}
           </Button>
@@ -253,24 +237,10 @@ export default function DatasetsPage() {
           <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed p-12 text-center">
             <Database className="size-6 text-muted-foreground" />
             <p className="text-sm text-muted-foreground">{t.empty}</p>
-            <div className="flex flex-wrap justify-center gap-2">
-              <Button onClick={() => loadSample()} disabled={loading}>
-                <Hospital />
-                {t.loadSample}
-              </Button>
-              <Button variant="outline" onClick={() => loadSample(loadNemotronSample)} disabled={loading}>
-                <FileText />
-                {t.loadNemotron}
-              </Button>
-              <Button variant="outline" onClick={() => loadSample(loadSyntheaSample)} disabled={loading}>
-                <Stethoscope />
-                {t.loadSynthea}
-              </Button>
-              <Button variant="outline" onClick={() => loadSample(loadPersonasSample)} disabled={loading}>
-                <Users />
-                {t.loadPersonas}
-              </Button>
-            </div>
+            <Button onClick={loadSamples} disabled={loading}>
+              <DatabaseZap />
+              {t.loadAll}
+            </Button>
           </div>
         ) : (
           <>
@@ -280,6 +250,7 @@ export default function DatasetsPage() {
                   <div
                     role="button"
                     tabIndex={0}
+                    data-tour={`dataset-${d.id}`}
                     onClick={() => setSelectedId(d.id)}
                     onKeyDown={(e) => e.key === "Enter" && setSelectedId(d.id)}
                     className={cn(
@@ -325,7 +296,7 @@ export default function DatasetsPage() {
                       ))}
                     </ul>
                     <Button size="sm" variant="outline" className="self-start" asChild onClick={(e) => e.stopPropagation()}>
-                      <Link href={`/jobs/new?dataset=${d.id}`}>
+                      <Link href={`/jobs/new?dataset=${d.id}`} data-tour={`new-job-${d.id}`}>
                         <FilePlus2 />
                         {t.newJob}
                       </Link>

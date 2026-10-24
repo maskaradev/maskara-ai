@@ -206,6 +206,7 @@ export function NewJobForm() {
                     disabled={busy}
                     aria-haspopup="dialog"
                     title={t.autoDetectHint}
+                    data-tour="auto-detect"
                     className="min-w-44 disabled:opacity-90"
                   >
                     {busy ? <Loader2 className="animate-spin" /> : <Sparkles />}
@@ -303,7 +304,7 @@ export function NewJobForm() {
                 <dt className="text-muted-foreground">{t.llmCells}</dt>
                 <dd>{counts?.llmCells}</dd>
               </dl>
-              <Button disabled={busy} onClick={() => router.push(`/jobs/${startRun(dataset.id)}`)}>
+              <Button disabled={busy} onClick={() => router.push(`/jobs/${startRun(dataset.id)}`)} data-tour="run-job">
                 <Play />
                 {t.run}
               </Button>
