@@ -57,7 +57,6 @@ export const en = {
   },
   run: {
     started: (when: string) => `started ${when}`,
-    runAgain: "Run again",
     analyze: "Analyze",
     status: "Status",
     statusValue: { running: "Running", succeeded: "Completed", failed: "Failed" },

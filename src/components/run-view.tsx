@@ -1,8 +1,7 @@
 "use client"
 
-import { ChartColumn, RotateCw } from "lucide-react"
+import { ChartColumn } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 import { AgentPanel } from "@/components/agent-panel"
@@ -15,10 +14,8 @@ import { StatusBadge, formatDuration } from "@/components/status-badge"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useNow } from "@/hooks/use-now"
-import { startRun } from "@/lib/pipeline/run"
 import { useMessages } from "@/lib/i18n"
 import { STAGE_BY_ID, isExternal } from "@/lib/pipeline/stages"
-import { useAppStore } from "@/lib/store"
 import type { Run, StageId } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
@@ -69,12 +66,10 @@ function StageDetail({ run, id, now }: { run: Run; id: StageId; now: number }) {
 }
 
 export function RunView({ run }: { run: Run }) {
-  const router = useRouter()
   const m = useMessages()
   const r = m.run
   const now = useNow(run.status === "running")
   const [selected, setSelected] = useState<StageId | null>(null)
-  const datasetExists = useAppStore((s) => s.datasets.some((d) => d.id === run.datasetId))
   const failedStage = (Object.keys(run.stages) as StageId[]).find((id) => run.stages[id].status === "failed")
   const runningStage = (Object.keys(run.stages) as StageId[]).find((id) => run.stages[id].status === "running")
   const focus = selected ?? failedStage ?? runningStage ?? "identify"
@@ -107,10 +102,6 @@ export function RunView({ run }: { run: Run }) {
               </Link>
             </Button>
           )}
-          <Button variant="outline" size="sm" disabled={!datasetExists || run.status === "running"} onClick={() => router.push(`/jobs/${startRun(run.datasetId)}`)}>
-            <RotateCw />
-            {r.runAgain}
-          </Button>
         </div>
       </div>
 

@@ -54,7 +54,6 @@ export const ko: Messages = {
   },
   run: {
     started: (when) => `${when} 시작`,
-    runAgain: "다시 실행",
     analyze: "분석",
     status: "상태",
     statusValue: { running: "실행 중", succeeded: "완료", failed: "실패" },
