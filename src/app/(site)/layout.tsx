@@ -10,14 +10,29 @@ const mono = Geist_Mono({ variable: "--font-mono", subsets: ["latin"] })
 const TITLE = "maskara: precise masking, uncompromised data"
 const DESCRIPTION =
   "maskara swaps the people in sensitive data for consistent synthetic personas across tables, notes, PDFs and photos, so the data stays usable for AI training. Built to run where the data lives."
+// Set here rather than as an opengraph-image file: this layout's `openGraph` replaces the root one, and a
+// file in this route group would collide with the app's /opengraph-image.
+const IMAGE = {
+  url: "/landing/og.png",
+  width: 1200,
+  height: 630,
+  alt: "maskara — precise masking, uncompromised data.",
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://maskara.dev"),
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/" },
-  openGraph: { type: "website", siteName: "maskara", title: TITLE, description: DESCRIPTION, url: "/" },
-  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
+  openGraph: {
+    type: "website",
+    siteName: "maskara",
+    title: TITLE,
+    description: DESCRIPTION,
+    url: "/",
+    images: [IMAGE],
+  },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION, images: [IMAGE] },
 }
 
 export const viewport: Viewport = {
