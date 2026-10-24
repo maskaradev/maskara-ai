@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>RLMask · Ambition for Korea Pitch (2 slides)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+ @page{size:1920px 1080px;margin:0}
+ *{margin:0;padding:0;box-sizing:border-box;word-break:keep-all}
+ body{font-family:'Pretendard Variable','Pretendard',-apple-system,sans-serif;background:#555;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .s{width:1920px;height:1080px;position:relative;overflow:hidden;background:#140C09;color:#FFF4E8;page-break-after:always;margin:0 auto 40px}
+ @media print{body{background:none}.s{margin:0}}
+ .team{position:absolute;top:56px;left:96px;font-size:26px;font-weight:700;color:rgba(255,244,232,.6)}
+ .topic{position:absolute;top:56px;right:96px;font-size:22px;font-weight:700;color:#FF6A2B;letter-spacing:.06em}
+ .body{position:absolute;left:96px;right:96px;top:150px;bottom:190px;display:flex;flex-direction:column;justify-content:center;gap:28px}
+ h1{font-size:110px;font-weight:900;line-height:1.02;letter-spacing:-.02em}
+ .one{font-size:44px;font-weight:600;color:#E8C49A;line-height:1.3}
+ .row{display:flex;gap:40px;margin-top:20px}
+ .box{flex:1;border:1px solid rgba(255,244,232,.18);border-radius:24px;padding:28px 32px}
+ .box b{display:block;font-size:22px;color:#FF6A2B;letter-spacing:.08em;margin-bottom:10px}
+ .box p{font-size:32px;line-height:1.4}
+ .shots{display:flex;gap:32px;flex:1;min-height:0}
+ .shot{flex:1;border-radius:20px;background:#2A1A12;border:1px solid rgba(255,244,232,.18);overflow:hidden}
+ .shot img{width:100%;height:100%;object-fit:cover;object-position:left top;display:block}
+ .foot{position:absolute;left:5%;right:5%;bottom:36px;height:auto}
+ .foot img{width:100%;display:block}
+
+ /* before / after example */
+ .ba{flex:1;display:flex;flex-direction:column;justify-content:center;gap:22px;padding:36px 40px}
+ .ba .lbl{font-size:20px;font-weight:700;letter-spacing:.08em;color:rgba(255,244,232,.5);margin-bottom:6px}
+ .ba .lbl.good{color:#FF6A2B}
+ .ba p{font-size:29px;line-height:1.4}
+ .ba .bad p{color:rgba(255,244,232,.55)}
+ .pii{color:#FFB38A;font-weight:700}
+ .tag{background:rgba(255,244,232,.14);border-radius:8px;padding:0 8px;font-weight:700;font-size:25px}
+ .per{color:#FF6A2B;font-weight:700;border-bottom:3px solid #FF6A2B}
+ .flow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+ .flow span{font-weight:700}
+ .flow i{font-style:normal;color:#FF6A2B}
+</style></head>
+<body>
+
+<!-- 1장 · 무엇을, 누구에게 -->
+<section class="s">
+  <div class="team">TEAM NAME</div><div class="topic">TOPIC · ATTENTIONX</div>
+  <div class="body">
+    <h1>RLMask</h1>
+    <div class="one">Swap PII for consistent synthetic personas —<br>privacy-safe data that's still useful for AI training.</div>
+    <div class="row">
+      <div class="box"><b>TARGET MARKET</b><p>US RL eval &amp; training-data companies that collect and ship real-world human data.</p></div>
+      <div class="box"><b>PROBLEM</b><p>Raw PII can't be shared or trained on — but redacting names, faces and ages strips the context models learn from.</p></div>
+    </div>
+  </div>
+  <div class="foot"><img src="../ambition-slide-kit/footer-for-dark-slides.png" alt=""></div>
+</section>
+
+<!-- 2장 · 오늘 만든 것 -->
+<section class="s">
+  <div class="team">TEAM NAME</div><div class="topic">BUILT TODAY</div>
+  <div class="body">
+    <div class="shots">
+      <div class="shot" style="flex:1.15"><img src="assets/app-persona-library.png" alt="RLMask persona library screen"></div>
+      <div class="shot ba">
+        <div class="bad"><div class="lbl">ORIGINAL</div>
+          <p><span class="pii">Minji Park, 29,</span> emailed her manager <span class="pii">John Carter</span> from <span class="pii">Austin, TX</span>.</p></div>
+        <div class="bad"><div class="lbl">TYPICAL MASKING</div>
+          <p><span class="tag">[NAME]</span>, <span class="tag">[AGE]</span>, emailed her manager <span class="tag">[NAME]</span> from <span class="tag">[CITY]</span>.</p></div>
+        <div><div class="lbl good">RLMASK</div>
+          <p><span class="per">Jordan Lee, 27,</span> emailed her manager <span class="per">Drew Kim</span> from <span class="per">Denver, CO</span>.</p></div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:0">
+      <div class="box"><b>HOW IT WORKS · CLAUDE</b>
+        <p class="flow"><span>Detect PII in context</span><i>→</i><span>Generate a consistent persona</span><i>→</i><span>Verify re-ID risk</span></p></div>
+      <div class="box"><b>NEXT 7 DAYS</b><p>Face replacement · Runs inside customers' AWS via Amazon Bedrock · First US pilot dataset</p></div>
+    </div>
+  </div>
+  <div class="foot"><img src="../ambition-slide-kit/footer-for-dark-slides.png" alt=""></div>
+</section>
+
+</body></html>
