@@ -16,3 +16,8 @@ Dr. Rachel Kim: This is Doctor Rachel Kim from Riverside pediatrics. I've filled
 Sarah Brennan: January 15, 2011.
 Dr. Rachel Kim: Great. I'll fax it to Lincoln High School today. She should take two puffs of albuterol fifteen minutes before track practice.
 Sarah Brennan: Thank you. You can text me at 5 5 5, 0 1 0, 1 4 5 8 if anything changes."
+M007,P007,2026-02-20,Osteopathic Medicine,"Scanned paper SOAP note from Emily Chen's outpatient OMT visit, filed to chart by front desk (Mei Chen, mother, dropped off the copy). Original form signed by Dr. S. L. Sleszynski, DO. Follow-up in 1 week.",soap_note_scan,media/images/M007_soap_note.png,,,
+M008,P009,2026-02-17,Endocrinology,"Registration: Aisha Rahman issued a new patient photo ID at the front desk. Old card reported lost; sister Fatima Rahman picked up the replacement.",patient_photo_id,media/photos/M008_patient_photo_id.png,,,
+M009,P009,2026-02-17,Endocrinology,"Baseline facial photo taken by Dr. Farouk to track Graves ophthalmopathy. Patient consented to clinical photography.",clinical_photo,media/photos/M009_clinical_photo.png,,,
+M010,P005,2026-03-04,Oncology,"Scanned clinical record (2 pages) for Priya Natarajan's cycle 4 visit, exported to PDF for the chart.",clinical_record_pdf,media/documents/M010_oncology_record.pdf,,,
+M011,P013,2026-03-02,General Surgery,"Pre-op identification photo for Linda Fitzgerald taken at check-in. Husband waiting in family lounge.",preop_photo,media/photos/M011_preop_photo.png,,,

@@ -2,15 +2,16 @@ import Papa from "papaparse"
 
 import { randomId } from "@/lib/hash"
 import { inferRoles } from "@/lib/roles"
-import type { AnswerKey, Dataset, Row, Table } from "@/lib/types"
+import type { AnswerKey, Dataset, Row, SpanAnswerKey, Table } from "@/lib/types"
 
 export const UPLOAD_LIMITS = { bytesPerFile: 1_000_000, totalRows: 1_000 }
 
 const SAMPLE_BASE = "/samples/hospital/"
 const SAMPLE_FILES = ["patients.csv", "clinical_notes.csv", "encounter_media.csv"]
+const NEMOTRON_BASE = "/samples/nemotron-pii/"
 
 export function parseCsv(name: string, csv: string): Table {
-  const parsed = Papa.parse<Row>(csv.trim(), { header: true, skipEmptyLines: true })
+  const parsed = Papa.parse<Row>(csv.replace(/\r\n?/g, "\n").trim(), { header: true, skipEmptyLines: true })
   if (parsed.errors.length) throw new Error(`${name}: ${parsed.errors[0].message}`)
   const columns = parsed.meta.fields ?? []
   return { name, columns, rows: parsed.data, roles: inferRoles(columns, parsed.data) }
@@ -39,6 +40,21 @@ export async function loadHospitalSample(): Promise<Dataset> {
     tables,
     baseUrl: SAMPLE_BASE,
     answerKey,
+  }
+}
+
+/** 40 US healthcare documents from nvidia/Nemotron-PII (CC BY 4.0) with their gold PII spans. */
+export async function loadNemotronSample(): Promise<Dataset> {
+  const [csvRes, keyRes] = await Promise.all([fetch(NEMOTRON_BASE + "documents.csv"), fetch(NEMOTRON_BASE + "answer_key.json")])
+  if (!csvRes.ok || !keyRes.ok) throw new Error("Failed to load the Nemotron-PII sample")
+  const spanKey = (await keyRes.json()) as SpanAnswerKey
+  return {
+    id: "sample-nemotron-pii",
+    name: "Nemotron-PII · healthcare (sample)",
+    source: "sample",
+    createdAt: new Date().toISOString(),
+    tables: [parseCsv(spanKey.table, await csvRes.text())],
+    spanKey,
   }
 }
 

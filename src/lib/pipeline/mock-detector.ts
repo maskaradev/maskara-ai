@@ -1,9 +1,9 @@
 import { escapeRegExp, splitName, stripTitles } from "@/lib/mask"
 import type { DetectedEntity, EntityType } from "@/lib/types"
 
-// Stand-in for the LLM on the mock-up lanes (structured, free text, speech).
+// Stand-in for the LLM on the mock-up speech lane.
 // It only knows the row's patient, the providers and a few regex patterns, so it
-// misses relatives, places and spoken emails. The image lane uses the real detector.
+// misses relatives, places and spoken emails. The image and text-DB lanes use the real detector.
 
 const PATTERNS: [EntityType, RegExp][] = [
   ["EMAIL", /[\w.+-]+@[\w-]+\.[\w.]+/g],

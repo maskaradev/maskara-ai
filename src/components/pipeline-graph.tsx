@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react"
 
 import { StatusBadge, formatDuration } from "@/components/status-badge"
 import { useMessages } from "@/lib/i18n"
-import { LAST_COL, STAGES, STAGE_BY_ID, type StageLocation } from "@/lib/pipeline/stages"
+import { LAST_COL, LAST_LANE, STAGES, STAGE_BY_ID, isExternal, type StageLocation } from "@/lib/pipeline/stages"
 import type { Run, StageId, StageState } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
@@ -23,6 +23,8 @@ const LOCATION_ICON: Record<StageLocation, typeof Laptop> = {
   "local-db": Database,
   browser: Laptop,
   "external-api": Cloud,
+  "gpu-repaint": Cloud,
+  "llm-api": Cloud,
   mock: FlaskConical,
 }
 
@@ -52,7 +54,7 @@ export function PipelineGraph({
 }) {
   const m = useMessages().graph
   const width = x(LAST_COL) + W
-  const height = y(3) + H + 8
+  const height = y(LAST_LANE) + H + 8
   const outer = width + 32
   const containerRef = useRef<HTMLDivElement>(null)
   const [available, setAvailable] = useState(outer)
@@ -88,17 +90,20 @@ export function PipelineGraph({
         <div style={{ width: outer * scale, height: height * scale }}>
           <div className="relative origin-top-left" style={{ width: outer, height, transform: `scale(${scale})` }}>
             {/* lane bands behind the branching columns */}
-            {m.lanes.map((lane, i) => (
+            {m.lanes.map((lane, i) => {
+              const agentLane = STAGES.some((s) => s.lane === i && s.agent)
+              return (
               <div
                 key={lane}
-                className={cn("absolute rounded-lg border border-dashed border-border/80", i === 0 && "border-solid border-violet-500/40 bg-violet-500/[0.04]")}
-                style={{ left: 16 + x(3) - 12, top: y(i) - 6, width: (i === 0 ? x(4) : x(3)) - x(3) + W + 24, height: H + 12 }}
+                className={cn("absolute rounded-lg border border-dashed border-border/80", agentLane && "border-solid border-violet-500/40 bg-violet-500/[0.04]")}
+                style={{ left: 16 + x(3) - 12, top: y(i) - 6, width: (agentLane ? x(4) : x(3)) - x(3) + W + 24, height: H + 12 }}
               >
                 <span className="absolute -top-2.5 left-2 bg-muted/30 px-1 text-[10px] font-medium tracking-wide text-muted-foreground uppercase backdrop-blur">
                   {lane}
                 </span>
               </div>
-            ))}
+              )
+            })}
 
             <svg className="pointer-events-none absolute inset-0" width={width + 32} height={height}>
               {STAGES.flatMap((from) =>
@@ -170,7 +175,7 @@ export function PipelineGraph({
                   <div
                     className={cn(
                       "mt-auto flex items-center gap-1 truncate text-[10.5px] text-muted-foreground",
-                      def.location === "external-api" && "font-medium text-amber-700 dark:text-amber-300",
+                      isExternal(def.location) && "font-medium text-amber-700 dark:text-amber-300",
                     )}
                   >
                     <Icon className="size-3 shrink-0" />

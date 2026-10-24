@@ -25,6 +25,8 @@ export const DetectRequestSchema = z.object({
     providers: z.array(z.string()).max(50),
     source: z.enum(["clinical_text", "ocr", "transcript"]),
   }),
+  /** "claude": Anthropic API (MVP stand-in). "local": in-house privacy-filter model + form-field rules. */
+  engine: z.enum(["claude", "local"]).default("claude"),
 })
 
-export type DetectRequest = z.infer<typeof DetectRequestSchema>
+export type DetectRequest = z.input<typeof DetectRequestSchema>

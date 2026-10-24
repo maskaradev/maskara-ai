@@ -151,25 +151,33 @@ function RecordCards({ table, images }: { table: MaskedTable; images: ImageItem[
               )
             }
             if (cell.kind === "image") {
-              const item = images[cell.item]
+              // A PDF cell spans one item per page.
+              const items = images.slice(cell.item, cell.item + (cell.pages ?? 1))
+              const isDoc = items[0]?.kind === "document"
               return (
                 <Compare
                   key={c}
-                  label={`${c} · ${m.regions(item?.regions.length ?? 0)}`}
+                  label={`${c} · ${m.regions(items.reduce((n, item) => n + item.regions.length, 0))}`}
                   original={
                     <div className="flex flex-col gap-2">
-                      <a href={cell.original} target="_blank" rel="noreferrer">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={cell.original} alt="Original" className="w-full rounded border bg-white" />
-                      </a>
-                      {item && <OcrText segments={item.ocr} mode="original" />}
+                      {isDoc ? (
+                        items.map((item) => <ImageCanvas key={item.id} item={item} mode="original" />)
+                      ) : (
+                        <a href={cell.original} target="_blank" rel="noreferrer">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={cell.original} alt="Original" className="w-full rounded border bg-white" />
+                        </a>
+                      )}
+                      {items.length > 0 && <OcrText segments={items.flatMap((item) => item.ocr)} mode="original" />}
                     </div>
                   }
                   masked={
-                    item?.status === "generated" ? (
+                    items.length && items.every((item) => item.status === "generated") ? (
                       <div className="flex flex-col gap-2">
-                        <ImageCanvas item={item} mode="generate" />
-                        <OcrText segments={item.ocr} mode="masked" />
+                        {items.map((item) => (
+                          <ImageCanvas key={item.id} item={item} mode="generate" />
+                        ))}
+                        <OcrText segments={items.flatMap((item) => item.ocr)} mode="masked" />
                       </div>
                     ) : (
                       <span className="text-xs text-muted-foreground">{m.notProcessed}</span>

@@ -7,10 +7,10 @@ import { ImageCanvas } from "@/components/image-canvas"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useMessages } from "@/lib/i18n"
-import type { ImageItem, ImageItemStatus, Run } from "@/lib/types"
+import type { ImageItem, ImageItemStatus, MediaKind, Run } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
-const ITEM_STYLE: Record<ImageItemStatus, string> = {
+export const ITEM_STYLE: Record<ImageItemStatus, string> = {
   pending: "bg-muted text-muted-foreground",
   identifying: "bg-sky-500/15 text-sky-700 dark:text-sky-300",
   identified: "bg-amber-500/15 text-amber-700 dark:text-amber-300",
@@ -22,36 +22,37 @@ function ready(item: ImageItem, agent: "identify" | "generate") {
   return agent === "identify" ? item.status === "identified" || item.status === "generated" : item.status === "generated"
 }
 
-/** Image list + per-image viewer for the identification and generation agents. */
-export function AgentPanel({ run, agent }: { run: Run; agent: "identify" | "generate" }) {
+/** Item list + viewer for the identification and generation agents of the photo or the document (PDF) lane. */
+export function AgentPanel({ run, agent, lane }: { run: Run; agent: "identify" | "generate"; lane: MediaKind }) {
   const m = useMessages()
   const a = m.agents
-  const images = run.images ?? []
+  const images = (run.images ?? []).filter((img) => img.kind === lane)
   const [selected, setSelected] = useState(0)
-  const [showWords, setShowWords] = useState(false)
+  const [showLayout, setShowLayout] = useState(false)
   const [showOriginal, setShowOriginal] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const onCanvas = useCallback((c: HTMLCanvasElement) => (canvasRef.current = c), [])
 
   if (!images.length) {
-    return <p className="rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground">{a.waiting}</p>
+    return <p className="rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground">{lane === "document" ? a.docWaiting : a.waiting}</p>
   }
   const item = images[Math.min(selected, images.length - 1)]
   const firstRegions = item.regions.filter((r) => r.first)
+  const faces = item.regions.filter((r) => r.visual === "face").length
 
   function download() {
     const url = canvasRef.current?.toDataURL("image/png")
     if (!url) return
     const link = document.createElement("a")
     link.href = url
-    link.download = `${item.id}.masked.png`
+    link.download = `${item.id.replace(/\W+/g, "-")}.masked.png`
     link.click()
   }
 
   return (
     <div className="grid gap-4 lg:grid-cols-[240px_1fr]">
       <div className="flex flex-col gap-2">
-        <div className="text-xs font-semibold">{a.images(images.length)}</div>
+        <div className="text-xs font-semibold">{lane === "document" ? a.documents(images.length) : a.images(images.length)}</div>
         <ul className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible">
           {images.map((img, i) => (
             <li key={img.id} className="w-48 shrink-0 lg:w-auto">
@@ -63,11 +64,19 @@ export function AgentPanel({ run, agent }: { run: Run; agent: "identify" | "gene
                   i === selected && "border-foreground/25 bg-muted",
                 )}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={img.src} alt="" className="h-10 w-14 shrink-0 rounded border bg-white object-cover object-left-top" />
+                {img.kind === "document" ? (
+                  <div className="h-10 w-14 shrink-0 overflow-hidden rounded border bg-white">
+                    <ImageCanvas item={img} mode="original" className="rounded-none border-0" />
+                  </div>
+                ) : (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={img.src} alt="" className="h-10 w-14 shrink-0 rounded border bg-white object-cover object-left-top" />
+                )}
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-[12.5px] font-medium">{img.id}</div>
-                  <div className="truncate text-[11px] text-muted-foreground">{img.column}</div>
+                  <div className="truncate text-[11px] text-muted-foreground">
+                    {img.page && img.pageCount ? a.page(img.page, img.pageCount) : img.column}
+                  </div>
                   <div className="mt-1 flex items-center gap-1.5">
                     <span className={cn("rounded px-1 text-[10px] font-semibold", ITEM_STYLE[img.status])}>{a.item[img.status]}</span>
                     {img.status !== "pending" && img.status !== "identifying" && (
@@ -89,7 +98,8 @@ export function AgentPanel({ run, agent }: { run: Run; agent: "identify" | "gene
             </div>
             {ready(item, "identify") && (
               <div className="text-[11.5px] text-muted-foreground">
-                {a.words(item.words.length)} · {a.pii(firstRegions.length)}
+                {lane === "photo" && `${a.faces(faces)} · `}
+                {a.words(item.words.length)} · {a.blocks(item.blocks?.length ?? 0)} · {a.pii(firstRegions.length)}
               </div>
             )}
           </div>
@@ -97,8 +107,8 @@ export function AgentPanel({ run, agent }: { run: Run; agent: "identify" | "gene
             <div className="flex items-center gap-3">
               {agent === "identify" ? (
                 <label className="flex items-center gap-1.5 text-xs">
-                  <Checkbox checked={showWords} onCheckedChange={(v) => setShowWords(v === true)} />
-                  {a.showWords}
+                  <Checkbox checked={showLayout} onCheckedChange={(v) => setShowLayout(v === true)} />
+                  {a.showLayout}
                 </label>
               ) : (
                 <>
@@ -124,7 +134,7 @@ export function AgentPanel({ run, agent }: { run: Run; agent: "identify" | "gene
                 <ImageCanvas item={item} mode="generate" onCanvas={onCanvas} />
               </div>
             ) : (
-              <ImageCanvas item={item} mode={agent} showWords={showWords} onCanvas={onCanvas} />
+              <ImageCanvas item={item} mode={agent} showLayout={showLayout} onCanvas={onCanvas} />
             )}
             <div className="overflow-x-auto rounded-lg border">
               <table className="w-full text-[12.5px]">
@@ -138,9 +148,15 @@ export function AgentPanel({ run, agent }: { run: Run; agent: "identify" | "gene
                 <tbody>
                   {firstRegions.map((r, i) => (
                     <tr key={i} className="border-t">
-                      <td className="px-3 py-1.5 font-mono text-[11px] text-muted-foreground">{r.type}</td>
+                      <td className="px-3 py-1.5 font-mono text-[11px] text-muted-foreground">{r.visual ? `${r.type} · ${r.visual}` : r.type}</td>
                       <td className={cn("px-3 py-1.5", agent === "generate" && "text-muted-foreground line-through")}>{r.original}</td>
-                      {agent === "generate" && <td className="px-3 py-1.5 font-medium">{r.replacement}</td>}
+                      {agent === "generate" && (
+                        <td className="px-3 py-1.5 font-medium">
+                          {r.visual === "face" && r.replacement
+                            ? a.repainted(r.replacement)
+                            : (r.replacement ?? (r.visual ? a.synthetic : ""))}
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>
@@ -149,8 +165,12 @@ export function AgentPanel({ run, agent }: { run: Run; agent: "identify" | "gene
           </>
         ) : (
           <div className="flex flex-col gap-2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={item.src} alt="" className="w-full rounded border bg-white opacity-50" />
+            {item.kind === "document" ? (
+              <ImageCanvas item={item} mode="original" className="opacity-50" />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={item.src} alt="" className="w-full rounded border bg-white opacity-50" />
+            )}
             <p className={cn("text-xs text-muted-foreground", item.status === "failed" && "text-red-600 dark:text-red-400")}>
               {item.status === "failed" ? item.error : agent === "identify" ? a.notIdentified : a.notGenerated}
             </p>

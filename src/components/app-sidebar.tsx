@@ -2,7 +2,6 @@
 
 import {
   Database,
-  FilePlus2,
   ListChecks,
   Plus,
   UserRoundCog,
@@ -36,19 +35,15 @@ import { useMessages, type Messages } from "@/lib/i18n"
 type NavItem = { title: keyof Messages["sidebar"]; icon?: LucideIcon; href?: string }
 
 const mainNav: NavItem[] = [
-  { title: "newJob", icon: FilePlus2, href: "/jobs/new" },
   { title: "jobs", icon: ListChecks, href: "/jobs" },
 ]
 
 const personaNav: NavItem[] = [
   { title: "personaLibrary", href: "/personas" },
-  { title: "templates" },
-  { title: "consistencyRules" },
 ]
 
 function isActive(pathname: string, href?: string) {
   if (!href) return false
-  if (href === "/jobs") return pathname === "/jobs" || (pathname.startsWith("/jobs/") && pathname !== "/jobs/new")
   return pathname === href || pathname.startsWith(href + "/")
 }
 

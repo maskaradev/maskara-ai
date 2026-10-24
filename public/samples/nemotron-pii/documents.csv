@@ -1,0 +1,817 @@
+doc_id,document_type,document_format,text
+NP001,Patient Consent Form,structured,"**Patient Consent Form**
+
+**Patient Information**
+
+- Patient Name: David Woody
+- Date of Birth: 1951-10-15
+
+**Procedure Details**
+
+- Procedure Name:
+- Date of Procedure:
+
+**Risks and Benefits**
+
+- Please review the following risks and benefits associated with the procedure:
+
+**Patient Acknowledgment**
+
+- I, David Woody, hereby acknowledge that I have read and understood the information provided above.
+- I have had the opportunity to ask questions and have received satisfactory answers.
+- I understand the risks and benefits of the procedure.
+
+**Patient Signature**
+
+- Patient Name (Print): David Woody
+- Patient Signature:
+- Date:
+
+**Healthcare Provider Information**
+
+- Healthcare Provider Name:
+- Healthcare Provider Signature:
+- Date:
+
+**Additional Information**
+
+- Education Level: graduate level
+- Occupation: cashier
+- Race Ethnicity: white"
+NP002,Insurance Enrollment Form,structured,"**CareMed Solutions Insurance Enrollment Form**
+
+**Provider Information**
+
+Provider Name:  CareMed Solutions
+Email: jeffreycliatt37@yahoo.com
+Phone Number: 513-228-2481
+Fax Number: 513-228-2481
+National Provider Identifier (NPI): 85239164
+Taxonomy Code:
+
+**Insurance Company Details**
+
+Insurance Company Name:
+Plan Information:
+
+**Enrollment Details**
+
+Enrollment Date: 15/08/2027
+Time: 17:42:25
+Medical Record Number: 729-45-3812
+
+**Provider Signature**
+
+Signature:
+
+Date:
+
+**Note**: Please ensure all information is accurate and complete. Any discrepancies may result in delays in processing your enrollment."
+NP003,Health Screening Form,structured,"**Health Screening Form**
+
+**Personal Information**
+
+- **Full Name:** Francesca
+- **Date of Birth:** 1979-05-22
+- **Medical Record Number:** MRN-3456721
+- **Blood Type:** O+
+- **County:** Anoka County
+
+**Medical History**
+
+- **Past Illnesses:**
+- **Surgeries:**
+- **Allergies:**
+
+**Current Medications**
+
+**Family Medical History**
+
+**Lifestyle Habits**
+
+- **Smoking:** Yes/No
+- **Alcohol Use:** Yes/No
+- **Exercise:** Yes/No
+
+**Additional Notes:**
+
+**Religious Belief:** Pentecostal"
+NP004,Fitness Prescription,unstructured,"James, born on 1950-01-01, has been advised by his physician to engage in a regular fitness routine to improve his overall health. His email address is james.h@icloud.com. James should aim to exercise for at least 30 minutes, 3 times a week, focusing on a mix of cardio and strength training. For his cardio workouts, he can choose activities like brisk walking or cycling. His strength training should include exercises like squats, lunges, and push-ups. Additionally, James should maintain a balanced diet, rich in fruits, vegetables, lean proteins, and whole grains. He should also stay hydrated throughout the day, drinking at least 8 glasses of water daily. His physician recommends that James keep a log of his workouts and dietary intake to track his progress and make adjustments as needed."
+NP005,Medication Refill Request,unstructured,"Dear Pharmacy Team,
+
+I am writing to request a refill for my medication. My name is John Lund, and my date of birth is 1952-10-05. My medical record number is LAC-00021487.
+
+The medication I need refilled is prescribed by my doctor. Please contact me at 363-809-3216 or via email at johnl5@gmail.com to confirm the details.
+
+Thank you for your assistance.
+
+Sincerely,
+John Lund"
+NP006,Vaccination Record,structured,"**Vaccination Record**
+
+**Patient Information:**
+
+- **Patient Name:** Andrew Jackson
+- **Date of Birth:** 1978-07-16
+- **Medical Record Number:** 0004281732
+- **Email:** andrew.jackson79@gmail.com
+- **SSN:** 263-57-3545
+
+**Vaccination Details:**
+
+| Vaccine Type       | Administration Date | Lot Number  | Administering Healthcare Provider |
+|--------------------|---------------------|-------------|-----------------------------------|
+| Influenza          | 2023-10-11          | LOT12345    | Certificate License Number: 34815962 |
+
+**Biometric Identifier:** M47283916589
+
+**Additional Information:**
+
+- **Blood Type:** AB positive
+- **Postcode:** 33556
+- **City:** Odessa
+- **Country:** USA"
+NP007,Referral Letter,structured,"**Referral Letter**
+
+**Patient Demographics**
+
+- First Name: Francisco
+- Last Name: Delvalle
+- Medical Record Number: BH-00092761
+- Biometric Identifier: F49382756741
+
+**Referring Physician Information**
+
+- Name: Dr. [Not Provided]
+- Contact Information: [Not Provided]
+
+**Reason for Referral**
+
+- Francisco Delvalle, Medical Record Number BH-00092761, is being referred for further evaluation and management of his chronic condition.
+
+**Relevant Medical History**
+
+- Francisco Delvalle has a history of chronic hypertension and diabetes, both of which have been managed with medication.
+
+**Current Medications**
+
+- Metformin 500mg twice daily
+- Lisinopril 10mg daily
+
+**Specific Questions or Requests for the Specialist**
+
+- Please evaluate Francisco Delvalle's current treatment plan and make any necessary adjustments to his medications.
+- Provide recommendations for lifestyle modifications to better manage his conditions.
+- Schedule a follow-up appointment on November 15, 2023 to review progress and address any concerns.
+
+**Additional Information**
+
+- Francisco Delvalle identifies as straight."
+NP008,Medical Certificate,unstructured,"Merrick Healthcare
+
+June 15, 2024
+
+To Whom It May Concern,
+
+This medical certificate is issued for Minh Pham, medical record number 190815-2847, with health plan beneficiary number AET-3895-2014-76.
+
+Patient Minh Pham presented for a routine check-up on June 15, 2024. During the examination, it was noted that the patient's education level is 9th to 12th grade, no diploma. The patient reported no significant changes in health status since the last visit. A comprehensive physical examination was conducted, and routine laboratory tests were ordered.
+
+The findings indicate that the patient is in good overall health. No acute conditions were identified, and the patient's vital signs were within normal ranges. The treatment provided included routine health maintenance recommendations and advice on continuing the current wellness regimen.
+
+It is recommended that the patient continue with regular check-ups and maintain a healthy lifestyle. The next follow-up appointment is scheduled for three months from the date of issue.
+
+Signed,
+
+Attending Physician"
+NP009,genetic study intake form,structured,"**Genetic Study Intake Form**
+
+**Patient Demographic Information**
+
+- Full Name: Cynthia
+- Date of Birth: 2005-07-17
+- Medical Record Number: MRN-398275
+- Email: cynthia_kight17@gmail.com
+- Phone Number: 734-680-2324
+- Health Plan Beneficiary Number: 938 527 6410
+
+**Medical History**
+
+Please provide a brief overview of your medical history, including any relevant diagnoses, treatments, and medications.
+
+**Family History of Genetic Conditions**
+
+Please list any known genetic conditions in your family, including the affected family member's relationship to you and the specific condition.
+
+**Consent for Genetic Testing**
+
+I, Cynthia, hereby consent to participate in the genetic study and authorize the collection, storage, and analysis of my genetic information. I understand that my genetic information will be used for research purposes only and will be kept confidential.
+
+**Genetic Study Details**
+
+- Type of Test:
+- Genes Being Analyzed:
+
+Please review the above information for accuracy and completeness. If you have any questions or need further assistance, please contact us at the provided phone number, 734-680-2324, or email, cynthia_kight17@gmail.com."
+NP010,patient intake form,unstructured,"Patient Name: William
+
+Date of Birth: 1949-03-15
+
+Phone Number: 854-486-8129
+
+Email: williamluis84@outlook.com
+
+Medical Record Number: LAC-00014795
+
+William, whose date of birth is 1949-03-15, can be reached at 854-486-8129 or williamluis84@outlook.com. His medical record number is LAC-00014795."
+NP011,Healthcare Provider Information,unstructured,"At Apex Medical Group, we are proud to have Tyrone Alston as part of our team. Tyrone is a highly skilled healthcare provider who is committed to delivering exceptional care to our patients. Tyrone's specialty lies in providing comprehensive medical services tailored to individual needs. For appointments or inquiries, you can reach Tyrone at 557-327-0705 or via email at alstont94@icloud.com. Tyrone is based in USA, MO and is fluent in English, ensuring clear communication with all patients."
+NP012,Counseling Notes,unstructured,"Kelly Speer, medical record number 0014729836, is a male patient from Mahaska County. He is white, and I saw him on 2024-07-15 at 7:15 AM. He expressed concerns about his recent stress levels and difficulty sleeping. We discussed potential coping mechanisms and set a plan for regular check-ins."
+NP013,Chronic Disease Management Plan,unstructured,"Harold Ewing, whose medical record number is 2025-38-7261, has been diagnosed with type 2 diabetes. Born on 1959-12-21, he is a beneficiary of the health plan with the number 7F52-WP9-MK34. His primary goal is to manage his blood sugar levels effectively. Harold's action plan includes regular monitoring of his blood glucose levels, a balanced diet, and regular physical activity. He has been prescribed Metformin 500mg twice daily and will have follow-up appointments scheduled every three months. His healthcare provider notes will be documented after each visit, and he will keep a record of his self-monitoring activities. His email address is hewing21@gmail.com."
+NP014,Medical Appointment Schedule,unstructured,"The schedule for May 24, 2025 includes an appointment at 02:48:05 for William Hayzlip. The patient's medical record number is 0002816954. The appointment will be with the provider whose certificate license number is IL-2019-00482."
+NP015,Care Coordination Plan,unstructured,"Jaime Perdomo, whose medical record number is PX202305-2198 and health plan beneficiary number is 298 136 7804, was born on 1991-09-24. Jaime speaks Spanish and is self-employed. Jaime can be reached via email at jaime.perdomo91@gmail.com or by phone at 832-996-3581. Jaime's primary healthcare provider is Dr. Martinez. Jaime's current medications include Lisinopril 10mg daily and Metformin 500mg twice daily. Jaime's care coordination team includes Dr. Martinez, Nurse Sarah, and Social Worker Maria. The action plan for Jaime includes regular check-ups with Dr. Martinez every three months, blood sugar monitoring daily, and a follow-up appointment with Nurse Sarah to review medication adherence. Communication methods include phone calls and emails to jaime.perdomo91@gmail.com."
+NP016,Imaging Report,structured,"**Imaging Report**
+
+**Patient Demographics**
+
+- **First Name**: Jeffery
+- **Date of Birth**: 1967-07-17
+- **Medical Record Number**: 0012345678
+- **Gender**: male
+
+**Examination Details**
+
+- **Type of Imaging**: MRI
+- **Date and Time of Procedure**: 2025-06-12T10:30:00
+- **Time**: 17:30:45
+
+**Findings**
+
+- The MRI scan of the brain reveals no significant abnormalities. The structures appear normal with no evidence of tumors, infarcts, or other pathological findings.
+
+**Impression**
+
+- The MRI scan is within normal limits for a male born on 1967-07-17.
+
+**Recommendations**
+
+- No further imaging is recommended at this time. Follow-up should be based on clinical symptoms and the patient's medical history. The medical record number is 0012345678."
+NP017,Medical Research Data,structured,"**Patient Information**
+
+| Field | Value |
+| --- | --- |
+| Patient ID | M12345678 |
+| First Name | Terri |
+| Last Name | Edge |
+| Health Plan Beneficiary Number | |
+
+**Provider Details**
+
+| Field | Value |
+| --- | --- |
+| Name |  |
+| Specialty |  |
+| Contact Information |  |
+
+**Research Study Information**
+
+| Field | Value |
+| --- | --- |
+| Study ID |  |
+| Protocol Details |  |
+| Data Collection Methods |  |
+
+**Participant Demographics**
+
+| Field | Value |
+| --- | --- |
+| Medical Record Number | M12345678 |
+| First Name | Terri |
+| Last Name | Edge |
+| Health Plan Beneficiary Number |  |"
+NP018,Immunization Record,unstructured,"Medical Record Number 0008572916
+
+Patient Name: Gary Weyrauch
+
+Immunization Record
+
+Gary Weyrauch received his annual flu vaccine on 10/15/2023. The healthcare provider who administered the vaccine is located in Hendricks County. The healthcare provider is associated with health plan beneficiary number AET-5768-9012-34.
+
+Additional Notes:
+Gary Weyrauch's medical record number is 0008572916. The MAC address associated with the electronic health record system is 00:24:81:F9:4C:6A."
+NP019,Palliative Care Plan,structured,"### Palliative Care Plan
+
+**Patient Information:**
+- **Medical Record Number:** 230315-00241
+- **Full Name:** Mamie Hoelle
+- **Date of Birth:** 1944-05-16
+- **Gender:** female
+- **Health Plan Beneficiary Number:** AET-7892-3456
+- **Email:** hoellem@hotmail.com
+
+**Medical History:**
+- Mamie Hoelle has a medical history that includes chronic obstructive pulmonary disease (COPD) and hypertension.
+
+**Current Diagnoses:**
+- COPD
+- Hypertension
+- Arthritis
+
+**Treatment Goals:**
+- Improve quality of life
+- Manage symptoms effectively
+- Ensure comfort and dignity
+
+**Symptom Management Strategies:**
+- Regular monitoring of oxygen saturation levels
+- Pain management through prescribed medications
+- Physical therapy for mobility issues
+
+**Medication Schedule:**
+- Albuterol inhaler: as needed for shortness of breath
+- Lisinopril: 10 mg daily for hypertension
+- Ibuprofen: 400 mg every 6 hours for pain
+
+**Care Team Contacts:**
+- Primary Care Physician: Dr. Jane Smith
+- Palliative Care Nurse: Nurse Emily Jones
+- Hospice Coordinator: Jane Doe
+- For more information, please refer to the document located at ftp://healthcare.gov/documents/palliative-care-plan.pdf
+
+**Advance Directives:**
+- Mamie Hoelle has specified her end-of-life preferences, including a Do Not Resuscitate (DNR) order and the desire for comfort care only. She has appointed her daughter, Sarah, as her healthcare proxy."
+NP020,Remote Monitoring Consent Form,structured,"**Remote Monitoring Consent Form**
+
+**Patient Information**
+
+First Name: Homer
+
+Last Name: Sullivan
+
+Date of Birth: 2003-01-17
+
+Email: homerjsullivan14@gmail.com
+
+**Device Information**
+
+Device Identifier: 3a4b5c6d7e8f9a0b1c2d3e4f5g6h7i8
+
+**Biometric Information**
+
+Biometric Identifier: A48593271652
+
+**Purpose of Monitoring**
+
+The purpose of this monitoring is to collect and analyze data to improve health outcomes.
+
+**Consent**
+
+I, Homer Sullivan, hereby consent to the remote monitoring of my health data using the device identified as 3a4b5c6d7e8f9a0b1c2d3e4f5g6h7i8. I understand that my biometric identifier, A48593271652, will be used for verification purposes.
+
+**Signature and Date**
+
+Signature: __________________________
+
+Date: 15-07-2024"
+NP021,Behavioral Health Plan,unstructured,"This Behavioral Health Plan outlines the coverage details and benefits for the health plan beneficiary number AET-2345-9876-12. Effective from 11/15/2024, this plan includes a comprehensive range of behavioral health services. To access your medical records, visit https://myhealthrecord.com/patient/behavioral-health?plan_id=12345&provider=DrSmith and enter your medical record number 1836-47-89-12. Your customer id SFO-5216378 and account number 385-721-9463 will be required for verification. The services covered under this plan are designed to support individuals with various behavioral health needs, including those with a bachelor's education level. The plan also includes coverage for straight individuals seeking behavioral health support. For more details, please refer to the plan documents available at coordinate (40.7128, -74.0060) on 2025-02-18T20:33:19."
+NP022,Health Insurance Plan,structured,"**Health Insurance Plan**
+
+**Plan Name:** Comprehensive Health Plan
+
+**Policy Number:** 89012345
+
+**Effective Dates:** 01/01/2023 - 12/31/2023
+
+**Beneficiaries:**
+| Beneficiary Name | Beneficiary Number | Medical Record Number | Date of Birth |
+|------------------|---------------------|------------------------|---------------|
+| John Doe         | M7G4-2N5-KR94       | 1234-8765-4321         | 01/01/1980    |
+
+**Coverage Details:**
+- Deductible: $1,000
+- Copay: $25
+- Coinsurance: 20%
+- Out-of-Pocket Maximum: $5,000
+
+**Network Providers:**
+- In-Network Providers Covered at 100%
+- Out-of-Network Providers Covered at 80%
+
+**Exclusions:**
+- Cosmetic Surgery
+- Experimental Treatments
+
+**Claims Information:**
+- Claims can be submitted online or via mail to the address provided in the policy.
+- Claims must include the **health plan beneficiary number** M7G4-2N5-KR94 and the **medical record number** 1234-8765-4321 for processing.
+- Claims should be submitted within 90 days of the date of service, 2023-07-28.
+
+**Claims Submission:**
+- **Password**: h7K@p9mR$5tZ3
+- **http cookie**: _ga2=GA1.2.762184529.1625634783; Domain=.example.net; Expires=Sat, 20 Oct 2024 12:30:00 GMT
+- **swift bic**: GLXKUS4PZ
+
+**Contact Information:**
+- For any inquiries, please contact our customer service at the number provided in the policy."
+NP023,Disability Certificate,unstructured,"To Whom It May Concern:
+
+This certificate is to confirm that Preeda Zinn, born on 1984-06-04, has been under my care for her medical condition. Preeda Zinn's medical record number is 0015739246. She is currently 41 years old and speaks Vietnamese as her primary language. Her primary diagnosis impacts her mobility and daily functioning. The onset of her disability began approximately three years ago. Preeda Zinn resides at 293 Roosevelt Highway 303, Charlotte, North Carolina.
+
+Given her condition, Preeda Zinn may require accommodations in her workplace and daily activities. Her prognosis indicates that she will continue to need support for the foreseeable future.
+
+This certificate is issued by me, the healthcare provider, with certificate license number PA-28946731. For any further inquiries, please contact me at 980-477-9691.
+
+Sincerely,
+
+[Provider's Signature]"
+NP024,Wellness Plan,structured,"**Health and Wellness Plan**
+
+**Personal Information**
+
+- **First Name:** David
+- **Medical Record Number:** 1234-98-7651
+
+**Health Goals**
+
+- **Age:** 24
+
+**Progress Tracking**
+
+- **Date:** 15.08.2027
+
+**Resources**
+
+- **Wellness Plan Document URL:** ftp://wellnessplans.healthcare.com/plans/2024/wellness_plan.pdf
+
+**Mental Health Strategies**
+
+- **County:** King County"
+NP025,Healthcare Benefits Summary,unstructured,"Dear Health Plan Beneficiary,
+
+Thank you for choosing our healthcare services. This summary outlines your coverage details. Your health plan beneficiary number is 1FJ7-OP2-NK56. Please keep this number for your medical record number is CHC-00019528. We are committed to providing you with comprehensive care.
+
+Your deductible for the year is $1,500. Once you meet your deductible, you will be responsible for a copayment of $25 for primary care visits and $50 for specialist visits. For hospital stays, you will have a coinsurance of 20% after meeting your deductible.
+
+All services provided by in-network providers are covered. This includes preventive care, diagnostic tests, and treatments. You can find a list of in-network providers on our website. If you have any questions or need assistance, please contact our customer service at 7:23 am."
+NP026,Lab Report,structured,"```
+Lab Report
+
+Patient Information
+--------------------------------------
+Name: Pamela Hardiman
+Age: 51
+Date of Birth: 1974-02-28
+Medical Record Number: 0013458239
+Biometric Identifier: BIO-5729846130
+Blood Type: B+
+
+Test Ordered
+--------------------------------------
+Test Name: Complete Blood Count (CBC)
+Ordering Physician: Dr. Smith
+
+Specimen Details
+--------------------------------------
+Type: Blood
+Collection Date: 2023-10-05
+Collection Time: 08:30
+
+Test Results
+--------------------------------------
+Reference Range: 4.5-6.0 x 10^9/L
+Actual Result: 5.2 x 10^9/L
+Units of Measurement: x 10^9/L
+
+Interpretation
+--------------------------------------
+Normal/Abnormal: Normal
+Clinical Significance: The white blood cell count is within the normal range.
+
+Notes
+--------------------------------------
+None
+```"
+NP027,Health Education Brochure,unstructured,"Welcome to your guide to a healthier lifestyle! Here you will find valuable health tips and resources to help you take control of your well-being. Remember, your health is your greatest asset, so let's start with some simple steps to improve it.
+
+First, stay informed. Visit https://healthline.com for reliable health information and articles. If you have any questions or need further assistance, feel free to reach out to us at 412-640-4107 or email tequillaf@gmail.com. Our team is here to support you on your health journey.
+
+One of the most important things you can do for your health is to stay proactive. Regular check-ups and screenings can help detect potential issues early. Make sure to schedule your appointments and keep your health on track.
+
+Remember, taking care of your health is a journey, not a destination. Every small step counts. Whether it's adding more fruits and vegetables to your diet, staying hydrated, or getting regular exercise, every effort adds up. For more tips and support, visit our website at https://healthline.com. If you have any questions or need further assistance, feel free to reach out to us at 412-640-4107 or email tequillaf@gmail.com. Our team is here to support you on your health journey."
+NP028,Medical Diagnosis,structured,"**Medical Diagnosis Report**
+
+**Patient Demographic Information:**
+- First Name: Tri
+- Last Name: Shum
+- Medical Record Number: MRN-345672
+- Date of Birth: 1988-03-26
+- Biometric Identifier: BIO-7459126830
+
+**Medical History:**
+- Employment Status: reassigned
+- Race Ethnicity: East Asian
+
+**Chief Complaint:**
+- Patient reports persistent chest pain.
+
+**Physical Examination Details:**
+- Blood pressure: 130/85 mmHg
+- Heart rate: 72 bpm
+- Respiratory rate: 16 breaths per minute
+
+**Diagnostic Test Results:**
+- ECG: Normal sinus rhythm
+- Chest X-ray: Clear
+
+**Differential Diagnoses:**
+- Angina
+- Gastroesophageal reflux disease (GERD)
+
+**Treatment Plan:**
+- Prescribe nitroglycerin for chest pain relief
+- Follow-up appointment in one week"
+NP029,Insurance Coverage Letter,structured,"**Insurance Coverage Letter**
+
+**Patient Information:**
+- First Name: Juan
+- Last Name: Rohoman
+- Health Plan Beneficiary Number: AET-5678-2345-12
+- Medical Record Number: B937461
+
+**Provider Details:**
+- Company Name: Harborview Medical Group
+
+**Insurance Coverage Details:**
+- Insurance Company Name: [To Be Determined]
+- Policy Number: [To Be Determined]
+- Effective Dates: [To Be Determined]
+- Covered Services: [To Be Determined]
+
+**Authorization:**
+
+_________________________        _____________________
+Patient's Signature (Juan Rohoman)           Date
+
+_________________________
+Provider's Signature"
+NP030,Emergency Contact Information,unstructured,"In case of an emergency, please contact Debra Thomas at 936-771-8070 or via email at debra_thomas@icloud.com. Her biometric identifier is M74539128645. The time of last update to this contact information was 18:32. For secure access to her medical records, use the password Sunrise@2025."
+NP031,End-of-Life Care Plan,unstructured,"Travis, born on 1966-11-17, has been a patient at Mayo Clinic, with a medical record number of 0005378916. His health plan beneficiary number is 2F78-OP9-KL24. Travis can be reached at 832-348-6822 or via email at travisharris3@icloud.com. His social security number is 454-78-1270. For further details, please refer to the end-of-life care plan document available at https://mayoclinic.org/services/end-of-life-care?document_type=plan&patient_id=12345. Travis's biometric identifier is M29483756843."
+NP032,Living Will,structured,"**Living Will**
+
+**Patient Information**
+
+First Name: Angela
+Last Name: Deal
+Gender: male
+Medical Record Number: P00293752
+Health Plan Beneficiary Number: AET-8237-4916-75
+Blood Type: A positive
+
+**End-of-Life Medical Preferences**
+
+In the event that I, Angela Deal, with the medical record number P00293752, become incapacitated and unable to communicate my wishes, the following directives should be followed:
+
+1. **Resuscitation**: I do not wish to be resuscitated if my heart stops beating or if I stop breathing. This directive is to be honored regardless of the health plan beneficiary number AET-8237-4916-75.
+2. **Ventilation**: I do not wish to be placed on a ventilator if I am unable to breathe on my own.
+3. **Hydration and Nutrition**: I do not wish to receive artificial hydration or nutrition if I am unable to eat or drink on my own.
+4. **Pain Management**: I wish to receive appropriate medication to manage pain, even if it may hasten my death.
+
+**Healthcare Power of Attorney**
+
+I designate a trusted individual to make medical decisions on my behalf if I am unable to do so. This individual will have access to my medical record number P00293752 and health plan beneficiary number AET-8237-4916-75. This individual will consider my blood type A positive when making decisions about blood transfusions.
+
+**Signature**
+
+____________________________
+Angela Deal
+Date: _____________________"
+NP033,Rehabilitation Plan,structured,"**Health and Rehabilitation Plan**
+
+**Patient Information**
+- **Name:** Benjamin
+- **Date of Birth:** 1991-07-30
+- **Medical Record Number:** M-938521
+
+**Diagnosis**
+- The patient, Benjamin has been diagnosed with a condition that requires intensive rehabilitation.
+
+**Treatment Goals**
+- The primary goal is to improve mobility and functional abilities.
+
+**Specific Interventions**
+- **Therapy Types:** Physical therapy, occupational therapy, and speech therapy.
+- **Frequency:** Three sessions per week.
+- **Duration:** 12 weeks.
+
+**Progress Tracking**
+- The progress will be tracked using standard rehabilitation metrics, including mobility assessments and functional tests.
+
+**Discharge Plans**
+- Upon completion of the rehabilitation program, the patient will be discharged with a comprehensive home exercise plan. The patient's blood type is B+ and will be noted in the discharge summary.
+
+**Signatures**
+- **Physiotherapist:** ______________________________
+- **Occupational Therapist:** ______________________________
+- **Speech Therapist:** ______________________________
+- **Medical Record Number:** M-938521"
+NP034,Medical Record,structured,"```
+Patient Information
+
+First Name: Jerry
+
+Last Name: Lawshe
+
+Medical Record Number: 1975-34-8291
+
+Date of Birth: 1980-04-06
+
+Blood Type: O negative
+
+Age: 45
+
+Medical History
+
+- Allergies: None reported
+
+- Immunizations: Up-to-date
+
+- Diagnoses: None reported
+
+- Procedures: None reported
+
+- Medications: None reported
+
+Lab Results
+
+- Blood Type: O negative
+
+Physician Notes
+
+- Patient Jerry Lawshe, medical record number 1975-34-8291, born on 1980-04-06, age 45, blood type O negative, presents with no significant findings. Further monitoring recommended.
+```"
+NP035,Healthcare Provider Report,structured,"**Healthcare Provider Report**
+
+**Provider ID:** 12345
+
+**Name:** Elisabeth Dorsett
+
+**Specialty:** Pediatrics
+
+**Contact Information:**
+- **Email:** elisabeth.dorsett96@outlook.com
+
+**Office Location:**
+- **Address:** Not Available
+
+**Services Offered:**
+- Routine check-ups
+- Immunizations
+- Developmental assessments
+- Pediatric emergencies
+
+**Patient Volumes:**
+- Total patients seen in the last quarter: 500
+
+**Quality Metrics:**
+- Patient satisfaction rate: 95%
+- Average wait time: 15 minutes
+
+**Compliance Status:**
+- **Certificate License Number:** A7923465
+- Compliance with HIPAA regulations: Yes
+- Compliance with CDC guidelines: Yes
+
+**Additional Notes:**
+- Provider is actively involved in community health initiatives.
+- Office hours are flexible to accommodate working parents."
+NP036,Health Insurance Card,structured,"**Front of Card:**
+
+**Insurance Provider Logo**
+
+Andre York
+First Name: Andre
+Last Name: York
+Date of Birth: 1948-07-12
+Unique Member ID: ZQ7KP4R9VX
+Medical Record Number: 1234-56-78-90
+Health Plan Beneficiary Number: A47291832
+
+**Back of Card:**
+
+Barcode for electronic verification
+
+For customer service, please contact the insurance provider's logo on the front of this card.
+
+In case of an emergency, please have this card ready for electronic verification at any participating healthcare facility."
+NP037,blood donor registration form,structured,"**Blood Donor Registration Form**
+
+**Personal Information**
+
+First Name: Keith
+
+Last Name: Hao
+
+Date of Birth: 1988-05-01
+
+Street Address: 357 Holly Way
+
+City: Fresno
+
+State: California
+
+Blood Type: A+
+
+Biometric Identifier: M78534216942
+
+**Medical History**
+
+- Blood Type: A+
+- Previous Donations: (Please specify dates and locations)
+
+- Health Conditions: (Please list any relevant health conditions)
+
+**Contact Information**
+
+Fax Number: 559-247-0459
+
+**Employment Status**
+
+Employment Status: resigned
+
+**Consent**
+
+I, Keith Hao, hereby acknowledge that I have read and understood the health-related questions and provide my consent to donate blood.
+
+Signature: _______________________________     Date: ________________
+
+**Acknowledgement**
+
+I confirm that all the information provided above is accurate and complete to the best of my knowledge.
+
+Signature: _______________________________     Date: ________________"
+NP038,Health History Form,structured,"**Health History Form**
+
+**Personal Information**
+
+- First Name: Bryan
+- Date of Birth: 1951-07-23
+- Gender: Female
+- Phone Number: 936-547-3076
+- Email: bryan.thomas51@gmail.com
+- Medical Record Number: LAC-00193756
+- Health Plan Beneficiary Number: FL-0005284679
+- Blood Type: O+
+
+**Medical History**
+
+- **Allergies**: None reported
+- **Current Medications**: None reported
+- **Past Surgeries**: None reported
+- **Immunizations**: Up-to-date
+- **Family Medical History**: None reported
+- **Lifestyle Habits**: None reported"
+NP039,Substance Abuse Treatment Plan,structured,"### Substance Abuse Treatment Plan
+
+**Client Information:**
+- **Medical Record Number:** 230612-3456
+- **Health Plan Beneficiary Number:** AET-7892-5612-34
+- **Biometric Identifier:** BIO-7245916380
+- **Education Level:** graduate level
+- **County:** San Mateo County
+
+**Diagnosis:**
+- Substance Use Disorder
+
+**Treatment Goals:**
+- Achieve and maintain abstinence from substances.
+- Improve coping skills and emotional regulation.
+- Enhance overall quality of life and well-being.
+
+**Specific Interventions:**
+- **Counseling Sessions:** Weekly individual and group therapy sessions focusing on cognitive-behavioral therapy (CBT) and motivational interviewing.
+- **Medication-Assisted Treatment:** Administration of appropriate medications to manage withdrawal symptoms and cravings.
+- **Support Groups:** Participation in local support groups in San Mateo County.
+
+**Expected Outcomes:**
+- Reduction in substance use.
+- Improved mental health and emotional stability.
+- Enhanced social functioning and community integration.
+
+**Progress Tracking:**
+- Regular assessments of substance use and mental health status.
+- Documentation of attendance and participation in counseling sessions and support groups.
+- Biometric data collection using the biometric identifier BIO-7245916380 to monitor physiological responses to treatment."
+NP040,Medication List,structured,"**Patient Information**
+
+Medical Record Number: MRN-2345678
+
+Patient Name: Maria Gentile
+Date of Birth: 1968-08-29
+Gender: male
+
+**Medication List**
+
+| Medication Name | Dosage | Frequency | Route of Administration | Prescriber's Name | Start Date | End Date |
+|-----------------|--------|-----------|--------------------------|-------------------|------------|----------|
+| Aspirin         | 81 mg  | Daily     | Oral                    | Dr. Smith         | 2023-01-15 | 2024-01-15 |
+| Lisinopril      | 10 mg  | Daily     | Oral                    | Dr. Smith         | 2023-02-01 | 2024-02-01 |
+| Metformin       | 500 mg | Twice daily | Oral                    | Dr. Smith         | 2023-03-10 | 2024-03-10 |"

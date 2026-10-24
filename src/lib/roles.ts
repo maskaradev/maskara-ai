@@ -5,12 +5,66 @@ export const ROLES: ColumnRole[] = [
   "free_text", "transcript", "image", "audio",
 ]
 
+/** What the pipeline does to a column of each role; shown next to the role in every selector. */
+export type Treatment = "kept" | "pseudonymized" | "persona" | "date_shifted" | "synthesized" | "ai_redacted"
+
+export const ROLE_TREATMENT: Record<ColumnRole, Treatment> = {
+  keep: "kept",
+  sex: "kept",
+  person_key: "pseudonymized",
+  id: "pseudonymized",
+  name: "persona",
+  provider: "persona",
+  dob: "date_shifted",
+  date: "date_shifted",
+  ssn: "synthesized",
+  phone: "synthesized",
+  email: "synthesized",
+  street: "synthesized",
+  city: "synthesized",
+  zip: "synthesized",
+  free_text: "ai_redacted",
+  transcript: "ai_redacted",
+  image: "ai_redacted",
+  audio: "ai_redacted",
+}
+
+/** Treatments in selector order; the column selector offers these, not the roles behind them. */
+export const TREATMENTS: Treatment[] = ["kept", "pseudonymized", "persona", "date_shifted", "synthesized", "ai_redacted"]
+
+const TREATMENT_DEFAULT: Record<Treatment, ColumnRole> = {
+  kept: "keep",
+  pseudonymized: "id",
+  persona: "name",
+  date_shifted: "date",
+  synthesized: "street",
+  ai_redacted: "free_text",
+}
+
+/**
+ * Role behind a treatment picked for a column: the current role if it already has that treatment,
+ * then the role detected from the column name and values, then a value sniff, then the default.
+ */
+export function roleForTreatment(treatment: Treatment, column: string, rows: Row[], current: ColumnRole): ColumnRole {
+  if (ROLE_TREATMENT[current] === treatment) return current
+  const detected = inferRole(column, rows)
+  if (ROLE_TREATMENT[detected] === treatment) return detected
+  if (treatment === "synthesized") {
+    const values = rows.map((r) => r[column] ?? "").filter(Boolean).slice(0, 50)
+    const all = (re: RegExp) => values.length > 0 && values.every((v) => re.test(v))
+    if (all(/^\d{5}(-\d{4})?$/)) return "zip"
+    if (all(/^\+?[\d\s().-]{7,}$/)) return "phone"
+  }
+  return TREATMENT_DEFAULT[treatment]
+}
+
 // Roles whose original values must not survive masking.
 export const SENSITIVE_ROLES: ColumnRole[] = [
   "person_key", "name", "dob", "date", "ssn", "phone", "email", "street", "city", "zip", "id", "provider",
 ]
 
-const MEDIA_IMAGE = /\.(png|jpe?g|webp|gif)$/i
+// PDFs share the image role; the pipeline routes them to the document lane by extension.
+const MEDIA_IMAGE = /\.(png|jpe?g|webp|gif|pdf)$/i
 const MEDIA_AUDIO = /\.(mp3|wav|m4a|ogg)$/i
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}/
 

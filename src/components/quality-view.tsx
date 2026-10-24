@@ -1,11 +1,12 @@
 "use client"
 
-import { Check, Minus, ShieldCheck, Sparkles, X } from "lucide-react"
+import { Check, Minus, ScanSearch, ShieldCheck, Sparkles, X } from "lucide-react"
 import { Fragment, useMemo } from "react"
 
 import { useMessages, type Messages } from "@/lib/i18n"
+import { f1, precision, recall } from "@/lib/pii/span-eval"
 import { computeUtility } from "@/lib/pipeline/utility"
-import type { Run, UtilityCheck, UtilityReport } from "@/lib/types"
+import type { Run, SpanReport, UtilityCheck, UtilityReport } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 const DAY = 86_400_000
@@ -208,6 +209,94 @@ function PrivacySection({ run }: { run: Run }) {
   )
 }
 
+const pct = (v: number | null) => (v === null ? "—" : `${Math.round(v * 100)}%`)
+
+function DetectionSection({ report }: { report: SpanReport }) {
+  const q = useMessages().quality
+  const scores = [
+    { label: q.recall, hint: q.recallHint(report.caught, report.gold), value: recall(report) },
+    { label: q.precision, hint: q.precisionHint(report.correct, report.correct + report.wrong), value: precision(report) },
+    { label: "F1", hint: q.f1Hint, value: f1(report) },
+  ]
+  return (
+    <section className="flex flex-col gap-4 rounded-xl border p-4">
+      <div>
+        <h3 className="flex items-center gap-1.5 text-sm font-semibold">
+          <ScanSearch className="size-4" />
+          {q.spanTitle}
+        </h3>
+        <p className="text-xs text-muted-foreground">{q.spanDesc(report.source, report.docs)}</p>
+      </div>
+      <div className="grid grid-cols-3 gap-3">
+        {scores.map((s) => (
+          <div key={s.label} className="flex flex-col gap-0.5 rounded-lg border p-3">
+            <span className="text-xs font-medium text-muted-foreground">{s.label}</span>
+            <span className="text-2xl font-semibold tabular-nums">{pct(s.value)}</span>
+            <span className="text-[11.5px] text-muted-foreground tabular-nums">{s.hint}</span>
+          </div>
+        ))}
+      </div>
+      <div className="grid gap-4 lg:grid-cols-3">
+        <div className="flex flex-col gap-1.5">
+          <div className="text-xs font-medium text-muted-foreground">{q.byLabel}</div>
+          {report.byLabel.map((l) => (
+            <div key={l.label} className="grid grid-cols-[150px_1fr_44px] items-center gap-2 text-[11.5px]">
+              <span className="truncate text-muted-foreground" title={l.type}>
+                {l.label}
+              </span>
+              <div className="h-1.5 rounded bg-muted">
+                <div
+                  className={cn("h-full rounded", l.caught === l.gold ? "bg-emerald-500/70" : "bg-amber-500/70")}
+                  style={{ width: `${(l.caught / Math.max(1, l.gold)) * 100}%` }}
+                />
+              </div>
+              <span className="text-right tabular-nums">
+                {l.caught}/{l.gold}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="text-xs font-medium text-muted-foreground">{q.missedTitle}</div>
+          {report.missed.length === 0 ? (
+            <p className="text-sm text-muted-foreground">{q.none}</p>
+          ) : (
+            <ul className="flex max-h-72 flex-col gap-1 overflow-auto text-[13px]">
+              {report.missed.map((m, i) => (
+                <li key={i} className="flex justify-between gap-3 rounded bg-amber-500/10 px-2 py-1">
+                  <span className="truncate">{m.value}</span>
+                  <span className="shrink-0 text-muted-foreground">
+                    {m.label} · {m.record}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="text-xs font-medium text-muted-foreground">{q.falsePositivesTitle}</div>
+          {report.falsePositives.length === 0 ? (
+            <p className="text-sm text-muted-foreground">{q.none}</p>
+          ) : (
+            <ul className="flex max-h-72 flex-col gap-1 overflow-auto text-[13px]">
+              {report.falsePositives.map((m, i) => (
+                <li key={i} className="flex justify-between gap-3 rounded bg-muted px-2 py-1">
+                  <span className="truncate">{m.value}</span>
+                  <span className="shrink-0 text-muted-foreground">
+                    {m.type} · {m.record}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className="text-[11.5px] text-muted-foreground">{q.falsePositivesNote}</p>
+          {report.outOfScope > 0 && <p className="text-[11.5px] text-muted-foreground">{q.outOfScope(report.outOfScope)}</p>}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export function QualityView({ run }: { run: Run }) {
   const m = useMessages()
   const utility = useMemo(() => utilityFor(run, m.utility), [run, m.utility])
@@ -221,6 +310,7 @@ export function QualityView({ run }: { run: Run }) {
   return (
     <div className="flex flex-col gap-4">
       {utility && <UtilitySection utility={utility} />}
+      {run.report?.spans && <DetectionSection report={run.report.spans} />}
       {run.report && <PrivacySection run={run} />}
     </div>
   )

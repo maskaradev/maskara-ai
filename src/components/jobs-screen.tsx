@@ -21,10 +21,6 @@ export function JobsScreen({ runId }: { runId?: string }) {
     <div className="flex min-h-full flex-1 flex-col">
       <PageHeader trail={[m.trail, run ? m.runShort(run.number) : m.runs]} />
       <main className="flex flex-1 flex-col gap-6 px-6 py-6">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">{m.title}</h1>
-          <p className="text-sm text-muted-foreground">{m.subtitle}</p>
-        </div>
         {!hydrated ? (
           <Skeleton className="h-96 w-full" />
         ) : (

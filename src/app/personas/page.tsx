@@ -36,11 +36,6 @@ export default function PersonaLibraryPage() {
     <div className="flex min-h-full flex-1 flex-col">
       <PageHeader trail={t.trail} />
       <main className="flex flex-1 flex-col gap-6 px-6 py-8">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">{t.title}</h1>
-          <p className="text-sm text-muted-foreground">{t.subtitle}</p>
-        </div>
-
         <div className="relative">
           <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t.search} className="pl-9" />

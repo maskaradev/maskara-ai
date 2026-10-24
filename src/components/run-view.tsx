@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useMemo, useState } from "react"
 
 import { AgentPanel } from "@/components/agent-panel"
+import { DbAgentPanel } from "@/components/db-agent-panel"
 import { PipelineGraph, stageDuration } from "@/components/pipeline-graph"
 import { QualityView, utilityFor } from "@/components/quality-view"
 import { ResultsView } from "@/components/results-view"
@@ -14,7 +15,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useNow } from "@/hooks/use-now"
 import { startRun } from "@/lib/pipeline/run"
 import { useMessages } from "@/lib/i18n"
-import { STAGE_BY_ID } from "@/lib/pipeline/stages"
+import { precision, recall } from "@/lib/pii/span-eval"
+import { STAGE_BY_ID, isExternal } from "@/lib/pipeline/stages"
 import { useAppStore } from "@/lib/store"
 import type { Run, StageId } from "@/lib/types"
 import { cn } from "@/lib/utils"
@@ -52,7 +54,7 @@ function StageDetail({ run, id, now }: { run: Run; id: StageId; now: number }) {
         <p className="text-sm text-muted-foreground">{text.description}</p>
         <dl className="grid grid-cols-[110px_1fr] gap-x-3 gap-y-1.5 text-[13px]">
           <dt className="text-muted-foreground">{m.run.runsIn}</dt>
-          <dd className={cn(def.location === "external-api" && "font-medium text-amber-700 dark:text-amber-300")}>
+          <dd className={cn(isExternal(def.location) && "font-medium text-amber-700 dark:text-amber-300")}>
             {m.graph.locations[def.location]}
           </dd>
           <dt className="text-muted-foreground">{m.run.onPrem}</dt>
@@ -123,7 +125,13 @@ export function RunView({ run }: { run: Run }) {
         <SummaryCard
           label={r.leakCheck}
           value={leaks === undefined ? "—" : r.leaks(leaks)}
-          detail={run.report?.media ? r.mediaKey(run.report.media.found, run.report.media.total) : r.afterLanes}
+          detail={
+            run.report?.spans
+              ? r.spanKey(Math.round((recall(run.report.spans) ?? 0) * 100), Math.round((precision(run.report.spans) ?? 0) * 100))
+              : run.report?.media
+                ? r.mediaKey(run.report.media.found, run.report.media.total)
+                : r.afterLanes
+          }
           tone={leaks === undefined ? undefined : leaks === 0 ? "good" : "bad"}
         />
         <SummaryCard
@@ -150,7 +158,17 @@ export function RunView({ run }: { run: Run }) {
           <PipelineGraph run={run} now={now} selected={focus} onSelect={setSelected} />
           {(focus === "identify" || focus === "generate") && (
             <section className="rounded-xl border p-4">
-              <AgentPanel key={focus} run={run} agent={focus} />
+              <AgentPanel key={focus} run={run} agent={focus} lane="photo" />
+            </section>
+          )}
+          {(focus === "doc_identify" || focus === "doc_generate") && (
+            <section className="rounded-xl border p-4">
+              <AgentPanel key={focus} run={run} agent={focus === "doc_identify" ? "identify" : "generate"} lane="document" />
+            </section>
+          )}
+          {(focus === "text_identify" || focus === "text_generate") && (
+            <section className="rounded-xl border p-4">
+              <DbAgentPanel run={run} agent={focus === "text_identify" ? "identify" : "generate"} />
             </section>
           )}
           <StageDetail run={run} id={focus} now={now} />

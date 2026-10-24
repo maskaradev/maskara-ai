@@ -74,7 +74,7 @@ export const useAppStore = create<State & Actions>()(
       addRun: (run) =>
         set((s) => ({
           // Keep outputs (masked data, images) only for the most recent runs to stay under the quota.
-          runs: [run, ...s.runs].map((r, i) => (i < MAX_RUN_OUTPUTS ? r : { ...r, output: undefined })),
+          runs: [run, ...s.runs].map((r, i) => (i < MAX_RUN_OUTPUTS ? r : { ...r, output: undefined, textDb: undefined })),
         })),
       updateRun: (id, update) => set((s) => ({ runs: s.runs.map((r) => (r.id === id ? update(r) : r)) })),
       mergePersonas: (personas) => set((s) => ({ personas: { ...s.personas, ...personas } })),
@@ -83,11 +83,11 @@ export const useAppStore = create<State & Actions>()(
     }),
     {
       name: "rlmask-local-db",
-      version: 2,
-      // v2 changed the pipeline stages (identification/generation agents); older runs can't be drawn.
+      version: 4,
+      // v2–v4 changed the pipeline stages (image, text-DB, then photo/document agents); older runs can't be drawn.
       migrate: (persisted, version) => {
         const state = persisted as State
-        return version < 2 ? { ...state, runs: [] } : state
+        return version < 4 ? { ...state, runs: [] } : state
       },
       storage: createJSONStorage(() => safeLocalStorage),
       onRehydrateStorage: () => (state) => {
@@ -109,9 +109,4 @@ function subscribeHydration(onChange: () => void) {
 /** True once localStorage has been read; render placeholders until then. */
 export function useHydrated(): boolean {
   return useSyncExternalStore(subscribeHydration, () => useAppStore.persist.hasHydrated(), () => false)
-}
-
-export function storageBytes(): number {
-  if (typeof window === "undefined") return 0
-  return (localStorage.getItem("rlmask-local-db") ?? "").length * 2
 }

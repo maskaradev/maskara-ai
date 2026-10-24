@@ -98,7 +98,7 @@ function totalVariation(a: Map<string, number>, b: Map<string, number>) {
 
 function richSegments(cell: MaskedCell, images: ImageItem[]): Segment[] {
   if (cell.kind === "text") return cell.segments
-  if (cell.kind === "image") return images[cell.item]?.ocr ?? []
+  if (cell.kind === "image") return images.slice(cell.item, cell.item + (cell.pages ?? 1)).flatMap((item) => item.ocr)
   if (cell.kind === "audio") return cell.transcript
   return []
 }

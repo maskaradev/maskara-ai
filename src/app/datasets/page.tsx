@@ -1,6 +1,6 @@
 "use client"
 
-import { AlertTriangle, Database, FilePlus2, Hospital, Trash2, Upload } from "lucide-react"
+import { AlertTriangle, Database, Eye, FilePlus2, FileText, Hospital, Trash2, Upload } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -10,13 +10,24 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { UPLOAD_LIMITS, datasetFromFiles, loadHospitalSample } from "@/lib/datasets"
+import { UPLOAD_LIMITS, datasetFromFiles, loadHospitalSample, loadNemotronSample } from "@/lib/datasets"
 import { useMessages } from "@/lib/i18n"
-import { QUOTA_EVENT, storageBytes, useAppStore, useHydrated } from "@/lib/store"
+import { QUOTA_EVENT, useAppStore, useHydrated } from "@/lib/store"
 import type { Dataset } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 const PREVIEW_ROWS = 50
+
+function MaskedValue({ value, revealed }: { value: string; revealed: boolean }) {
+  if (!value) return null
+  return (
+    <span className="inline-block max-w-full overflow-hidden rounded bg-muted/60 px-1">
+      <span className={cn("transition-[filter]", !revealed && "blur-[5px] select-none")} aria-hidden={!revealed}>
+        {value}
+      </span>
+    </span>
+  )
+}
 
 function UploadPanel({ onDone }: { onDone: (d: Dataset) => void }) {
   const m = useMessages()
@@ -84,16 +95,41 @@ function UploadPanel({ onDone }: { onDone: (d: Dataset) => void }) {
 function DatasetViewer({ dataset }: { dataset: Dataset }) {
   const m = useMessages()
   const t = m.datasets
+  const [peek, setPeek] = useState(false)
+  const hold = (on: boolean) => (e: React.KeyboardEvent) => {
+    if (e.key !== " " && e.key !== "Enter") return
+    e.preventDefault()
+    setPeek(on)
+  }
   return (
     <Tabs defaultValue={dataset.tables[0]?.name} key={dataset.id}>
-      <TabsList variant="line">
-        {dataset.tables.map((table) => (
-          <TabsTrigger key={table.name} value={table.name}>
-            {table.name}
-            <span className="text-xs text-muted-foreground">{table.rows.length}</span>
-          </TabsTrigger>
-        ))}
-      </TabsList>
+      <div className="flex items-center justify-between gap-2">
+        <TabsList variant="line">
+          {dataset.tables.map((table) => (
+            <TabsTrigger key={table.name} value={table.name}>
+              {table.name}
+              <span className="text-xs text-muted-foreground">{table.rows.length}</span>
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        <Button
+          variant={peek ? "secondary" : "ghost"}
+          size="sm"
+          className="touch-none select-none"
+          aria-pressed={peek}
+          onPointerDown={() => setPeek(true)}
+          onPointerUp={() => setPeek(false)}
+          onPointerLeave={() => setPeek(false)}
+          onPointerCancel={() => setPeek(false)}
+          onKeyDown={hold(true)}
+          onKeyUp={hold(false)}
+          onBlur={() => setPeek(false)}
+          onContextMenu={(e) => e.preventDefault()}
+        >
+          <Eye />
+          {t.peek}
+        </Button>
+      </div>
       {dataset.tables.map((table) => (
         <TabsContent key={table.name} value={table.name}>
           <div className="max-h-[480px] overflow-auto rounded-lg border">
@@ -113,7 +149,7 @@ function DatasetViewer({ dataset }: { dataset: Dataset }) {
                   <tr key={i} className="border-t align-top">
                     {table.columns.map((c) => (
                       <td key={c} className={cn("px-3 py-1.5", (row[c]?.length ?? 0) > 60 ? "min-w-80" : "whitespace-nowrap")}>
-                        {row[c]}
+                        <MaskedValue value={row[c] ?? ""} revealed={peek} />
                       </td>
                     ))}
                   </tr>
@@ -139,24 +175,22 @@ export default function DatasetsPage() {
   const [uploading, setUploading] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [bytes, setBytes] = useState(0)
 
   const selected = datasets.find((d) => d.id === selectedId) ?? datasets[0]
-  const hasSample = datasets.some((d) => d.source === "sample")
+  const hasSample = datasets.some((d) => d.id === "sample-hospital")
+  const hasNemotron = datasets.some((d) => d.id === "sample-nemotron-pii")
 
   useEffect(() => {
-    const refresh = () => setBytes(storageBytes())
-    refresh()
     const onQuota = () => setError(t.quotaFull)
     window.addEventListener(QUOTA_EVENT, onQuota)
     return () => window.removeEventListener(QUOTA_EVENT, onQuota)
-  }, [datasets, t.quotaFull])
+  }, [t.quotaFull])
 
-  async function loadSample() {
+  async function loadSample(load: () => Promise<Dataset> = loadHospitalSample) {
     setLoading(true)
     setError(null)
     try {
-      const d = await loadHospitalSample()
+      const d = await load()
       upsertDataset(d)
       setSelectedId(d.id)
     } catch (e) {
@@ -170,21 +204,19 @@ export default function DatasetsPage() {
     <div className="flex min-h-full flex-1 flex-col">
       <PageHeader trail={t.trail} />
       <main className="flex flex-1 flex-col gap-6 px-6 py-8">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight">{t.title}</h1>
-            <p className="text-sm text-muted-foreground">{t.subtitle}</p>
-          </div>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={loadSample} disabled={loading}>
-              <Hospital />
-              {hasSample ? t.reloadSample : t.loadSample}
-            </Button>
-            <Button variant={uploading ? "secondary" : "default"} onClick={() => setUploading(!uploading)}>
-              <Upload />
-              {t.upload}
-            </Button>
-          </div>
+        <div className="flex flex-wrap justify-end gap-2">
+          <Button variant="outline" onClick={() => loadSample()} disabled={loading}>
+            <Hospital />
+            {hasSample ? t.reloadSample : t.loadSample}
+          </Button>
+          <Button variant="outline" onClick={() => loadSample(loadNemotronSample)} disabled={loading}>
+            <FileText />
+            {hasNemotron ? t.reloadNemotron : t.loadNemotron}
+          </Button>
+          <Button variant={uploading ? "secondary" : "default"} onClick={() => setUploading(!uploading)} disabled>
+            <Upload />
+            {t.upload}
+          </Button>
         </div>
 
         {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
@@ -204,10 +236,16 @@ export default function DatasetsPage() {
           <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed p-12 text-center">
             <Database className="size-6 text-muted-foreground" />
             <p className="text-sm text-muted-foreground">{t.empty}</p>
-            <Button onClick={loadSample} disabled={loading}>
-              <Hospital />
-              {t.loadSample}
-            </Button>
+            <div className="flex flex-wrap justify-center gap-2">
+              <Button onClick={() => loadSample()} disabled={loading}>
+                <Hospital />
+                {t.loadSample}
+              </Button>
+              <Button variant="outline" onClick={() => loadSample(loadNemotronSample)} disabled={loading}>
+                <FileText />
+                {t.loadNemotron}
+              </Button>
+            </div>
           </div>
         ) : (
           <>
@@ -243,6 +281,17 @@ export default function DatasetsPage() {
                         <Trash2 />
                       </Button>
                     </div>
+                    {d.spanKey && (
+                      <a
+                        className="self-start text-xs text-muted-foreground underline"
+                        href={d.spanKey.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {t.spanKeySource(d.spanKey.source, d.spanKey.license)}
+                      </a>
+                    )}
                     <ul className="text-xs text-muted-foreground">
                       {d.tables.map((table) => (
                         <li key={table.name}>
@@ -264,8 +313,7 @@ export default function DatasetsPage() {
           </>
         )}
 
-        <footer className="mt-auto flex items-center justify-between border-t pt-4 text-xs text-muted-foreground">
-          <span>{t.storage((bytes / 1024 / 1024).toFixed(2))}</span>
+        <footer className="mt-auto flex items-center justify-end border-t pt-4 text-xs text-muted-foreground">
           <Button
             variant="ghost"
             size="sm"
