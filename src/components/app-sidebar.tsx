@@ -7,7 +7,6 @@ import {
   FilePlus2,
   KeyRound,
   ListChecks,
-  Moon,
   Plus,
   Settings,
   ShieldCheck,
@@ -31,6 +30,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const mainNav = [
   { title: "New masking job", icon: FilePlus2 },
@@ -127,7 +127,7 @@ export function AppSidebar() {
       <SidebarFooter className="px-4 pb-4">
         <div className="flex items-center gap-3 text-muted-foreground">
           <UserRoundCog className="size-4" />
-          <Moon className="size-4" />
+          <ThemeToggle />
           <span className="ml-auto text-[11px]">v0.1.0</span>
         </div>
       </SidebarFooter>
