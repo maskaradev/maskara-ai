@@ -4,8 +4,7 @@
 
 export const REPAINT_PREFIX = "repaint:"
 
-// Keeps the pre-rename name so repaints saved under the old RLMask name still load.
-const DB_NAME = "rlmask"
+const DB_NAME = "maskara"
 const STORE = "repaint"
 
 let db: Promise<IDBDatabase> | null = null

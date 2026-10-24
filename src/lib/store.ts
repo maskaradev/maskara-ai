@@ -80,14 +80,7 @@ export const useAppStore = create<State & Actions>()(
       cacheDetection: (key, entities) => set((s) => ({ detectionCache: { ...s.detectionCache, [key]: entities } })),
     }),
     {
-      // Keeps the pre-rename key so data saved under the old RLMask name still loads.
-      name: "rlmask-local-db",
-      version: 4,
-      // v2–v4 changed the pipeline stages (image, text-DB, then photo/document agents); older runs can't be drawn.
-      migrate: (persisted, version) => {
-        const state = persisted as State
-        return version < 4 ? { ...state, runs: [] } : state
-      },
+      name: "maskara-local-db",
       storage: createJSONStorage(() => safeLocalStorage),
       onRehydrateStorage: () => (state) => {
         // A reload stops in-flight runs; mark them so the UI doesn't show them as running forever.
