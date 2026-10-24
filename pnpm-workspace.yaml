@@ -1,5 +1,3 @@
 allowBuilds:
-  onnxruntime-node: false
   sharp: false
-  tesseract.js: false
   unrs-resolver: false
