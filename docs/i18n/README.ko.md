@@ -11,6 +11,7 @@
 [라이브 데모](https://rl-mask.vercel.app) · [빠른 시작](#빠른-시작) · [동작 방식](#동작-방식) · [로드맵](#로드맵) · [기여하기](#기여하기)
 
 ![Status: MVP](https://img.shields.io/badge/status-MVP-orange)
+[![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue)](../../LICENSE)
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-12-F69220?logo=pnpm&logoColor=white)
@@ -227,4 +228,6 @@ planning/           # 기획 문서, 리서치, 발표 자료
 
 ## 라이선스
 
-아직 오픈소스 라이선스를 정하지 않았습니다. `LICENSE` 파일이 추가되기 전까지 이 저장소의 코드는 저작권자의 허락 없이 사용·수정·배포할 수 없습니다.
+[GNU Affero General Public License v3.0](../../LICENSE)으로 배포합니다. 수정한 버전을 네트워크 서비스로 운영하면 그 서비스 사용자에게 소스 코드를 제공해야 합니다.
+
+`public/samples/`의 샘플 데이터는 각자의 원래 라이선스를 따릅니다([감사의 말](#감사의-말) 참고).

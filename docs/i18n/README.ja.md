@@ -11,6 +11,7 @@
 [ライブデモ](https://rl-mask.vercel.app) · [クイックスタート](#クイックスタート) · [仕組み](#仕組み) · [ロードマップ](#ロードマップ) · [コントリビュート](#コントリビュート)
 
 ![Status: MVP](https://img.shields.io/badge/status-MVP-orange)
+[![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue)](../../LICENSE)
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-12-F69220?logo=pnpm&logoColor=white)
@@ -225,4 +226,6 @@ Issue や PR を歓迎します。
 
 ## ライセンス
 
-オープンソースライセンスはまだ決まっていません。`LICENSE` ファイルが追加されるまで、このリポジトリのコードを著作権者の許可なく使用、改変、配布することはできません。
+[GNU Affero General Public License v3.0](../../LICENSE) で公開しています。改変したバージョンをネットワークサービスとして運用する場合は、そのサービスの利用者にソースコードを提供する必要があります。
+
+`public/samples/` のサンプルデータセットは、それぞれ元のライセンスに従います（[謝辞](#謝辞)を参照）。

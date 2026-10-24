@@ -11,6 +11,7 @@
 [在线演示](https://rl-mask.vercel.app) · [快速开始](#快速开始) · [工作原理](#工作原理) · [路线图](#路线图) · [参与贡献](#参与贡献)
 
 ![Status: MVP](https://img.shields.io/badge/status-MVP-orange)
+[![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue)](../../LICENSE)
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-12-F69220?logo=pnpm&logoColor=white)
@@ -225,4 +226,6 @@ planning/           # 规划文档、调研资料、演示幻灯片
 
 ## 许可证
 
-目前尚未选定开源许可证。在添加 `LICENSE` 文件之前，未经版权所有者许可，不得使用、修改或分发本仓库中的代码。
+本项目以 [GNU Affero 通用公共许可证 v3.0](../../LICENSE) 发布。如果将修改后的版本作为网络服务运行，必须向该服务的用户提供其源代码。
+
+`public/samples/` 中的示例数据集沿用各自的许可证（见[致谢](#致谢)）。

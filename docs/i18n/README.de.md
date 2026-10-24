@@ -11,6 +11,7 @@
 [Live-Demo](https://rl-mask.vercel.app) · [Schnellstart](#schnellstart) · [So funktioniert es](#so-funktioniert-es) · [Roadmap](#roadmap) · [Mitwirken](#mitwirken)
 
 ![Status: MVP](https://img.shields.io/badge/status-MVP-orange)
+[![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue)](../../LICENSE)
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-12-F69220?logo=pnpm&logoColor=white)
@@ -225,4 +226,6 @@ Gut zu wissen:
 
 ## Lizenz
 
-Bisher wurde keine Open-Source-Lizenz gewählt. Solange keine `LICENSE`-Datei hinzugefügt wurde, darf der Code in diesem Repository ohne Erlaubnis des Urheberrechtsinhabers weder verwendet noch verändert oder verbreitet werden.
+Veröffentlicht unter der [GNU Affero General Public License v3.0](../../LICENSE). Wer eine veränderte Version als Netzwerkdienst betreibt, muss den Nutzern dieses Dienstes den Quellcode anbieten.
+
+Die Beispieldatensätze in `public/samples/` behalten ihre eigenen Lizenzen (siehe [Danksagungen](#danksagungen)).
