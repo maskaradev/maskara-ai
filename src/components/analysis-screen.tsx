@@ -437,7 +437,7 @@ export function AnalysisScreen({ runId }: { runId?: string }) {
           <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed p-12 text-center">
             <p className="text-sm text-muted-foreground">{m.analysis.empty}</p>
             <Button asChild variant="outline">
-              <Link href="/jobs">{m.sidebar.jobs}</Link>
+              <Link href="/jobs">{m.sidebar.mask}</Link>
             </Button>
           </div>
         )}

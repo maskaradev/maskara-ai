@@ -1,6 +1,6 @@
 "use client"
 
-import { CircleCheck, CircleDashed, Database, ListChecks, X, type LucideIcon } from "lucide-react"
+import { CircleCheck, CircleDashed, Database, FlaskConical, VenetianMask, X, type LucideIcon } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Suspense, useSyncExternalStore } from "react"
@@ -29,7 +29,8 @@ import { useAppStore, useHydrated } from "@/lib/store"
 type NavItem = { title: Exclude<keyof Messages["sidebar"], "onboarding">; icon?: LucideIcon; href?: string }
 
 const mainNav: NavItem[] = [
-  { title: "jobs", icon: ListChecks, href: "/jobs" },
+  { title: "mask", icon: VenetianMask, href: "/jobs" },
+  { title: "lab", icon: FlaskConical, href: "/lab" },
 ]
 
 function isActive(pathname: string, href?: string) {
@@ -120,7 +121,7 @@ function Nav({ pathname }: { pathname: string }) {
   )
 }
 
-/** Demo walkthrough order (datasets → jobs), doubling as the ⌘+number shortcut to jump there. */
+/** Demo walkthrough order (datasets → mask → lab), doubling as the ⌘+number shortcut to jump there. */
 function NavShortcut({ step, href, active }: { step: number; href?: string; active: boolean }) {
   const router = useRouter()
   useHotkeys(`mod+${step}`, () => href && router.push(href), { enabled: !!href, preventDefault: true }, [href, router])
