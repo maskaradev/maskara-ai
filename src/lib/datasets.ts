@@ -58,6 +58,33 @@ export async function loadNemotronSample(): Promise<Dataset> {
   }
 }
 
+async function loadCsvSample(id: string, name: string, base: string, files: string[]): Promise<Dataset> {
+  const tables = await Promise.all(
+    files.map(async (file) => {
+      const res = await fetch(base + file)
+      if (!res.ok) throw new Error(`Failed to load ${file}`)
+      return parseCsv(file.replace(/\.csv$/, ""), await res.text())
+    }),
+  )
+  return { id, name, source: "sample", createdAt: new Date().toISOString(), tables }
+}
+
+/** 15 synthetic Massachusetts patients from Synthea (Apache-2.0): patients, encounters, conditions. */
+export function loadSyntheaSample(): Promise<Dataset> {
+  return loadCsvSample("sample-synthea", "Synthea · patients (sample)", "/samples/synthea/", [
+    "patients.csv",
+    "encounters.csv",
+    "conditions.csv",
+  ])
+}
+
+/** 15 synthetic US personas from nvidia/Nemotron-Personas-USA (CC BY 4.0); names appear in the free text. */
+export function loadPersonasSample(): Promise<Dataset> {
+  return loadCsvSample("sample-nemotron-personas", "Nemotron-Personas · USA (sample)", "/samples/nemotron-personas/", [
+    "personas.csv",
+  ])
+}
+
 export async function datasetFromFiles(name: string, files: File[]): Promise<Dataset> {
   for (const f of files) {
     if (f.size > UPLOAD_LIMITS.bytesPerFile) throw new Error(`${f.name} is larger than 1 MB.`)

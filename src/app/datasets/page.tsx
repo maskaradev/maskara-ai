@@ -1,6 +1,6 @@
 "use client"
 
-import { AlertTriangle, Database, Eye, FilePlus2, FileText, Hospital, Trash2, Upload } from "lucide-react"
+import { AlertTriangle, Database, Eye, FilePlus2, FileText, Hospital, Stethoscope, Trash2, Upload, Users } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -10,7 +10,14 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { UPLOAD_LIMITS, datasetFromFiles, loadHospitalSample, loadNemotronSample } from "@/lib/datasets"
+import {
+  UPLOAD_LIMITS,
+  datasetFromFiles,
+  loadHospitalSample,
+  loadNemotronSample,
+  loadPersonasSample,
+  loadSyntheaSample,
+} from "@/lib/datasets"
 import { useMessages } from "@/lib/i18n"
 import { QUOTA_EVENT, useAppStore, useHydrated } from "@/lib/store"
 import type { Dataset } from "@/lib/types"
@@ -179,6 +186,8 @@ export default function DatasetsPage() {
   const selected = datasets.find((d) => d.id === selectedId) ?? datasets[0]
   const hasSample = datasets.some((d) => d.id === "sample-hospital")
   const hasNemotron = datasets.some((d) => d.id === "sample-nemotron-pii")
+  const hasSynthea = datasets.some((d) => d.id === "sample-synthea")
+  const hasPersonas = datasets.some((d) => d.id === "sample-nemotron-personas")
 
   useEffect(() => {
     const onQuota = () => setError(t.quotaFull)
@@ -213,6 +222,14 @@ export default function DatasetsPage() {
             <FileText />
             {hasNemotron ? t.reloadNemotron : t.loadNemotron}
           </Button>
+          <Button variant="outline" onClick={() => loadSample(loadSyntheaSample)} disabled={loading}>
+            <Stethoscope />
+            {hasSynthea ? t.reloadSynthea : t.loadSynthea}
+          </Button>
+          <Button variant="outline" onClick={() => loadSample(loadPersonasSample)} disabled={loading}>
+            <Users />
+            {hasPersonas ? t.reloadPersonas : t.loadPersonas}
+          </Button>
           <Button variant={uploading ? "secondary" : "default"} onClick={() => setUploading(!uploading)} disabled>
             <Upload />
             {t.upload}
@@ -244,6 +261,14 @@ export default function DatasetsPage() {
               <Button variant="outline" onClick={() => loadSample(loadNemotronSample)} disabled={loading}>
                 <FileText />
                 {t.loadNemotron}
+              </Button>
+              <Button variant="outline" onClick={() => loadSample(loadSyntheaSample)} disabled={loading}>
+                <Stethoscope />
+                {t.loadSynthea}
+              </Button>
+              <Button variant="outline" onClick={() => loadSample(loadPersonasSample)} disabled={loading}>
+                <Users />
+                {t.loadPersonas}
               </Button>
             </div>
           </div>

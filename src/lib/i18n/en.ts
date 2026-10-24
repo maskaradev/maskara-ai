@@ -324,6 +324,10 @@ export const en = {
     reloadSample: "Reload hospital sample",
     loadNemotron: "Load Nemotron-PII sample",
     reloadNemotron: "Reload Nemotron-PII sample",
+    loadSynthea: "Load Synthea sample",
+    reloadSynthea: "Reload Synthea sample",
+    loadPersonas: "Load Nemotron-Personas sample",
+    reloadPersonas: "Reload Nemotron-Personas sample",
     upload: "Upload CSV",
     empty:
       "No datasets yet. Load the Riverside General Hospital sample (patients, clinical notes, and records with images and audio) or upload your own CSV.",

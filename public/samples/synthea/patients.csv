@@ -1,0 +1,16 @@
+patient_id,first_name,last_name,sex,date_of_birth,ssn,drivers_license_number,passport_number,street_address,city,state,zip
+S001,Shanel,Gusikowski,F,1967-04-01,999-55-2858,S99963078,X22070396X,874 Torp Dale,Georgetown,Massachusetts,00000
+S002,Soon,Koelpin,F,1988-12-29,999-47-4106,S99996292,X74406370X,986 Wilkinson Lane Apt 19,Boston,Massachusetts,02131
+S003,Fernando,Stehr,M,1960-08-15,999-67-2319,S99955104,X41641087X,116 Moen Path Apt 23,Greenfield,Massachusetts,01301
+S004,Nisha,Greenfelder,F,1985-11-01,999-56-3639,S99973532,X59414376X,155 Oberbrunner Highlands Unit 20,Boston,Massachusetts,02111
+S005,Jed,Kilback,M,1990-11-07,999-12-7166,S99947669,X47287442X,440 Senger Mission Unit 24,Tewksbury,Massachusetts,00000
+S006,Birgit,Shanahan,F,1971-05-28,999-98-8313,S99969640,X07030165X,510 Deckow Pathway,Brockton,Massachusetts,02351
+S007,Peter,Bosco,M,1959-06-14,999-42-6784,S99947561,X78271624X,767 Wiegand View Suite 26,Halifax,Massachusetts,00000
+S008,Abram,Brekke,M,1966-03-01,999-70-6180,S99910585,X68282880X,755 Hilll Haven Suite 43,Medford,Massachusetts,02145
+S009,Shalanda,West,F,1949-09-03,999-90-9474,S99920567,X80485527X,137 Rempel Road Suite 54,Lawrence,Massachusetts,01840
+S010,Angelyn,Harris,F,1965-11-10,999-73-3588,S99981249,X14424021X,245 Pagac Vista Apt 31,Norwood,Massachusetts,02090
+S011,Berta,Villanueva,F,1974-04-02,999-86-3088,S99998054,X80488524X,757 Dibbert Alley Unit 40,Boston,Massachusetts,02152
+S012,Precious,Corwin,F,2003-10-26,999-11-9823,S99985141,X32536742X,308 Fritsch Avenue Unit 69,Boston,Massachusetts,02215
+S013,Franklin,Kris,M,1952-10-05,999-10-9984,S99930725,X25540739X,657 Bergnaum Ville,Hopkinton,Massachusetts,01748
+S014,Arla,Walter,F,1994-04-15,999-42-7428,S99986631,X19636647X,542 Fay Common,Methuen,Massachusetts,01844
+S015,Kent,Hudson,M,1995-12-04,999-86-1887,S99929710,X70675993X,730 McLaughlin Lodge,Abington,Massachusetts,02351

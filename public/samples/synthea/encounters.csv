@@ -1,0 +1,61 @@
+encounter_id,patient_id,visit_date,encounter_class,encounter_type,reason,provider,organization
+Ecd716f3d,S001,2026-06-28,ambulatory,Encounter for problem (procedure),Dependent drug abuse (disorder),Silva Grimes,ANNA JAQUES HOSPITAL SUBACUTE UNIT
+E7b3eca14,S001,2026-07-28,ambulatory,Encounter for problem (procedure),Dependent drug abuse (disorder),Silva Grimes,ANNA JAQUES HOSPITAL SUBACUTE UNIT
+E5254a506,S001,2026-08-27,ambulatory,Encounter for problem (procedure),Dependent drug abuse (disorder),Silva Grimes,ANNA JAQUES HOSPITAL SUBACUTE UNIT
+Eaa8cf9d8,S001,2026-09-26,ambulatory,Encounter for problem (procedure),Dependent drug abuse (disorder),Silva Grimes,ANNA JAQUES HOSPITAL SUBACUTE UNIT
+E9886f4e2,S002,2026-05-07,emergency,Obstetric emergency hospital admission (procedure),Normal pregnancy (finding),Hui Cronin,SOUTH COVE COMMUNITY HEALTH CENTER  INC
+Ea65fe7f8,S002,2026-06-18,ambulatory,Postnatal visit (regime/therapy),,Emilia Hernández,TUFTS MEDICAL CENTER  INC
+Ecc516bc5,S002,2026-09-03,wellness,General examination of patient (procedure),,Sondra Zieme,FENWAY COMMUNITY HEALTH CENTER  INC
+E3f4c70c9,S002,2026-09-17,ambulatory,Encounter for check up (procedure),Patient referral for dental care (procedure),Emilia Hernández,TUFTS MEDICAL CENTER  INC
+E093dfc81,S003,2026-02-17,emergency,Emergency hospital admission for asthma (procedure),Asthma (disorder),Marth Mayer,BAYSTATE FRANKLIN MEDICAL CENTER
+E126a2762,S003,2026-02-19,ambulatory,Asthma follow-up (regime/therapy),Asthma (disorder),Marth Mayer,BAYSTATE FRANKLIN MEDICAL CENTER
+E75905273,S003,2026-07-06,wellness,General examination of patient (procedure),,Tomás Menéndez,CONNECTICUT RIVER INTERNISTS. LLP
+E01ca51b5,S003,2026-07-20,ambulatory,Encounter for check up (procedure),Gingivitis (disorder),Marth Mayer,BAYSTATE FRANKLIN MEDICAL CENTER
+E904acb30,S004,2026-03-20,ambulatory,Prenatal visit (regime/therapy),Normal pregnancy (finding),Leland Bernier,WALDEN BEHAVIORAL CARE LLC
+Eb1cf38ca,S004,2026-03-27,ambulatory,Prenatal visit (regime/therapy),Normal pregnancy (finding),Leland Bernier,WALDEN BEHAVIORAL CARE LLC
+E4e7bec9e,S004,2026-04-03,emergency,Obstetric emergency hospital admission (procedure),Normal pregnancy (finding),Tanika Baumbach,GERMAN CENTER FOR EXTENDED CARE
+Eef95d8f5,S004,2026-05-15,ambulatory,Postnatal visit (regime/therapy),,Leland Bernier,WALDEN BEHAVIORAL CARE LLC
+Ea79a2e32,S005,2022-06-20,ambulatory,Encounter for symptom (procedure),Acute bacterial sinusitis (disorder),Alysha Koch,TEWKSBURY HOSPITAL
+E869be10f,S005,2025-01-22,wellness,General examination of patient (procedure),,Alfonso Nava,GREATER LAWRENCE FAMILY HEALTH CENTER INC
+E47346371,S005,2025-02-05,ambulatory,Encounter for check up (procedure),Patient referral for dental care (procedure),Alysha Koch,TEWKSBURY HOSPITAL
+E510adfe1,S005,2025-09-22,ambulatory,Encounter for symptom (procedure),Acute viral pharyngitis (disorder),Alysha Koch,TEWKSBURY HOSPITAL
+E49f86bd2,S006,2025-07-04,ambulatory,Encounter for problem (procedure),Ischemic heart disease (disorder),Manuela Rendón,Fitchburg Outpatient Clinic
+E2ce9e050,S006,2025-07-11,ambulatory,Encounter for check up (procedure),Gingivitis (disorder),Almeda Okuneva,BRIGHAM & WOMENS HOSPITAL INC
+Ef0a985f2,S006,2026-06-04,ambulatory,Encounter for check up (procedure),Screening for malignant neoplasm of colon (procedure),Almeda Okuneva,BRIGHAM & WOMENS HOSPITAL INC
+E304f2045,S006,2026-06-26,wellness,General examination of patient (procedure),,Arturo Schmidt,FAMILY AND COMMUNITY RESOURCES INC
+E8aec13f9,S007,2026-05-24,urgentcare,Urgent care clinic (environment),,Mica Lemke,SOUTH SHORE PRIMARY AND URGENT CARE LLC
+E616ad70d,S007,2026-09-20,wellness,General examination of patient (procedure),,Daniel Ankunding,KINGSBURY PRIMARY CARE PC
+Ed5943c13,S007,2026-09-21,ambulatory,Follow-up encounter (procedure),Hyperlipidemia (disorder),Damaris Funk,BROCKTON HOSPITAL  INC.
+Ec3f3ffd7,S007,2026-10-04,ambulatory,Encounter for check up (procedure),Patient referral for dental care (procedure),Damaris Funk,BROCKTON HOSPITAL  INC.
+E9d05a591,S008,2025-06-24,wellness,General examination of patient (procedure),,Elijah White,MELROSE FAMILY OPTICIANS LLC
+Ec8ca7d18,S008,2025-07-08,ambulatory,Encounter for check up (procedure),Patient referral for dental care (procedure),Zachery Pagac,MELROSEWAKEFIELD HEALTHCARE  INC
+E43cb58cc,S008,2026-03-01,ambulatory,Encounter for check up (procedure),Screening for malignant neoplasm of colon (procedure),Zachery Pagac,MELROSEWAKEFIELD HEALTHCARE  INC
+E137ecee6,S008,2026-06-30,wellness,General examination of patient (procedure),,Elijah White,MELROSE FAMILY OPTICIANS LLC
+Eaa811a8d,S009,2026-05-23,emergency,Emergency room admission (procedure),Overdose (disorder),Concha Mann,ACADEMY MANOR
+Efa25a96b,S009,2026-06-13,ambulatory,Encounter for problem (procedure),Dependent drug abuse (disorder),Chang Kutch,LAWRENCE GENERAL HOSPITAL
+E5b18f730,S009,2026-07-14,ambulatory,Encounter for problem (procedure),Dependent drug abuse (disorder),Chang Kutch,LAWRENCE GENERAL HOSPITAL
+E94985b6a,S009,2026-08-13,ambulatory,Encounter for problem (procedure),Dependent drug abuse (disorder),Chang Kutch,LAWRENCE GENERAL HOSPITAL
+Eb797c026,S010,2026-08-05,urgentcare,Urgent care clinic (environment),,Brigitte Bartoletti,WOONSOCKET URGENT CARE PC
+E74f8bbc3,S010,2026-09-02,outpatient,Encounter for check up (procedure),,Guillermo Fay,NORWOOD HOSPITAL
+Ec16b986c,S010,2026-09-16,ambulatory,Encounter for check up (procedure),Patient referral for dental care (procedure),Shasta King,STEWARD NORWOOD HOSPITAL INC
+Ea2dceb52,S010,2026-10-14,outpatient,Encounter for check up (procedure),,Guillermo Fay,NORWOOD HOSPITAL
+Ed66c3f87,S011,2024-04-16,ambulatory,Encounter for check up (procedure),Gingivitis (disorder),Latoyia Lindgren,DR SOLOMON CARTER FULLER MENTAL HEALTH CENTER
+Ed9c3425d,S011,2025-01-14,outpatient,Patient encounter procedure (procedure),Contraception care (regime/therapy),Latoyia Lindgren,DR SOLOMON CARTER FULLER MENTAL HEALTH CENTER
+E171a25bf,S011,2025-04-08,wellness,General examination of patient (procedure),,Alane Frami,SOUTH END COMMUNITY HEALTH CENTER INC
+E2c46abf4,S011,2026-04-14,wellness,General examination of patient (procedure),,Alane Frami,SOUTH END COMMUNITY HEALTH CENTER INC
+Edeb4b576,S012,2024-11-26,ambulatory,Prenatal visit (regime/therapy),Normal pregnancy (finding),Cindie Zulauf,LEMUEL SHATTUCK HOSPITAL
+E5f68244e,S012,2025-10-29,ambulatory,Encounter for symptom (procedure),Viral sinusitis (disorder),Cindie Zulauf,LEMUEL SHATTUCK HOSPITAL
+E4bbf7d68,S012,2025-12-03,outpatient,Consultation for treatment (procedure),Contraception care (regime/therapy),Cindie Zulauf,LEMUEL SHATTUCK HOSPITAL
+E31fed076,S012,2025-12-28,wellness,General examination of patient (procedure),,Eliseo Reinger,DIMOCK COMMUNITY HEALTH CENTER  INC
+E22a4212a,S013,2025-02-14,inpatient,Hospital admission (procedure),Acute ST segment elevation myocardial infarction (disorder),Manuela Rendón,Fitchburg Outpatient Clinic
+E3c9ae43c,S013,2025-02-14,emergency,Emergency room admission (procedure),Myocardial infarction (disorder),Manuela Rendón,Fitchburg Outpatient Clinic
+Ed6e8190b,S013,2025-02-23,ambulatory,Encounter for check up (procedure),Gingivitis (disorder),Delois Langosh,METRO WEST REHAB CORP
+E12526cca,S013,2026-02-15,wellness,General examination of patient (procedure),,Bea Schiller,PRIMARY CARE FOR ADULTS PLLC
+Ed23e23f1,S014,2025-10-24,outpatient,Patient encounter procedure (procedure),Contraception care (regime/therapy),Chang Kutch,LAWRENCE GENERAL HOSPITAL
+E494144d4,S014,2026-01-23,outpatient,Patient encounter procedure (procedure),Contraception care (regime/therapy),Chang Kutch,LAWRENCE GENERAL HOSPITAL
+E19896067,S014,2026-04-24,outpatient,Patient encounter procedure (procedure),Contraception care (regime/therapy),Chang Kutch,LAWRENCE GENERAL HOSPITAL
+E1b579ed1,S014,2026-07-24,outpatient,Patient encounter procedure (procedure),Contraception care (regime/therapy),Chang Kutch,LAWRENCE GENERAL HOSPITAL
+E52f960d3,S015,2024-02-12,wellness,General examination of patient (procedure),,Victoria Roob,DILIGENCEHEALTHCARE
+Eeb7a28de,S015,2025-01-26,ambulatory,Encounter for symptom (procedure),Acute bronchitis (disorder),Damaris Funk,BROCKTON HOSPITAL  INC.
+E4002c7d1,S015,2025-02-03,urgentcare,Urgent care clinic (environment),,Elizbeth Dickinson,HANOVER FAMILY HEALTH & URGENT CARE PC
+Efaa888ee,S015,2025-02-10,outpatient,Encounter for check up (procedure),,Damaris Funk,BROCKTON HOSPITAL  INC.

@@ -322,6 +322,10 @@ export const ko: Messages = {
     reloadSample: "병원 샘플 다시 불러오기",
     loadNemotron: "Nemotron-PII 샘플 불러오기",
     reloadNemotron: "Nemotron-PII 샘플 다시 불러오기",
+    loadSynthea: "Synthea 샘플 불러오기",
+    reloadSynthea: "Synthea 샘플 다시 불러오기",
+    loadPersonas: "Nemotron-Personas 샘플 불러오기",
+    reloadPersonas: "Nemotron-Personas 샘플 다시 불러오기",
     upload: "CSV 업로드",
     empty:
       "아직 데이터셋이 없습니다. Riverside General Hospital 샘플(환자, 진료 기록, 이미지·오디오가 포함된 기록)을 불러오거나 CSV를 업로드하세요.",
