@@ -4,8 +4,6 @@
   "private": true,
   "license": "AGPL-3.0-only",
   "scripts": {
-    "predev": "node scripts/sync-readme.mjs",
-    "sync:readme": "node scripts/sync-readme.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
