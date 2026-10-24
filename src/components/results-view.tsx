@@ -7,7 +7,7 @@ import { HighlightedText } from "@/components/highlighted-text"
 import { ImageCanvas } from "@/components/image-canvas"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { toCsv } from "@/lib/datasets"
+import { downloadCsv } from "@/lib/datasets"
 import { useMessages } from "@/lib/i18n"
 import { segmentsToText } from "@/lib/mask"
 import type { ImageItem, MaskedCell, MaskedTable, Run, Segment } from "@/lib/types"
@@ -26,14 +26,9 @@ function exportValue(cell: MaskedCell): string {
   }
 }
 
-function downloadCsv(table: MaskedTable) {
+function downloadMasked(table: MaskedTable) {
   const rows = table.rows.map((r) => Object.fromEntries(table.columns.map((c) => [c, exportValue(r[c])])))
-  const blob = new Blob([toCsv(table.columns, rows)], { type: "text/csv" })
-  const a = document.createElement("a")
-  a.href = URL.createObjectURL(blob)
-  a.download = `${table.name}.masked.csv`
-  a.click()
-  URL.revokeObjectURL(a.href)
+  downloadCsv(`${table.name}.masked`, table.columns, rows)
 }
 
 function ValueCell({ cell }: { cell: MaskedCell }) {
@@ -225,7 +220,7 @@ export function ResultsView({ run }: { run: Run }) {
               {m.legendPrefix} <span className="rounded bg-red-500/15 px-1">{m.legendDetected}</span> →{" "}
               <span className="rounded bg-emerald-500/15 px-1">{m.legendPersona}</span>. {m.legendSuffix}
             </p>
-            <Button size="sm" variant="outline" onClick={() => downloadCsv(t)}>
+            <Button size="sm" variant="outline" onClick={() => downloadMasked(t)}>
               <Download />
               {m.maskedCsv}
             </Button>

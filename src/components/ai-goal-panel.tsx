@@ -2,7 +2,7 @@
 
 import { Check, Sparkles, Target, X } from "lucide-react"
 import { useState } from "react"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"

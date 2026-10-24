@@ -5,7 +5,7 @@ import type { EntityType, GoldSpan, SpanAnswerKey, SpanReport } from "@/lib/type
  * The rest (occupation, gender, blood type, time, state, ...) are attributes the masking policy keeps
  * for utility, so they are scored neither as misses nor as false positives.
  */
-export const SCORED_LABELS: Record<string, EntityType> = {
+const SCORED_LABELS: Record<string, EntityType> = {
   first_name: "PERSON",
   last_name: "PERSON",
   user_name: "PERSON",

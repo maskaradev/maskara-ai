@@ -12,8 +12,8 @@ export type Bucket = "none" | "year" | "month" | "age10" | "bin10"
 export type FilterOp = "eq" | "ne" | "contains" | "gt" | "lt" | "empty" | "notEmpty"
 export type MetricFn = "count" | "distinct" | "mean" | "sum" | "min" | "max"
 
-export type Dim = { field: string; bucket: Bucket }
-export type Filter = { field: string; op: FilterOp; value: string }
+type Dim = { field: string; bucket: Bucket }
+type Filter = { field: string; op: FilterOp; value: string }
 export type Metric = { fn: MetricFn; field: string }
 export type Join = { table: string; on: string }
 
@@ -50,12 +50,12 @@ export function joinable(tables: MaskedTable[], base: string): Join[] {
     })
 }
 
-export function num(s: string): number | null {
+function num(s: string): number | null {
   const t = s.trim().replace(/,/g, "")
   return t !== "" && /^-?\d+(\.\d+)?$/.test(t) ? Number(t) : null
 }
 
-export function date(s: string): number | null {
+function date(s: string): number | null {
   const iso = s.match(/^(\d{4})-(\d{2})-(\d{2})/)
   if (iso) return Date.UTC(+iso[1], +iso[2] - 1, +iso[3])
   const us = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/)
@@ -67,7 +67,7 @@ function ageYears(at: number): number {
   return Math.floor((Date.now() - at) / (365.2425 * DAY))
 }
 
-export function bucketValue(v: string, bucket: Bucket): string {
+function bucketValue(v: string, bucket: Bucket): string {
   if (bucket === "none" || v === "") return v
   if (bucket === "bin10") {
     const n = num(v)
@@ -85,7 +85,7 @@ export function bucketValue(v: string, bucket: Bucket): string {
 }
 
 /** Base rows (left-joined with one table) as `table.column` → value maps for one side. */
-export function flatten(tables: MaskedTable[], q: Pick<Query, "table" | "join">, side: Side): Record<string, string>[] {
+function flatten(tables: MaskedTable[], q: Pick<Query, "table" | "join">, side: Side): Record<string, string>[] {
   const base = tables.find((t) => t.name === q.table)
   if (!base) return []
   const cols = fieldsOf(base)

@@ -22,7 +22,7 @@ export const STREET_NAMES = [
   "Elm", "Cedar", "Aspen", "Juniper", "Hawthorne", "Magnolia", "Chestnut", "Laurel", "Spruce", "Alder",
   "Poplar", "Sumac", "Hickory", "Beacon", "Summit", "Orchard", "Meadow", "Kestrel", "Ridgeline", "Foxglove",
 ]
-export const STREET_SUFFIXES = ["St", "Ave", "Rd", "Dr", "Ln", "Ct", "Pl", "Way"]
+const STREET_SUFFIXES = ["St", "Ave", "Rd", "Dr", "Ln", "Ct", "Pl", "Way"]
 export const CITIES = [
   "Fairhaven", "Millbrook", "Ashford", "Cedar Bluff", "Kingsbury", "Oakridge", "Brightwater", "Elmhurst Falls",
   "Hollister", "Pine Hollow", "Westmoor", "Stonebrook", "Larkspur", "Riverbend", "Glenwood Springs", "Maple Crossing",

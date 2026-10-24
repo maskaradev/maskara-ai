@@ -3,7 +3,7 @@
 import { Hospital, Loader2, Play, Sparkles } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useRef, useState } from "react"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
 import { AiGoalDialog, GoalSummary, hasGoal, type Goal } from "@/components/ai-goal-panel"
 import { PageHeader } from "@/components/page-header"

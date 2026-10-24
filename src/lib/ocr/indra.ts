@@ -3,7 +3,7 @@ import { z } from "zod"
 import type { Box, LayoutBlock, LayoutKind, OcrDocument, OcrWord } from "@/lib/types"
 
 // Client for the in-house GPU OCR server (indra-ocr, `datalab-to/indra-ocr`). Server-only (the
-// server is on the tailnet). `node scripts/probe-ocr.mjs` dumps raw responses.
+// server is on the tailnet).
 //
 // POST /v1/ocr, multipart: file, format=md|text|json, mode=auto|ocr|text, math, max_pages.
 // format=json returns per page: text lines with boxes and confidence, layout blocks (Surya labels:
@@ -122,7 +122,7 @@ function rows(lines: Line[]): Line[][] {
  * regrouped into rows so a form label and its value end up on one line ("Date of birth | 01/15/2011"),
  * and section headings marked with "## ". Word offsets index into this text.
  */
-export function toDocument(page: Page, size: { width: number; height: number }): OcrDocument {
+function toDocument(page: Page, size: { width: number; height: number }): OcrDocument {
   const blocks: LayoutBlock[] = page.blocks.map((b) => ({ label: b.label, kind: layoutKind(b.label), bbox: toBox(b.bbox), text: b.text.trim() || undefined }))
   const all: Line[] = page.lines.map((l, index) => ({ box: toBox(l.box), text: l.text.trim(), conf: l.conf, index }))
   const lines = all.filter((l) => l.conf >= MIN_CONF && /[\p{Script=Latin}\p{Script=Hangul}\d]/u.test(l.text))

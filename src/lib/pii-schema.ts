@@ -1,10 +1,10 @@
 import { z } from "zod"
 
-export const ENTITY_TYPES = [
+const ENTITY_TYPES = [
   "PERSON", "DATE", "AGE", "PHONE", "EMAIL", "SSN", "ID_NUMBER", "ADDRESS", "ZIP", "LOCATION", "ORGANIZATION", "OTHER",
 ] as const
 
-export const PERSON_ROLES = ["patient", "relative", "provider", "staff", "other"] as const
+const PERSON_ROLES = ["patient", "relative", "provider", "staff", "other"] as const
 
 export const DetectionSchema = z.object({
   entities: z.array(

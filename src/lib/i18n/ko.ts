@@ -196,8 +196,6 @@ export const ko: Messages = {
     upNext: (n) => `다음 ${n}개 대기`,
     queued: "다음에 재생됨",
     inspect: "자세히",
-    photoLane: "사진·스캔 이미지",
-    documentLane: "PDF 페이지",
     replay: "다시 재생",
   },
   results: {
@@ -319,7 +317,6 @@ export const ko: Messages = {
     trail: ["워크스페이스", "데이터셋"],
     peek: "누르고 있으면 값 보기",
     loadSample: "병원 샘플 불러오기",
-    reloadSample: "병원 샘플 다시 불러오기",
     loadAll: "샘플 전체 불러오기",
     reloadAll: "샘플 전체 다시 불러오기",
     upload: "CSV 업로드",

@@ -27,7 +27,7 @@ import {
   type Query,
   type Side,
 } from "@/lib/analysis"
-import { toCsv } from "@/lib/datasets"
+import { downloadCsv } from "@/lib/datasets"
 import { useMessages } from "@/lib/i18n"
 import { useAppStore, useHydrated } from "@/lib/store"
 import type { MaskedTable, Run } from "@/lib/types"
@@ -108,15 +108,6 @@ function RemoveButton({ onClick }: { onClick: () => void }) {
       <X />
     </Button>
   )
-}
-
-function downloadCsv(name: string, columns: string[], rows: string[][]) {
-  const blob = new Blob([toCsv(columns, rows.map((r) => Object.fromEntries(columns.map((c, i) => [c, r[i]]))))], { type: "text/csv" })
-  const a = document.createElement("a")
-  a.href = URL.createObjectURL(blob)
-  a.download = `${name}.csv`
-  a.click()
-  URL.revokeObjectURL(a.href)
 }
 
 function QueryPanel({ tables, query, setQuery, mode, runNumber }: { tables: MaskedTable[]; query: Query; setQuery: (q: Query) => void; mode: Mode; runNumber: number }) {
@@ -227,7 +218,7 @@ function QueryPanel({ tables, query, setQuery, mode, runNumber }: { tables: Mask
             {a.rows(rowCount, result.length)}
             {mode === "compare" && ` · ${a.same(same, result.length)}`}
           </span>
-          <Button size="sm" variant="outline" disabled={!result.length} onClick={() => downloadCsv(`run-${runNumber}.${query.table}.${mode}`, header, order.map((i) => cells[i]))}>
+          <Button size="sm" variant="outline" disabled={!result.length} onClick={() => downloadCsv(`run-${runNumber}.${query.table}.${mode}`, header, order.map((i) => Object.fromEntries(header.map((c, j) => [c, cells[i][j]]))))}>
             <Download />
             {a.csv}
           </Button>

@@ -68,7 +68,7 @@ const MEDIA_IMAGE = /\.(png|jpe?g|webp|gif|pdf)$/i
 const MEDIA_AUDIO = /\.(mp3|wav|m4a|ogg)$/i
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}/
 
-export function inferRole(column: string, rows: Row[]): ColumnRole {
+function inferRole(column: string, rows: Row[]): ColumnRole {
   const h = column.toLowerCase()
   const values = rows.map((r) => r[column] ?? "").filter(Boolean).slice(0, 50)
   const all = (re: RegExp) => values.length > 0 && values.every((v) => re.test(v))

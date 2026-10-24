@@ -172,7 +172,7 @@ export type ImageRegion = Box & {
   visual?: VisualKind
 }
 
-export type AgentItemStatus = "pending" | "identifying" | "identified" | "generated" | "failed"
+type AgentItemStatus = "pending" | "identifying" | "identified" | "generated" | "failed"
 
 export type ImageItemStatus = AgentItemStatus
 

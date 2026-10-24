@@ -198,8 +198,6 @@ export const en = {
     upNext: (n: number) => `${n} up next`,
     queued: "Up next on the stage",
     inspect: "Inspect",
-    photoLane: "Photos & scans",
-    documentLane: "PDF pages",
     replay: "Replay",
   },
   results: {
@@ -321,7 +319,6 @@ export const en = {
     trail: ["Workspace", "Datasets"],
     peek: "Hold to reveal values",
     loadSample: "Load hospital sample",
-    reloadSample: "Reload hospital sample",
     loadAll: "Load all samples",
     reloadAll: "Reload all samples",
     upload: "Upload CSV",

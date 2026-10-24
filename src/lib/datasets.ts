@@ -9,7 +9,7 @@ const SAMPLE_BASE = "/samples/hospital/"
 const SAMPLE_FILES = ["patients.csv", "clinical_notes.csv", "encounter_media.csv"]
 const NEMOTRON_BASE = "/samples/nemotron-pii/"
 
-export function parseCsv(name: string, csv: string): Table {
+function parseCsv(name: string, csv: string): Table {
   const parsed = Papa.parse<Row>(csv.replace(/\r\n?/g, "\n").trim(), { header: true, skipEmptyLines: true })
   if (parsed.errors.length) throw new Error(`${name}: ${parsed.errors[0].message}`)
   const columns = parsed.meta.fields ?? []
@@ -17,18 +17,32 @@ export function parseCsv(name: string, csv: string): Table {
   return { name, columns, rows: parsed.data, roles: Object.fromEntries(columns.map((c) => [c, "keep"])) }
 }
 
-export function toCsv(columns: string[], rows: Row[]): string {
+function toCsv(columns: string[], rows: Row[]): string {
   return Papa.unparse({ fields: columns, data: rows.map((r) => columns.map((c) => r[c] ?? "")) })
 }
 
-export async function loadHospitalSample(): Promise<Dataset> {
-  const tables = await Promise.all(
-    SAMPLE_FILES.map(async (file) => {
-      const res = await fetch(SAMPLE_BASE + file)
+/** Saves the rows as `<name>.csv` through the browser. */
+export function downloadCsv(name: string, columns: string[], rows: Row[]) {
+  const a = document.createElement("a")
+  a.href = URL.createObjectURL(new Blob([toCsv(columns, rows)], { type: "text/csv" }))
+  a.download = `${name}.csv`
+  a.click()
+  URL.revokeObjectURL(a.href)
+}
+
+/** Fetches CSV files under `base`, one table each, named after the file. */
+function loadTables(base: string, files: string[]): Promise<Table[]> {
+  return Promise.all(
+    files.map(async (file) => {
+      const res = await fetch(base + file)
       if (!res.ok) throw new Error(`Failed to load ${file}`)
       return parseCsv(file.replace(/\.csv$/, ""), await res.text())
     }),
   )
+}
+
+export async function loadHospitalSample(): Promise<Dataset> {
+  const tables = await loadTables(SAMPLE_BASE, SAMPLE_FILES)
   const keyRes = await fetch(SAMPLE_BASE + "encounter_media_answer_key.json")
   const answerKey = keyRes.ok ? ((await keyRes.json()) as AnswerKey) : undefined
 
@@ -59,14 +73,7 @@ export async function loadNemotronSample(): Promise<Dataset> {
 }
 
 async function loadCsvSample(id: string, name: string, base: string, files: string[]): Promise<Dataset> {
-  const tables = await Promise.all(
-    files.map(async (file) => {
-      const res = await fetch(base + file)
-      if (!res.ok) throw new Error(`Failed to load ${file}`)
-      return parseCsv(file.replace(/\.csv$/, ""), await res.text())
-    }),
-  )
-  return { id, name, source: "sample", createdAt: new Date().toISOString(), tables }
+  return { id, name, source: "sample", createdAt: new Date().toISOString(), tables: await loadTables(base, files) }
 }
 
 /** 15 synthetic Massachusetts patients from Synthea (Apache-2.0): patients, encounters, conditions. */

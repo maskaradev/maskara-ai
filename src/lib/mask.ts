@@ -232,7 +232,7 @@ export function shiftDatesIn(s: string, days: number): string {
   })
 }
 
-export function aggregateAges(s: string): string {
+function aggregateAges(s: string): string {
   return s.replace(/(?<!\d)(\d{2,3})(?!\d)/g, (m) => (Number(m) >= 90 && Number(m) < 130 ? "90+" : m))
 }
 
@@ -299,7 +299,7 @@ const GENERIC_WORDS = new Set(
   ).split(" "),
 )
 
-export function renderOrganization(ctx: MaskContext, mention: string): string {
+function renderOrganization(ctx: MaskContext, mention: string): string {
   const words = mention.split(/\s+/)
   const firstGeneric = words.findIndex((w) => GENERIC_WORDS.has(w.toLowerCase().replace(/[^a-z]/g, "")))
   const word = pick(PLACE_WORDS, hashOf(ctx.salt, "org", mention.toLowerCase()))
@@ -307,7 +307,7 @@ export function renderOrganization(ctx: MaskContext, mention: string): string {
   return [word, ...words.slice(firstGeneric)].join(" ")
 }
 
-export function renderLocation(ctx: MaskContext, mention: string): string {
+function renderLocation(ctx: MaskContext, mention: string): string {
   // US state codes may stay under HIPAA Safe Harbor.
   if (/^[A-Z]{2}$/.test(mention.trim())) return mention
   const aliased = ctx.applyWordAliases(mention)
