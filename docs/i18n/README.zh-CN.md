@@ -15,7 +15,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-12-F69220?logo=pnpm&logoColor=white)
 
-<img src="../assets/demo.gif" alt="maskara demo" width="720">
+https://github.com/user-attachments/assets/74707848-83b9-40b7-b6c9-49ee4cb43c4d
 
 </div>
 
