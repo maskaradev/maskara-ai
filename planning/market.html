@@ -1,0 +1,65 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>RLMask · 시장 분석</title><style>
+:root{--_fg:var(--foreground,#18181b);--_muted:var(--muted-foreground,#71717a);--_card:var(--card,#f8f8f9);--_border:var(--border,#e4e4e7);--_accent:var(--accent,#4f46e5);--_ok:var(--success,#16a34a);--_bad:var(--destructive,#dc2626);--_bad-s:var(--destructive-surface,rgba(220,38,38,.08));--_acc-s:var(--accent-surface,rgba(79,70,229,.08));--_warn-s:var(--warning-surface,rgba(217,119,6,.10));--_c1:var(--chart-1,#4f46e5);--_c2:var(--chart-2,#94a3b8);--_r:var(--radius,10px)}
+*{box-sizing:border-box}body{margin:0;color:var(--_fg);font-family:var(--font-sans,-apple-system,"Apple SD Gothic Neo",system-ui);line-height:1.6;font-size:14.5px}a{color:var(--_accent);text-decoration:none}
+.wrap{max-width:1040px;margin:0 auto}
+.hero{padding:18px;border-radius:var(--_r);background:var(--_acc-s);margin-bottom:26px}.hero .k{font-size:12px;color:var(--_accent);font-weight:600;letter-spacing:.05em}.hero h1{margin:4px 0 6px;font-size:21px;line-height:1.35}.hero p{margin:0;color:var(--_muted)}
+section{margin:0 0 32px}h2{font-size:17px;margin:0 0 4px}h2 .n{color:var(--_accent);font-size:13px;margin-right:6px;font-family:var(--font-mono,monospace)}.lead{color:var(--_muted);margin:0 0 12px}h3{font-size:14.5px;margin:18px 0 8px}
+.tbl{overflow-x:auto;border:1px solid var(--_border);border-radius:var(--_r)}table{border-collapse:collapse;width:100%;font-size:13px;min-width:640px}th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--_border);vertical-align:top}th{color:var(--_muted);font-size:12px;background:var(--_card)}tr:last-child td{border-bottom:0}.num{font-variant-numeric:tabular-nums;white-space:nowrap}.q{color:var(--_muted)}.up{color:var(--_ok);font-weight:600}.flat{color:var(--_muted);font-weight:600}
+.est{font-size:10.5px;padding:0 6px;border-radius:999px;border:1px solid var(--_border);color:var(--_muted);margin-left:4px;white-space:nowrap}
+.callout{padding:13px 16px;border-radius:var(--_r);margin:12px 0 0}.callout b.t{display:block;margin-bottom:3px}.callout p,.callout ul{margin:0}.gap{background:var(--_acc-s)}.warn{background:var(--_warn-s)}
+.bars{display:grid;gap:7px}.bar{display:grid;grid-template-columns:150px 1fr 92px;gap:10px;align-items:center;font-size:13px}.bar .track{height:16px;position:relative}.bar .fill{height:16px;border-radius:3px;min-width:2px}.bar .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}.buyer .fill{background:var(--_c1)}.priv .fill{background:var(--_c2)}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--_muted);margin:0 0 10px}.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.tss{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:center}
+.rings{position:relative;width:260px;height:260px}.ring{position:absolute;border-radius:50%;left:50%;bottom:0;transform:translateX(-50%);display:flex;justify-content:center;padding-top:10px;font-size:12px;font-weight:700}
+.r1{width:260px;height:260px;background:var(--_acc-s);border:1px solid var(--_accent);color:var(--_accent)}.r2{width:170px;height:170px;background:var(--_acc-s);border:1px solid var(--_accent);color:var(--_accent)}.r3{width:84px;height:84px;background:var(--_accent);color:var(--primary-foreground,#fff);align-items:center;padding:0}
+.tcards{display:grid;gap:10px}.tc{padding:13px 16px;border:1px solid var(--_border);border-radius:var(--_r)}.tc .h{display:flex;justify-content:space-between;gap:10px;align-items:baseline}.tc .h b{font-size:14px}.tc .h .v{font-size:20px;font-weight:700;color:var(--_accent);font-variant-numeric:tabular-nums;white-space:nowrap}.tc p{margin:4px 0 0;font-size:13px;color:var(--_muted)}.tc code{font-family:var(--font-mono,monospace);font-size:12px;color:var(--_fg)}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.stat{padding:13px;border-radius:var(--_r);border:1px solid var(--_border)}.stat .v{font-size:21px;font-weight:700;font-variant-numeric:tabular-nums}.stat .l{font-size:12px;color:var(--_muted)}
+.src{font-size:12px;color:var(--_muted);border-top:1px solid var(--_border);padding-top:12px}.src a{color:var(--_muted);text-decoration:underline}
+@media(max-width:600px){.tss{grid-template-columns:1fr;justify-items:center}.tcards{width:100%}.bar{grid-template-columns:100px 1fr 70px}}
+</style></head><body><div class="wrap">
+
+<div class="hero"><div class="k">RLMASK · MARKET BRIEF · 2026-10</div><h1>프라이버시 경쟁사는 작고 느리다.<br>우리가 파는 대상(RL 데이터 회사)은 1년에 몇 배씩 큰다.</h1><p>마스킹 시장 자체가 아니라, 폭증하는 RL 환경·eval 데이터 지출에 붙는 “규제 데이터 통행료”를 노린다.</p></div>
+
+<section><h2><span class="n">01</span>경쟁사 매출 · 투자 · 성장력</h2><p class="lead">비상장 회사라 공식 매출 공개는 없음. <span class="est">추정</span> 표시는 제3자 추정치.</p>
+<div class="tbl"><table><thead><tr><th>회사</th><th>매출</th><th>누적 투자</th><th>최근 신호</th><th>성장력</th></tr></thead><tbody>
+<tr><td><b>Tonic.ai</b></td><td class="num">$18.1M ARR (2024)<span class="est">추정</span><br><span class="q">2023 $11.5M → +58%</span></td><td class="num">~$45M</td><td>Textual 확장, MS Fabric GA(2026-03). 고객 Comcast·eBay·UnitedHealthcare</td><td class="flat">정체 의심 · 인원 1년 0%</td></tr>
+<tr><td><b>Limina</b> <span class="q">(구 Private AI)</span></td><td class="q">비공개</td><td class="num">~$11M</td><td>2026-03 리브랜딩, 마지막 라운드 2022 Series A</td><td class="flat">소형 · 신규 라운드 없음</td></tr>
+<tr><td><b>Skyflow</b></td><td class="q">비공개</td><td class="num">~$100M</td><td>2024-03 Series B 연장 $30M. 핀테크·헬스테크 데이터 볼트</td><td class="flat">중형 · 2024 이후 조용</td></tr>
+<tr><td><b>Datavant</b></td><td class="q">비공개</td><td class="num">—</td><td>기업가치 ~$7B <span class="est">세컨더리 추정</span>. 의료 데이터 연결·토큰화</td><td class="up">대형 · 의료 데이터 인프라</td></tr>
+<tr><td><b>MOSTLY AI</b></td><td class="num">$1–10M<span class="est">추정</span></td><td class="num">~$31M</td><td>마지막 큰 라운드 2022 Series B $25M, 오픈소스화</td><td class="flat">소형</td></tr>
+<tr><td><b>Protecto</b></td><td class="q">비공개</td><td class="num">~$5M</td><td>2023-11 시드 $4M</td><td class="flat">초기</td></tr>
+<tr><td><b>Presidio</b></td><td class="q">오픈소스</td><td class="q">—</td><td>MS 출신 OSS, 매출 없음 → 대체재/부품</td><td class="q">—</td></tr>
+</tbody></table></div>
+<div class="callout gap"><b class="t">읽는 법</b><p>대표 주자 Tonic도 추정 ARR ~$18M. 프라이버시 전문 회사들은 2022~2024 이후 큰 라운드가 없다. Datavant만 크지만 “연결용 토큰” 사업이라 RL eval과 겹치지 않는다.</p></div></section>
+
+<section><h2><span class="n">02</span>수요: 우리 고객은 얼마나 크고 빨리 크나</h2><p class="lead">RL 환경·eval 데이터 회사 매출(파랑) vs 프라이버시 경쟁사(회색). 같은 축, 단위 $M.</p>
+<div class="legend"><span><i style="background:var(--_c1)"></i>RL·학습 데이터 회사 (고객)</span><span><i style="background:var(--_c2)"></i>프라이버시 회사 (경쟁사)</span></div>
+<div class="bars">
+<div class="bar buyer"><span>Mercor <span class="q">(2026, gross)</span></span><div class="track"><div class="fill" style="width:100%"></div></div><span class="v">~$2,000M</span></div>
+<div class="bar buyer"><span>Surge AI <span class="q">(run-rate)</span></span><div class="track"><div class="fill" style="width:70%"></div></div><span class="v">~$1,400M</span></div>
+<div class="bar buyer"><span>Scale AI <span class="q">(2025)</span></span><div class="track"><div class="fill" style="width:50%"></div></div><span class="v">~$1,000M</span></div>
+<div class="bar buyer"><span>Snorkel AI <span class="q">(ARR)</span></span><div class="track"><div class="fill" style="width:18.75%"></div></div><span class="v">$375M</span></div>
+<div class="bar buyer"><span>Prime Intellect</span><div class="track"><div class="fill" style="width:5%"></div></div><span class="v">$100M+</span></div>
+<div class="bar priv"><span>Tonic.ai <span class="q">(2024 est)</span></span><div class="track"><div class="fill" style="width:0.9%"></div></div><span class="v">~$18M</span></div>
+</div>
+<h3>수요 신호</h3>
+<div class="grid">
+<div class="stat"><div class="v">$1B+</div><div class="l">Anthropic이 1년간 RL 환경에 쓰는 안을 논의 (The Information, 2025-09)</div></div>
+<div class="stat"><div class="v">~50%</div><div class="l">Scale AI 신규 학습 데이터 프로젝트 중 RL 환경 비중</div></div>
+<div class="stat"><div class="v">$760M→$2B</div><div class="l">Mercor 연환산 매출, 1년 새 2.6배. 의료·법률 RL 환경 판매</div></div>
+<div class="stat"><div class="v">75%+</div><div class="l">학습 데이터·RL 환경 매출 중 상위 4개사 몫 → 영업 대상이 좁고 명확</div></div>
+</div>
+<div class="callout warn"><b class="t">왜 지금 우리가 필요한가</b><p>의료·금융·법률 RL 환경을 만들려면 실제 기관 데이터가 필요한데, 기관은 원본을 못 내준다. 지금은 사람이 손으로 가리거나 합성으로 지어낸다. 의료 특화 RL 환경 회사는 검색에서 하나도 안 나왔다 → 빈자리.</p></div></section>
+
+<section><h2><span class="n">03</span>시장 규모 · TAM / SAM / SOM</h2><p class="lead">TAM은 리포트 기반, SAM·SOM은 <b>우리 가정</b>으로 계산. 발표 시 “가정”임을 밝힐 것.</p>
+<div class="tss">
+<div class="rings"><div class="ring r1">TAM</div><div class="ring r2">SAM</div><div class="ring r3">SOM</div></div>
+<div class="tcards">
+<div class="tc"><div class="h"><b>TAM · 글로벌 프라이버시 데이터 툴링</b><span class="v">~$2B</span></div><p>데이터 마스킹 ~$1.1–1.2B (2025, CAGR 13–19%) + 합성 데이터 생성 ~$0.5–0.8B (2025, CAGR 30–40%). 인접 시장: 비식별 의료 데이터 거래 $8–10B (2025).</p></div>
+<div class="tc"><div class="h"><b>SAM · 미국 RL eval·데이터 회사의 규제 도메인 프라이버시 처리</b><span class="v">~$50–100M</span></div><p>방법 A (top-down): RL·학습 데이터 지출 ~$5B+ × 규제 도메인 비중 20% × 프라이버시 처리비 5–10% <br>방법 B (bottom-up): <code>RL 데이터·환경 회사 ~150곳 × ACV $150K ≈ $23M</code> + <code>데이터 제공 기관(병원·보험) ~500곳 × $50K ≈ $25M</code> + 랩 직접 계약</p></div>
+<div class="tc"><div class="h"><b>SOM · 3년 내 확보 목표</b><span class="v">$2–4M ARR</span></div><p><code>RL 데이터 회사 10–20곳 × $150K</code> + 의료기관 파트너 몇 곳. 상위 4개사 중 1곳만 잡아도 이 범위.</p></div>
+</div></div>
+<div class="callout gap"><b class="t">성장성 한 줄</b><p>마스킹 시장은 연 13–19%로 크지만, 우리 SAM은 RL 환경 지출(연 2배+)에 연동된다. 경쟁사 시장이 아니라 고객 시장의 속도로 큰다.</p></div></section>
+
+<p class="src"><b>출처</b> · 경쟁사: <a href="https://getlatka.com/companies/tonicai">Latka(Tonic)</a>, <a href="https://www.tonic.ai/press-releases/tonic-textual-general-availablity-for-fabric">Tonic 보도자료</a>, <a href="https://www.getlimina.ai/en/private-to-limina">Limina 리브랜딩</a>, <a href="https://www.cbinsights.com/company/private-ai">CB Insights(Limina)</a>, <a href="https://www.cbinsights.com/company/skyflow-2/financials">CB Insights(Skyflow)</a>, <a href="https://www.premieralts.com/companies/datavant/valuation">Premier Alts(Datavant)</a>, <a href="https://seedtable.com/startups/mostly-ai">Seedtable(MOSTLY AI)</a>, <a href="https://fintech.global/2023/11/10/protecto-secures-4m-in-seed-funding-to-bolster-enterprise-ai-data-privacy/">FinTech Global(Protecto)</a> · 수요: <a href="https://epochai.substack.com/p/an-faq-on-reinforcement-learning">Epoch AI</a>, <a href="https://techcrunch.com/2025/09/21/silicon-valley-bets-big-on-environments-to-train-ai-agents/">TechCrunch</a>, <a href="https://valueaddvc.com/blog/how-does-scale-ai-make-money-data-labeling-rlhf-and-the-meta-14-3b-stake">ValueAdd VC(Scale)</a>, <a href="https://en.wikipedia.org/wiki/Surge_AI">Surge AI</a>, <a href="https://finance.biggo.com/news/99fca087-237a-48f3-ab02-30289cb7d364">BigGo(Mercor)</a>, <a href="https://blog.pebblous.ai/blog/ai-data-supply-oligopoly/en/">Pebblous(시장 집중도)</a>, <a href="https://rl-list.com/rl-environment-companies">rl-list(Snorkel·Prime Intellect)</a> · 시장: <a href="https://www.researchandmarkets.com/report/data-masking">Research and Markets</a>, <a href="https://www.kingsresearch.com/report/data-masking-market-2602">Kings Research</a>, <a href="https://www.gminsights.com/industry-analysis/synthetic-data-generation-market">GMI</a>, <a href="https://market.us/report/de-identified-health-data-market/">Market.us</a>, <a href="https://www.grandviewresearch.com/industry-analysis/ai-training-dataset-market">Grand View</a>. 대부분 비상장사 추정치이므로 발표 전 재확인 권장.</p>
+</div></body></html>

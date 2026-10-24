@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RLMask · 리서치 정리</title>
+<style>
+  :root {
+    --_bg: var(--background, #ffffff);
+    --_fg: var(--foreground, #18181b);
+    --_muted: var(--muted-foreground, #71717a);
+    --_card: var(--card, #f8f8f9);
+    --_border: var(--border, #e4e4e7);
+    --_accent: var(--accent, #4f46e5);
+    --_ok: var(--success, #16a34a);
+    --_warn: var(--warning, #d97706);
+    --_warn-s: var(--warning-surface, rgba(217,119,6,.10));
+    --_bad: var(--destructive, #dc2626);
+    --_bad-s: var(--destructive-surface, rgba(220,38,38,.08));
+    --_acc-s: var(--accent-surface, rgba(79,70,229,.08));
+    --_r: var(--radius, 10px);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; color: var(--_fg); font-family: var(--font-sans, -apple-system, "Apple SD Gothic Neo", "Pretendard", system-ui, sans-serif); line-height: 1.6; font-size: 14.5px; }
+  .wrap { max-width: 1040px; margin: 0 auto; }
+  a { color: var(--_accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  nav { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 18px; }
+  nav a { font-size: 12.5px; padding: 3px 10px; border: 1px solid var(--_border); border-radius: 999px; color: var(--_muted); }
+  .hero { padding: 18px; border-radius: var(--_r); background: var(--_acc-s); margin-bottom: 26px; }
+  .hero .k { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--_accent); font-weight: 600; }
+  .hero h1 { margin: 4px 0 6px; font-size: 22px; line-height: 1.35; }
+  .hero p { margin: 0; color: var(--_muted); }
+  section { margin: 0 0 34px; }
+  h2 { font-size: 17px; margin: 0 0 4px; display: flex; gap: 8px; align-items: baseline; }
+  h2 .n { color: var(--_accent); font-family: var(--font-mono, ui-monospace, monospace); font-size: 13px; }
+  .lead { color: var(--_muted); margin: 0 0 14px; }
+  h3 { font-size: 14.5px; margin: 18px 0 8px; }
+  .tbl { overflow-x: auto; border: 1px solid var(--_border); border-radius: var(--_r); }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; min-width: 640px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--_border); vertical-align: top; }
+  th { font-weight: 600; color: var(--_muted); font-size: 12px; background: var(--_card); }
+  tr:last-child td { border-bottom: 0; }
+  tr.us td { background: var(--_acc-s); font-weight: 600; }
+  .y { color: var(--_ok); font-weight: 600; }
+  .x { color: var(--_bad); font-weight: 600; }
+  .q { color: var(--_muted); }
+  .callout { padding: 14px 16px; border-radius: var(--_r); margin: 14px 0 0; }
+  .callout.gap { background: var(--_acc-s); }
+  .callout.warn { background: var(--_warn-s); }
+  .callout.bad { background: var(--_bad-s); }
+  .callout b.t { display: block; margin-bottom: 4px; }
+  .callout p, .callout ul { margin: 0; }
+  .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  .card { padding: 16px; border: 1px solid var(--_border); border-radius: var(--_r); background: var(--_card); }
+  .card h4 { margin: 0 0 6px; font-size: 14px; }
+  .card ul { margin: 0; padding-left: 18px; }
+  .card li { margin: 2px 0; }
+  .tag { display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--_border); color: var(--_muted); margin-right: 4px; }
+  .tag.a { border-color: var(--_accent); color: var(--_accent); }
+  ol.pipe { list-style: none; padding: 0; margin: 0; counter-reset: s; display: grid; gap: 6px; }
+  ol.pipe li { counter-increment: s; display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; align-items: center; padding: 9px 12px; border: 1px solid var(--_border); border-radius: var(--_r); }
+  ol.pipe li::before { content: counter(s); width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 600; background: var(--_acc-s); color: var(--_accent); }
+  ol.pipe .who { font-size: 11.5px; color: var(--_muted); font-family: var(--font-mono, ui-monospace, monospace); white-space: nowrap; }
+  .road { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .road .card { position: relative; }
+  .road .when { font-size: 12px; font-weight: 600; color: var(--_accent); }
+  .road .card.dim { opacity: .7; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .stat { padding: 14px; border-radius: var(--_r); border: 1px solid var(--_border); }
+  .stat .v { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .stat .l { font-size: 12px; color: var(--_muted); }
+  .layers { display: grid; gap: 10px; }
+  .layer { display: grid; grid-template-columns: 120px 1fr; gap: 14px; padding: 14px 16px; border: 1px solid var(--_border); border-radius: var(--_r); }
+  .layer.top { border-color: var(--_accent); background: var(--_acc-s); }
+  .layer .h { font-weight: 700; }
+  .layer .h small { display: block; font-weight: 400; color: var(--_muted); font-size: 12px; }
+  .layer ul { margin: 0; padding-left: 18px; }
+  .pos { padding: 20px; border-radius: var(--_r); border: 2px solid var(--_accent); text-align: center; margin-bottom: 14px; }
+  .pos .en { font-size: 19px; font-weight: 700; line-height: 1.4; }
+  .pos .ko { color: var(--_muted); margin-top: 4px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cmp { padding: 14px 16px; border-radius: var(--_r); border: 1px solid var(--_border); }
+  .cmp code { font-family: var(--font-mono, ui-monospace, monospace); font-size: 12.5px; }
+  .cmp .res { margin-top: 8px; font-weight: 600; }
+  .foot { font-size: 12px; color: var(--_muted); border-top: 1px solid var(--_border); padding-top: 12px; }
+  @media (max-width: 640px) {
+    .road, .two { grid-template-columns: 1fr; }
+    .layer { grid-template-columns: 1fr; gap: 6px; }
+    ol.pipe li { grid-template-columns: 26px 1fr; }
+    ol.pipe .who { grid-column: 2; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav>
+    <a href="#comp">1 경쟁사</a><a href="#impl">2 구현</a><a href="#modal">3 모달리티</a>
+    <a href="#rl">4 의료 RL 과제</a><a href="#bench">5 Privacy Filter 벤치마크</a>
+    <a href="#util">6 유용성 평가</a><a href="#pos">7 우리 포지션</a>
+  </nav>
+
+  <div class="hero">
+    <div class="k">RLMask · Research brief · AttentionX 주제</div>
+    <h1>마스킹은 다들 한다. <br>“마스킹한 뒤에도 RL 과제가 풀리는가”를 수치로 재는 곳은 아직 못 찾았다.</h1>
+    <p>탐지는 공개 모델(OpenAI Privacy Filter)에 맡기고, 그 위에 <b>에피소드 단위 일관된 페르소나</b>와 <b>과제 보존 검증</b>을 얹는다.</p>
+  </div>
+
+  <!-- 1 -->
+  <section id="comp">
+    <h2><span class="n">01</span>경쟁사</h2>
+    <p class="lead">텍스트·이미지·오디오 마스킹과 온프렘 설치는 이미 상향 평준화. 빈자리는 맨 오른쪽 열.</p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>회사</th><th>지원 데이터</th><th>로컬 설치</th><th>일관된 실감 대체</th><th>RL 과제 보존 검증</th></tr></thead>
+        <tbody>
+          <tr><td><a href="https://docs.tonic.ai/textual/dataset-files/dataset-file-types">Tonic Textual</a></td><td>텍스트, 표, PDF, 이미지, 오디오</td><td class="y">✓</td><td class="y">✓</td><td class="x">없음</td></tr>
+          <tr><td><a href="https://docs.getlimina.ai/configuration-and-operations/working-with-files/supported-file-types">Limina (구 Private AI)</a></td><td>텍스트, 표, PDF, 이미지, 오디오, DICOM 베타</td><td class="y">✓</td><td>지원</td><td class="x">없음</td></tr>
+          <tr><td><a href="https://github.com/data-privacy-stack/presidio/blob/main/docs/learn_presidio/index.md">Presidio</a></td><td>텍스트, 표, 이미지</td><td class="y">✓ 오픈소스</td><td class="q">직접 구현</td><td class="x">없음</td></tr>
+          <tr><td><a href="https://docs.skyflow.com/docs/de-identification/overview.mdx">Skyflow</a></td><td>텍스트, 표, PDF, 이미지, 오디오</td><td class="q">미확인</td><td class="q">토큰 방식</td><td class="x">없음</td></tr>
+          <tr><td><a href="https://docs.protecto.ai/deployment/on-premises">Protecto</a></td><td>텍스트, 표</td><td class="y">✓ 폐쇄망</td><td class="q">토큰 방식</td><td class="x">없음</td></tr>
+          <tr><td><a href="https://github.com/mostly-ai/mostlyai">MOSTLY AI</a></td><td>표, 텍스트</td><td class="y">✓</td><td class="q">합성 데이터를 새로 만듦</td><td class="x">없음</td></tr>
+          <tr><td><a href="https://datavant-aws-marketplace-files.s3.amazonaws.com/tokenization_user_guide.pdf">Datavant</a></td><td>표</td><td class="y">✓</td><td class="q">연결용 해시 토큰</td><td class="x">없음</td></tr>
+          <tr><td><a href="https://secludy.com/solutions/rl-environments">Secludy</a> <b>⚠️ 직접 경쟁</b></td><td>CSV·JSONL·Parquet·이메일·PDF·이미지</td><td class="x">관리형 (온프렘 언급 없음)</td><td class="y">✓ RL 환경용</td><td>채점기 통과·유출 검사 (정량 지표 없음)</td></tr>
+          <tr class="us"><td>RLMask</td><td>텍스트, DB 테이블 (오늘)</td><td class="y">✓</td><td class="y">에피소드·테이블 간 일관</td><td class="y">✓ 핵심</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout gap"><b class="t">빈자리 (2026-10 수정)</b><p>처음엔 “아무도 안 한다”고 봤지만 <b>Secludy</b>(2026-05 시드 $4M)가 RL 환경용 일관 비식별화를 내세운다. 남은 빈자리는 <b>① 온프렘 ② 영상·화면 녹화 ③ 과제 보존의 정량 검증 ④ 의료 특화</b>. 자세한 비교는 customers.html.</p></div>
+  </section>
+
+  <!-- 2 -->
+  <section id="impl">
+    <h2><span class="n">02</span>구현 방법 · OpenAI 로컬 모델</h2>
+    <p class="lead">OpenAI가 올해 4월 로컬용 개인정보 탐지 모델을 오픈소스로 공개 → “OpenAI 로컬 모델”은 이것으로 해결.</p>
+    <div class="grid">
+      <div class="card">
+        <h4><a href="https://huggingface.co/openai/privacy-filter">OpenAI Privacy Filter</a></h4>
+        <span class="tag a">Apache 2.0</span><span class="tag">탐지</span>
+        <ul style="margin-top:8px">
+          <li>파라미터 1.5B, 실제 활성 계산 50M → 노트북에서도 동작</li>
+          <li>8종 탐지: 사람, 주소, 이메일, 전화, URL, 날짜, 계좌, 비밀정보</li>
+          <li>PII-Masking-300k F1 96%</li>
+          <li>스스로 “익명화·컴플라이언스 인증 도구가 아님”이라고 밝힘 (<a href="https://cdn.openai.com/pdf/c66281ed-b638-456a-8ce1-97e9f5264a90/OpenAI-Privacy-Filter-Model-Card.pdf">모델 카드</a>)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4><a href="https://openai.com/index/introducing-gpt-oss/">gpt-oss-20b / 120b</a></h4>
+        <span class="tag">판단</span><span class="tag">vLLM · Ollama</span>
+        <ul style="margin-top:8px">
+          <li>20b: 메모리 16GB / 120b: 80GB GPU 한 장</li>
+          <li>애매한 값 판정, “같은 사람인가” 판단 담당</li>
+          <li>승혁님 DGX Spark(128GB)면 120b도 로컬 구동 가능</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>파이프라인</h3>
+    <ol class="pipe">
+      <li><span>읽기 전용으로 DB 연결</span><span class="who">connector</span></li>
+      <li><span>형식이 정해진 값(계좌번호 등)을 먼저 잡음</span><span class="who">regex + Presidio</span></li>
+      <li><span>문맥상 개인정보 탐지</span><span class="who">Privacy Filter</span></li>
+      <li><span>애매한 값 · 동일 인물 판단</span><span class="who">gpt-oss</span></li>
+      <li><span>비밀 키 해시 + Faker로 같은 사람 → 같은 페르소나, 날짜는 사람별 동일 일수만큼 이동</span><span class="who">HMAC + Faker</span></li>
+      <li><span>바뀐 결과만 별도 저장소에 적재 (원본은 기관 밖으로 안 나감)</span><span class="who">masked store</span></li>
+      <li><span>마스킹본만 받아 과제가 여전히 풀리는지 검증 → 리포트</span><span class="who">Claude</span></li>
+    </ol>
+
+    <div class="callout warn">
+      <b class="t">⚠️ 행사 규칙 대응 — AI 기능은 지급된 Claude 크레딧으로</b>
+      <ul style="padding-left:18px">
+        <li>오늘 데모: 문맥 탐지 · 동일 인물 판단 · 과제 검증 <b>모두 Claude</b>로. 데이터는 합성/공개 데이터.</li>
+        <li>로컬 모델은 “고객 현장에서는 Privacy Filter + gpt-oss로 교체”라는 <b>아키텍처 슬라이드</b>에만.</li>
+        <li>코드에는 <code>DETECTOR=claude|local</code> 스위치만 둔다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section id="modal">
+    <h2><span class="n">03</span>모달리티</h2>
+    <p class="lead">경쟁사가 이미 잘하는 모달리티로 넓히면 차별점이 흐려진다. 일관성이 드러나는 곳부터.</p>
+    <div class="road">
+      <div class="card"><div class="when">오늘</div><h4>텍스트 + DB 테이블</h4><p style="margin:0">진료 메모, 상담 대화, 에이전트 실행 로그. 표와 메모에 같은 환자가 나올 때 일관성을 보여 주기에 최적.</p></div>
+      <div class="card"><div class="when">다음</div><h4>PDF · OCR → 콜센터 음성</h4><p style="margin:0">문서 스캔본, 그다음 통화 녹취.</p></div>
+      <div class="card dim"><div class="when">장기</div><h4>DICOM · 이미지 · 로봇 카메라 영상</h4><p style="margin:0">경쟁사 영역. 지금 손대면 차별점이 흐려짐.</p></div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section id="rl">
+    <h2><span class="n">04</span>의료에서 RL로 할 수 있는 것</h2>
+    <p class="lead">두 갈래. RLMask에 맞는 건 ①번 — 에이전트가 의사·원무과처럼 일하도록 학습/평가.</p>
+    <div class="two">
+      <div class="card" style="border-color:var(--_accent)">
+        <h4>① 의료 에이전트 과제 <span class="tag a">RLMask 적합</span></h4>
+        <ul>
+          <li><b>진단 대화</b>: 여러 턴 문답 → 검사 선택 → 진단. 보상 = 정답 진단 (예: AgentClinic)</li>
+          <li><b>EHR 업무</b>: 기록 조회, 처방 입력, 결과 확인을 도구로 처리 (예: Stanford MedAgentBench)</li>
+          <li><b>약물 대조</b>: 날짜별 처방 비교 → 중복·상호작용 탐지</li>
+          <li><b>퇴원 요약 · 의료 코딩</b>: 요약 작성, 청구 코드 부여</li>
+          <li><b>사전 승인 · 보험 청구</b>: 미국에서 돈이 가장 많이 걸린 업무</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>② 치료 결정 최적화 <span class="tag">고전 RL</span></h4>
+        <ul>
+          <li>패혈증 수액·승압제 용량, 인슐린 투여량, 인공호흡기 설정을 과거 기록으로 학습</li>
+          <li>수치 데이터 중심이라 우리 주제와는 거리가 있음</li>
+        </ul>
+      </div>
+    </div>
+    <h3>데모 추천: 진단 대화 or 약물 대조</h3>
+    <div class="two">
+      <div class="cmp" style="background:var(--_bad-s)">
+        <div><b>[REDACTED] 방식</b></div>
+        <code>[PERSON] 처방: [DATE] 메트포르민 / [DATE] 메트포르민</code>
+        <div class="res" style="color:var(--_bad)">“3월 처방과 5월 처방이 겹치나?” → 답 불가, 과제 깨짐</div>
+      </div>
+      <div class="cmp" style="background:var(--_acc-s)">
+        <div><b>RLMask 방식</b></div>
+        <code>Daniel Reyes 처방: 4/12 메트포르민 / 6/12 메트포르민</code>
+        <div class="res" style="color:var(--_ok)">날짜 간격·인물 일관 유지 → 정답 그대로</div>
+      </div>
+    </div>
+    <p class="q" style="font-size:12px;margin-top:8px">※ 벤치마크 이름(AgentClinic, MedAgentBench)은 슬라이드에 넣기 전 링크 확인 필요.</p>
+  </section>
+
+  <!-- 5 -->
+  <section id="bench">
+    <h2><span class="n">05</span>OpenAI Privacy Filter의 벤치마크</h2>
+    <p class="lead">공개된 건 사실상 PII-Masking-300k 하나. <b>“얼마나 잘 찾았나”</b>만 재고, 가린 뒤 데이터가 쓸모 있는지는 재지 않는다. (<a href="https://openai.com/index/introducing-openai-privacy-filter/">발표 글</a>, <a href="https://huggingface.co/openai/privacy-filter">모델 페이지</a>)</p>
+    <div class="stats">
+      <div class="stat"><div class="v">96.0%</div><div class="l">F1 · PII-Masking-300k<br>P 94.04 / R 98.04</div></div>
+      <div class="stat"><div class="v">97.43%</div><div class="l">F1 · 라벨 오류 수정본<br>P 96.79 / R 98.08</div></div>
+      <div class="stat"><div class="v">54 → 96%</div><div class="l">F1 · 소량 도메인 파인튜닝<br>(분야 미공개)</div></div>
+      <div class="stat"><div class="v" style="color:var(--_bad)">—</div><div class="l">가린 뒤 과제 유용성<br>측정 안 함</div></div>
+    </div>
+    <p class="q" style="font-size:12.5px;margin:10px 0 0">그 밖에 코드 속 비밀번호·API 키, 다국어, 공격적 입력, 문맥 의존 예시로 스트레스 테스트 — 상세는 <a href="https://cdn.openai.com/pdf/c66281ed-b638-456a-8ce1-97e9f5264a90/OpenAI-Privacy-Filter-Model-Card.pdf">모델 카드 PDF</a>에만.</p>
+    <h3>스스로 밝힌 한계</h3>
+    <div class="grid">
+      <div class="card"><ul>
+        <li>익명화·컴플라이언스 인증 아님, 여러 보호 장치 중 하나</li>
+        <li>주로 영어용 — 한국어 등 비라틴 문자는 성능 저하 가능</li>
+        <li>흔치 않은 이름, 이니셜, 분야 특유 식별자는 놓칠 수 있음</li>
+      </ul></div>
+      <div class="card"><ul>
+        <li>의료·금융은 사람 검토 + 해당 분야 재평가 권장</li>
+        <li><b>“너무 많이 가리면 후속 판단에 필요한 맥락이 사라진다”</b>고 직접 경고</li>
+        <li>출력은 <code>[PRIVATE_PERSON]</code> 같은 태그 — 실감 가명 대체 없음</li>
+      </ul></div>
+    </div>
+    <div class="callout gap"><b class="t">우리한테 주는 의미</b><p>탐지는 Privacy Filter 같은 공개 모델에 맡기고, 그 위에 <b>과제 보존율</b>이라는 새 평가 지표를 얹는다. OpenAI 스스로 과잉 마스킹의 맥락 손실을 인정했다.</p></div>
+  </section>
+
+  <!-- 6 -->
+  <section id="util">
+    <h2><span class="n">06</span>비식별화 후에도 특징이 유지됐는지 어떻게 판단하나</h2>
+    <p class="lead">세 층으로 잰다. eval 데이터에서는 맨 위 과제 수준이 핵심.</p>
+    <div class="layers">
+      <div class="layer top"><div class="h">과제 수준<small>같은 결론이 나오나</small></div><ul>
+        <li><b>정답 보존율</b>: 원본 vs 마스킹본으로 같은 과제를 풀었을 때 정답·보상이 같은 비율</li>
+        <li><b>모델 순위 보존</b>: 여러 모델을 원본/마스킹 eval로 채점 → Spearman·Kendall 순위 상관. 1에 가까울수록 “eval 가치 그대로”. <b>eval 판매 회사에 핵심 숫자</b></li>
+        <li><b>점수 차이</b>: 모델별 점수가 원본 대비 몇 %p 바뀌었나</li>
+      </ul></div>
+      <div class="layer"><div class="h">데이터 수준<small>분포·관계 유지</small></div><ul>
+        <li>나이·성별·진단명·약 분포 비교 (KS 검정, JS divergence)</li>
+        <li>항목 간 관계 (예: 당뇨 → 인슐린 처방 상관)</li>
+        <li>시간 간격: 입원~퇴원 일수, 처방 간격 동일</li>
+        <li>비개인정보(진단명·수치·약 이름)는 원본과 100% 일치</li>
+      </ul></div>
+      <div class="layer"><div class="h">일관성 수준<small>같은 사람은 같은 사람</small></div><ul>
+        <li>같은 원본 인물 → 모든 문서·테이블에서 같은 페르소나</li>
+        <li>“그 환자”, “Mr. Kim” 같은 지칭 연결 유지</li>
+      </ul></div>
+      <div class="layer" style="background:var(--_bad-s)"><div class="h">반대쪽 저울<small>프라이버시</small></div><ul>
+        <li>원본 개인정보 잔존율(유출률), 재식별 위험 — “유용성 최대, 유출 0”을 한 화면에</li>
+      </ul></div>
+    </div>
+    <h3>데모 대시보드 — 숫자 4개, [REDACTED] vs RLMask 나란히</h3>
+    <div class="tbl">
+      <table style="min-width:520px">
+        <thead><tr><th>지표</th><th>목표</th><th>[REDACTED]</th><th>RLMask</th></tr></thead>
+        <tbody>
+          <tr><td>정답 보존율</td><td>↑ 높을수록</td><td class="q">측정 예정</td><td class="q">측정 예정</td></tr>
+          <tr><td>모델 순위 상관 (Spearman)</td><td>→ 1.0</td><td class="q">측정 예정</td><td class="q">측정 예정</td></tr>
+          <tr><td>비개인정보 보존율</td><td>= 100%</td><td class="q">측정 예정</td><td class="q">측정 예정</td></tr>
+          <tr><td>개인정보 유출률</td><td>= 0%</td><td class="q">측정 예정</td><td class="q">측정 예정</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="q" style="font-size:12.5px;margin:8px 0 0">합성 데이터에 정답을 미리 심어 두면 오늘 안에 Claude로 직접 계산해 실제 숫자를 채울 수 있다.</p>
+  </section>
+
+  <!-- 7 -->
+  <section id="pos">
+    <h2><span class="n">07</span>우리는 무엇이 되어야 하나</h2>
+    <div class="pos">
+      <div class="en">On-prem de-identification for RL eval data.<br>Remove the PII, keep the task.</div>
+      <div class="ko">RL eval 데이터를 위한 온프렘 비식별화. 개인정보는 지우고, 과제는 살린다.</div>
+    </div>
+    <div class="grid">
+      <div class="card"><h4>① 에피소드 일관성</h4><p style="margin:0">여러 턴·여러 테이블·여러 도구 호출에 걸쳐 같은 사람을 같은 페르소나로 유지.</p></div>
+      <div class="card"><h4>② 과제 보존 검증</h4><p style="margin:0">마스킹 후에도 정답과 보상이 그대로인지 수치로 증명 (정답 보존율, 순위 상관).</p></div>
+      <div class="card"><h4>③ 비공개 eval 벤치마크</h4><p style="margin:0">결과를 private eval로 묶어 판매. 원본은 기관 밖으로 한 번도 안 나감.</p></div>
+    </div>
+    <div class="callout bad">
+      <b class="t">하면 안 되는 말</b>
+      <ul style="padding-left:18px">
+        <li>“HIPAA 인증”, “완전 익명화”, “재식별 불가능”</li>
+        <li>“Tonic보다 탐지를 잘한다” — 근거 없음</li>
+        <li>“음성·영상·DICOM 오늘 지원” — 근거 없음</li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="foot">출처는 각 항목 링크. 수치는 공개 자료 기준이며 발표 전 링크 재확인 권장.</p>
+</div>
+</body>
+</html>

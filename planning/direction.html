@@ -1,0 +1,66 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>RLMask · 방향 비교</title><style>
+:root{--_fg:var(--foreground,#18181b);--_muted:var(--muted-foreground,#71717a);--_card:var(--card,#f8f8f9);--_border:var(--border,#e4e4e7);--_accent:var(--accent,#4f46e5);--_ok:var(--success,#16a34a);--_bad:var(--destructive,#dc2626);--_bad-s:var(--destructive-surface,rgba(220,38,38,.08));--_acc-s:var(--accent-surface,rgba(79,70,229,.08));--_warn-s:var(--warning-surface,rgba(217,119,6,.10));--_r:var(--radius,10px)}
+*{box-sizing:border-box}body{margin:0;color:var(--_fg);font-family:var(--font-sans,-apple-system,"Apple SD Gothic Neo",system-ui);line-height:1.6;font-size:14.5px}
+.wrap{max-width:1040px;margin:0 auto}
+section{margin:0 0 28px}h2{font-size:17px;margin:0 0 10px}h2 .n{color:var(--_accent);font-size:13px;margin-right:6px;font-family:var(--font-mono,monospace)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{padding:16px;border-radius:var(--_r);border:1px solid var(--_border)}.opt.a{border:2px solid var(--_accent);background:var(--_acc-s)}
+.opt .lab{font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--_muted)}.opt.a .lab{color:var(--_accent)}
+.opt h3{margin:2px 0 4px;font-size:17px}.opt .sub{font-size:13px;color:var(--_muted);margin:0 0 12px}
+.flow{display:flex;flex-direction:column;gap:4px}.step{font-size:13px;padding:6px 10px;border-radius:6px;background:var(--background,#fff);border:1px solid var(--_border)}.step small{color:var(--_muted);font-family:var(--font-mono,monospace);font-size:11px;margin-left:4px}
+.arrow{text-align:center;color:var(--_muted);font-size:11px;line-height:1}
+.out{margin-top:8px;font-weight:700;font-size:14px}.opt.a .out{color:var(--_accent)}
+.tbl{overflow-x:auto;border:1px solid var(--_border);border-radius:var(--_r)}table{border-collapse:collapse;width:100%;font-size:13px;min-width:600px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--_border);vertical-align:top}th{color:var(--_muted);font-size:12px;background:var(--_card)}tr:last-child td{border-bottom:0}
+td:first-child{color:var(--_muted);font-size:12.5px;white-space:nowrap;width:110px}
+td.win{background:var(--_acc-s);font-weight:600}td.win::before{content:"● ";color:var(--_accent)}
+tr.grp td{background:var(--_card);font-weight:700;font-size:12px;color:var(--_fg);padding:5px 10px}
+.score{display:flex;gap:10px;margin-top:10px;font-size:13px}.score div{flex:1;padding:10px 14px;border-radius:var(--_r);border:1px solid var(--_border);display:flex;justify-content:space-between;align-items:baseline}.score b{font-size:20px}.score .a{border-color:var(--_accent);color:var(--_accent)}
+.callout{padding:14px 16px;border-radius:var(--_r);margin:12px 0 0}.callout b.t{display:block;margin-bottom:4px}.callout p,.callout ul{margin:0}.gap{background:var(--_acc-s)}.warn{background:var(--_warn-s)}.bad{background:var(--_bad-s)}
+.hyb{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;margin-top:6px}.hyb span{padding:5px 10px;border-radius:6px;border:1px solid var(--_border)}.hyb span.b{border-style:dashed}.hyb span.c{border-color:var(--_accent);color:var(--_accent);font-weight:600}.hyb i{color:var(--_muted);font-style:normal}
+@media(max-width:600px){.two{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+
+<section><h2><span class="n">01</span>두 방향</h2>
+<div class="two">
+<div class="opt a"><div class="lab">A · 추천</div><h3>익명 합성 데이터</h3><p class="sub">원본에서 통계를 배워 실존하지 않는 페르소나를 만들고, 그걸로 데이터를 새로 생성</p>
+<div class="flow"><div class="step">원본 데이터</div><div class="arrow">▼</div><div class="step">통계 프로필 <small>로컬 · 희귀 조합 제거</small></div><div class="arrow">▼</div><div class="step">LLM → 페르소나 <small>Claude / 로컬</small></div><div class="arrow">▼</div><div class="step">LLM → 테이블 + 메모 생성</div><div class="arrow">▼</div><div class="step">충실도 · 프라이버시 검증</div></div>
+<div class="out">→ 실존 인물 0명, 매핑표 없음</div></div>
+<div class="opt"><div class="lab">B</div><h3>가명 처리 툴</h3><p class="sub">원본 기록은 그대로 두고, 개인정보만 찾아서 가짜 값으로 교체</p>
+<div class="flow"><div class="step">원본 데이터</div><div class="arrow">▼</div><div class="step">규칙 기반 탐지 <small>정규식 · Presidio</small></div><div class="arrow">▼</div><div class="step">로컬 모델 탐지 <small>Privacy Filter</small></div><div class="arrow">▼</div><div class="step">페르소나로 치환 <small>매핑표 보관</small></div></div>
+<div class="out">→ 원본 기록 + 이름만 교체, 1:1 연결 남음</div></div>
+</div></section>
+
+<section><h2><span class="n">02</span>항목별 비교</h2>
+<div class="tbl"><table><thead><tr><th>기준</th><th>A · 익명 합성</th><th>B · 가명 처리</th></tr></thead><tbody>
+<tr class="grp"><td colspan="3">데이터</td></tr>
+<tr><td>결과물</td><td>새 가상 환자와 기록</td><td>원본 기록에서 신원만 교체</td></tr>
+<tr><td>현실성</td><td>통계 수준. 희귀 사례·개인별 맥락은 손실</td><td class="win">실제 기록 그대로, 최고</td></tr>
+<tr><td>데이터 양</td><td class="win">원하는 만큼, 조건 지정 생성 (희귀 질환 500명 등)</td><td>원본만큼</td></tr>
+<tr><td>정답 라벨</td><td class="win">만들면서 정답을 앎 → eval 과제 자동 생성</td><td>원본에 라벨이 있어야 함</td></tr>
+<tr class="grp"><td colspan="3">프라이버시 · 법</td></tr>
+<tr><td>실존 인물 연결</td><td class="win">없음 (통계에서 생성, 매핑표 없음)</td><td>1:1 연결 + 매핑표 존재</td></tr>
+<tr><td>법적 지위</td><td class="win">익명 수준 목표 → 개인정보법 적용 밖 가능 (검증 필요)</td><td>가명정보 → 여전히 개인정보 (한국·GDPR)</td></tr>
+<tr><td>외부 반출</td><td class="win">통계만 나감 → 기관 승인 쉬움</td><td>가명 데이터 자체가 나감 → 승인 어려움</td></tr>
+<tr><td>남는 위험</td><td>모델이 희귀 환자를 복제할 위험 → DCR·중복 검사로 증명</td><td>다른 정보와 합쳐 재식별될 위험</td></tr>
+<tr class="grp"><td colspan="3">시장</td></tr>
+<tr><td>경쟁사</td><td>MOSTLY AI, Gretel, Tonic Fabricate, Secludy, MDClone, Syntegra, 무료: Synthea, Nemotron-Personas</td><td>Tonic Textual, Limina, Skyflow, Protecto, Secludy, 무료: Presidio, OpenAI Privacy Filter</td></tr>
+<tr><td>차별점</td><td class="win">고객 기관 데이터 기반 + 환자 단위로 테이블·메모 일관</td><td>약함. 무료 도구가 핵심 기능을 이미 함</td></tr>
+<tr><td>예상 공격 질문</td><td>“랩이 LLM으로 직접 만들면 되잖아?”</td><td>“무료 도구 감싼 거 아니에요?”</td></tr>
+<tr class="grp"><td colspan="3">해커톤</td></tr>
+<tr><td>Claude 역할</td><td class="win">핵심 (페르소나·데이터 생성)</td><td>주변 (탐지는 규칙·로컬 모델) → 규칙 위반 소지</td></tr>
+<tr><td>데모 임팩트</td><td class="win">페르소나 카드, 원본 vs 합성 분포, 프라이버시 지표</td><td>마스킹 전후 텍스트 (흔한 그림)</td></tr>
+<tr><td>하루 구현</td><td>가능</td><td class="win">더 쉬움</td></tr>
+</tbody></table></div>
+<div class="score"><div class="a"><span>A 우위</span><b>8</b></div><div><span>B 우위</span><b>2</b></div></div>
+<p style="font-size:12px;color:var(--_muted);margin:6px 0 0">가중치 없는 단순 집계. 단, B가 이기는 “현실성”은 고객에게 가장 무거운 항목일 수 있음.</p>
+</section>
+
+<section><h2><span class="n">03</span>추천: A 메인, B는 A의 첫 단계로</h2>
+<div class="hyb"><span>원본</span><i>→</i><span class="b">① 로컬 비식별화 (B의 도구)</span><i>→</i><span>② 통계 프로필</span><i>→</i><span class="c">③ Claude: 페르소나</span><i>→</i><span class="c">④ Claude: 합성 데이터</span><i>→</i><span>⑤ 검증</span></div>
+<p style="font-size:13px;color:var(--_muted);margin:8px 0 0">① 진료 메모 속 이름·번호를 먼저 지워야 메모 형식과 통계를 안전하게 뽑을 수 있음. 오늘 데모는 정규식만, Privacy Filter·로컬 LLM은 아키텍처 슬라이드에만.</p>
+<div class="callout gap"><b class="t">A의 약점 대응: “랩이 직접 만들면?”</b><ul style="padding-left:18px"><li>랩은 병원 내부 분포를 모른다 → 우리는 기관 안에서 뽑은 통계로 생성</li><li>정답이 데이터에 내장 → eval 과제를 바로 만듦</li><li>프라이버시를 숫자로 증명 → 원본 중복 0건, DCR</li></ul></div>
+<div class="callout warn"><b class="t">최종 판단 질문 (현장에서 AttentionX에)</b><p>“Mercor·Fleet 같은 회사들이 병원·보험사 원본을 실제로 받아서 쓰나요?” → 대부분 못 받으면 A, 받는데 정리가 문제면 B의 가치가 올라감.</p></div>
+<div class="callout bad"><b class="t">A로 갈 때 지킬 규칙</b><p>페르소나는 실제 환자 한 명에서 만들지 않고 통계에서 뽑는다. 원본 ↔ 페르소나 매핑표를 만들지 않는다. 둘 중 하나라도 어기면 가명이 된다.</p></div>
+</section>
+</div></body></html>
