@@ -1,4 +1,4 @@
-// Copies planning/subject.md (Korean) into README.ko.md between the subject markers.
+// Copies planning/subject.md (Korean) into docs/i18n/README.ko.md between the subject markers.
 import { readFileSync, writeFileSync } from "node:fs"
 
 const START = "<!-- subject:start -->"
@@ -9,7 +9,7 @@ const subject = readFileSync("planning/subject.md", "utf8")
   .trim()
   .replace(/^# .*\n+/, "")
   .replace(/^(#{2,5}) /gm, "#$1 ")
-const README = "README.ko.md"
+const README = "docs/i18n/README.ko.md"
 const readme = readFileSync(README, "utf8")
 
 const from = readme.indexOf(START)

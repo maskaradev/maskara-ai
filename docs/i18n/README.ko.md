@@ -1,8 +1,8 @@
 <div align="center">
 
-[English](README.md) | **한국어** | [简体中文](README.zh-CN.md) | [日本語](README.ja.md) | [Español](README.es.md) | [Français](README.fr.md) | [Deutsch](README.de.md)
+[English](../../README.md) | **한국어** | [简体中文](README.zh-CN.md) | [日本語](README.ja.md) | [Español](README.es.md) | [Français](README.fr.md) | [Deutsch](README.de.md)
 
-<img src="src/app/opengraph-image.png" alt="maskara — synthetic persona masking for AI training data" width="600">
+<img src="../../src/app/opengraph-image.png" alt="maskara — synthetic persona masking for AI training data" width="600">
 
 # maskara
 
@@ -14,6 +14,8 @@
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-12-F69220?logo=pnpm&logoColor=white)
+
+<img src="../assets/demo.gif" alt="maskara demo" width="720">
 
 </div>
 
@@ -96,11 +98,11 @@ flowchart LR
 | 텍스트 식별 | Claude | Anthropic API | 로컬 LLM (vLLM) |
 | 치환 · 검증 · 반출 | — | 브라우저 | 고객사 내부망 |
 
-MVP는 데모를 빨리 보여 주려고 **데이터 저장소(localStorage)와 텍스트 LLM(Anthropic API)** 두 곳만 임시로 대체했습니다. 나머지 파이프라인은 실제 제품과 같은 코드입니다. 자세한 설계는 [`planning/mvp.md`](planning/mvp.md)를 참고하세요.
+MVP는 데모를 빨리 보여 주려고 **데이터 저장소(localStorage)와 텍스트 LLM(Anthropic API)** 두 곳만 임시로 대체했습니다. 나머지 파이프라인은 실제 제품과 같은 코드입니다. 자세한 설계는 [`planning/mvp.md`](../../planning/mvp.md)를 참고하세요.
 
 ## 설정
 
-`.env.local`에 환경 변수를 넣습니다. 전체 목록은 [`.env.example`](.env.example)에 있습니다.
+`.env.local`에 환경 변수를 넣습니다. 전체 목록은 [`.env.example`](../../.env.example)에 있습니다.
 
 | 변수 | 필수 | 설명 |
 |---|---|---|
@@ -120,7 +122,7 @@ GPU 서버 주소를 비워 두면 팀 기본 서버를 씁니다. 얼굴을 다
 | `pnpm build` | 프로덕션 빌드 |
 | `pnpm start` | 빌드 결과 실행 |
 | `pnpm lint` | ESLint 검사 |
-| `pnpm sync:readme` | [`planning/subject.md`](planning/subject.md) 내용을 아래 [배경](#배경) 섹션에 복사 |
+| `pnpm sync:readme` | [`planning/subject.md`](../../planning/subject.md) 내용을 아래 [배경](#배경) 섹션에 복사 |
 
 **스택:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · shadcn/ui (Radix) · Zustand · React Query · Zod · Anthropic SDK
 
@@ -200,7 +202,7 @@ planning/           # 기획 문서, 리서치, 발표 자료
 - 이 기관들의 데이터로 모델을 학습시켜야 하는 금융 AI 회사
 <!-- subject:end -->
 
-더 자세한 리서치는 [`planning/`](planning/)에 있습니다: [시장 분석](planning/market.html) · [고객사 조사](planning/customers.html) · [리서치 정리](planning/research.html) · [빌드 계획](planning/build-plan.md)
+더 자세한 리서치는 [`planning/`](../../planning/)에 있습니다: [시장 분석](../../planning/market.html) · [고객사 조사](../../planning/customers.html) · [리서치 정리](../../planning/research.html) · [빌드 계획](../../planning/build-plan.md)
 
 ## 기여하기
 
@@ -213,9 +215,9 @@ planning/           # 기획 문서, 리서치, 발표 자료
 알아 두면 좋은 규칙:
 
 - UI 문구는 `src/lib/i18n/en.ts`와 `ko.ts`에 **함께** 추가합니다.
-- 이 README의 [배경](#배경) 섹션은 자동 생성됩니다. README가 아니라 [`planning/subject.md`](planning/subject.md)를 수정하고, 다른 언어 README의 배경 섹션도 직접 번역해 함께 고칩니다.
-- README의 원본은 영어 [README.md](README.md)이고, 번역본은 `README.<언어>.md`입니다. README를 고칠 때는 번역본도 함께 수정합니다.
-- 이 프로젝트는 Next.js 16을 씁니다. 이전 버전과 API가 다르니 코드를 쓰기 전에 `node_modules/next/dist/docs/`의 가이드를 확인하세요 ([`AGENTS.md`](AGENTS.md) 참고).
+- 이 README의 [배경](#배경) 섹션은 자동 생성됩니다. README가 아니라 [`planning/subject.md`](../../planning/subject.md)를 수정하고, 다른 언어 README의 배경 섹션도 직접 번역해 함께 고칩니다.
+- README의 원본은 영어 [README.md](../../README.md)이고, 번역본은 `docs/i18n/README.<언어>.md`입니다. README를 고칠 때는 번역본도 함께 수정합니다.
+- 이 프로젝트는 Next.js 16을 씁니다. 이전 버전과 API가 다르니 코드를 쓰기 전에 `node_modules/next/dist/docs/`의 가이드를 확인하세요 ([`AGENTS.md`](../../AGENTS.md) 참고).
 
 ## 감사의 말
 

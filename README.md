@@ -1,6 +1,6 @@
 <div align="center">
 
-**English** | [한국어](README.ko.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md) | [Español](README.es.md) | [Français](README.fr.md) | [Deutsch](README.de.md)
+**English** | [한국어](docs/i18n/README.ko.md) | [简体中文](docs/i18n/README.zh-CN.md) | [日本語](docs/i18n/README.ja.md) | [Español](docs/i18n/README.es.md) | [Français](docs/i18n/README.fr.md) | [Deutsch](docs/i18n/README.de.md)
 
 <img src="src/app/opengraph-image.png" alt="maskara — synthetic persona masking for AI training data" width="600">
 
@@ -14,6 +14,8 @@
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-12-F69220?logo=pnpm&logoColor=white)
+
+<img src="docs/assets/demo.gif" alt="maskara demo" width="720">
 
 </div>
 
@@ -120,7 +122,7 @@ Leave a GPU server URL empty to use the team's default server. A photo whose fac
 | `pnpm build` | Production build |
 | `pnpm start` | Run the build |
 | `pnpm lint` | Run ESLint |
-| `pnpm sync:readme` | Copy [`planning/subject.md`](planning/subject.md) into the Background section of [README.ko.md](README.ko.md) |
+| `pnpm sync:readme` | Copy [`planning/subject.md`](planning/subject.md) into the Background section of [README.ko.md](docs/i18n/README.ko.md) |
 
 **Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · shadcn/ui (Radix) · Zustand · React Query · Zod · Anthropic SDK
 
@@ -211,8 +213,8 @@ Issues and PRs are welcome.
 Good to know:
 
 - Add UI strings to `src/lib/i18n/en.ts` and `ko.ts` **together**.
-- This README is the source; translations live in `README.<lang>.md`. When you change it, update the translations too.
-- The Background section of [README.ko.md](README.ko.md) is generated from [`planning/subject.md`](planning/subject.md). Edit that file, not the README, then update the translated Background sections in the other READMEs by hand.
+- This README is the source; translations live in `docs/i18n/README.<lang>.md`. When you change it, update the translations too.
+- The Background section of [README.ko.md](docs/i18n/README.ko.md) is generated from [`planning/subject.md`](planning/subject.md). Edit that file, not the README, then update the translated Background sections in the other READMEs by hand.
 - This project uses Next.js 16, whose APIs differ from earlier versions. Read the guide in `node_modules/next/dist/docs/` before writing code (see [`AGENTS.md`](AGENTS.md)).
 
 ## Acknowledgements

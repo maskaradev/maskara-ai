@@ -1,8 +1,8 @@
 <div align="center">
 
-[English](README.md) | [한국어](README.ko.md) | [简体中文](README.zh-CN.md) | **日本語** | [Español](README.es.md) | [Français](README.fr.md) | [Deutsch](README.de.md)
+[English](../../README.md) | [한국어](README.ko.md) | [简体中文](README.zh-CN.md) | **日本語** | [Español](README.es.md) | [Français](README.fr.md) | [Deutsch](README.de.md)
 
-<img src="src/app/opengraph-image.png" alt="maskara — synthetic persona masking for AI training data" width="600">
+<img src="../../src/app/opengraph-image.png" alt="maskara — synthetic persona masking for AI training data" width="600">
 
 # maskara
 
@@ -14,6 +14,8 @@
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-12-F69220?logo=pnpm&logoColor=white)
+
+<img src="../assets/demo.gif" alt="maskara demo" width="720">
 
 </div>
 
@@ -96,11 +98,11 @@ flowchart LR
 | テキストの識別 | Claude | Anthropic API | ローカル LLM（vLLM） |
 | 置換 · 検証 · エクスポート | — | ブラウザ | 顧客ネットワーク |
 
-デモを素早く出すため、MVP では**データストア（localStorage）とテキスト LLM（Anthropic API）** の 2 つだけを一時的に代替しています。それ以外のパイプラインは製品と同じコードです。設計の全体は [`planning/mvp.md`](planning/mvp.md) を参照してください。
+デモを素早く出すため、MVP では**データストア（localStorage）とテキスト LLM（Anthropic API）** の 2 つだけを一時的に代替しています。それ以外のパイプラインは製品と同じコードです。設計の全体は [`planning/mvp.md`](../../planning/mvp.md) を参照してください。
 
 ## 設定
 
-環境変数は `.env.local` に記述します。一覧は [`.env.example`](.env.example) にあります。
+環境変数は `.env.local` に記述します。一覧は [`.env.example`](../../.env.example) にあります。
 
 | 変数 | 必須 | 説明 |
 |---|---|---|
@@ -120,7 +122,7 @@ GPU サーバーの URL を空のままにすると、チームのデフォル�
 | `pnpm build` | 本番ビルド |
 | `pnpm start` | ビルドを実行 |
 | `pnpm lint` | ESLint を実行 |
-| `pnpm sync:readme` | [`planning/subject.md`](planning/subject.md) を [README.ko.md](README.ko.md) の Background セクションにコピー |
+| `pnpm sync:readme` | [`planning/subject.md`](../../planning/subject.md) を [README.ko.md](README.ko.md) の Background セクションにコピー |
 
 **スタック:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · shadcn/ui (Radix) · Zustand · React Query · Zod · Anthropic SDK
 
@@ -198,7 +200,7 @@ planning/           # Planning docs, research, slides
 - データを持っているが外に出せない機関（銀行、病院）
 - これらの機関のデータでモデルを学習させたい金融 AI 企業
 
-詳しい調査は [`planning/`](planning/)（韓国語）にあります：[市場分析](planning/market.html) · [顧客調査](planning/customers.html) · [リサーチノート](planning/research.html) · [ビルド計画](planning/build-plan.md)
+詳しい調査は [`planning/`](../../planning/)（韓国語）にあります：[市場分析](../../planning/market.html) · [顧客調査](../../planning/customers.html) · [リサーチノート](../../planning/research.html) · [ビルド計画](../../planning/build-plan.md)
 
 ## コントリビュート
 
@@ -211,9 +213,9 @@ Issue や PR を歓迎します。
 知っておくと便利なこと：
 
 - UI の文字列は `src/lib/i18n/en.ts` と `ko.ts` の**両方に**追加してください。
-- この README が原文で、翻訳は `README.<lang>.md` にあります。README を変更したら翻訳も更新してください。
-- [README.ko.md](README.ko.md) の Background セクションは [`planning/subject.md`](planning/subject.md) から生成されます。README ではなくそのファイルを編集し、他の README の翻訳版 Background セクションは手動で更新してください。
-- このプロジェクトは Next.js 16 を使っており、API が以前のバージョンと異なります。コードを書く前に `node_modules/next/dist/docs/` のガイドを読んでください（[`AGENTS.md`](AGENTS.md) を参照）。
+- この README が原文で、翻訳は `docs/i18n/README.<lang>.md` にあります。README を変更したら翻訳も更新してください。
+- [README.ko.md](README.ko.md) の Background セクションは [`planning/subject.md`](../../planning/subject.md) から生成されます。README ではなくそのファイルを編集し、他の README の翻訳版 Background セクションは手動で更新してください。
+- このプロジェクトは Next.js 16 を使っており、API が以前のバージョンと異なります。コードを書く前に `node_modules/next/dist/docs/` のガイドを読んでください（[`AGENTS.md`](../../AGENTS.md) を参照）。
 
 ## 謝辞
 

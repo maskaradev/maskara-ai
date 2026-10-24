@@ -1,8 +1,8 @@
 <div align="center">
 
-[English](README.md) | [한국어](README.ko.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md) | [Español](README.es.md) | **Français** | [Deutsch](README.de.md)
+[English](../../README.md) | [한국어](README.ko.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md) | [Español](README.es.md) | **Français** | [Deutsch](README.de.md)
 
-<img src="src/app/opengraph-image.png" alt="maskara — masquage par personas synthétiques pour les données d'entraînement d'IA" width="600">
+<img src="../../src/app/opengraph-image.png" alt="maskara — masquage par personas synthétiques pour les données d'entraînement d'IA" width="600">
 
 # maskara
 
@@ -14,6 +14,8 @@
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-12-F69220?logo=pnpm&logoColor=white)
+
+<img src="../assets/demo.gif" alt="maskara demo" width="720">
 
 </div>
 
@@ -96,11 +98,11 @@ flowchart LR
 | Identification texte | Claude | API Anthropic | LLM local (vLLM) |
 | Substitution · validation · export | — | Navigateur | Réseau du client |
 
-Pour sortir une démo rapidement, le MVP remplace temporairement deux éléments seulement : **le stockage des données (localStorage) et le LLM texte (API Anthropic)**. Le reste du pipeline est le même code que celui du produit. Consultez [`planning/mvp.md`](planning/mvp.md) pour la conception complète.
+Pour sortir une démo rapidement, le MVP remplace temporairement deux éléments seulement : **le stockage des données (localStorage) et le LLM texte (API Anthropic)**. Le reste du pipeline est le même code que celui du produit. Consultez [`planning/mvp.md`](../../planning/mvp.md) pour la conception complète.
 
 ## Configuration
 
-Placez les variables d'environnement dans `.env.local`. La liste complète se trouve dans [`.env.example`](.env.example).
+Placez les variables d'environnement dans `.env.local`. La liste complète se trouve dans [`.env.example`](../../.env.example).
 
 | Variable | Obligatoire | Description |
 |---|---|---|
@@ -120,7 +122,7 @@ Laissez vide l'URL d'un serveur GPU pour utiliser le serveur par défaut de l'é
 | `pnpm build` | Build de production |
 | `pnpm start` | Lance le build |
 | `pnpm lint` | Exécute ESLint |
-| `pnpm sync:readme` | Copie [`planning/subject.md`](planning/subject.md) dans la section Contexte de [README.ko.md](README.ko.md) |
+| `pnpm sync:readme` | Copie [`planning/subject.md`](../../planning/subject.md) dans la section Contexte de [README.ko.md](README.ko.md) |
 
 **Stack :** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · shadcn/ui (Radix) · Zustand · React Query · Zod · Anthropic SDK
 
@@ -198,7 +200,7 @@ Les données ne peuvent pas sortir, alors **c'est nous qui allons là où sont l
 - Les établissements qui détiennent des données sans pouvoir les exporter (banques, hôpitaux)
 - Les entreprises d'IA financière qui doivent entraîner des modèles sur les données de ces établissements
 
-D'autres recherches se trouvent dans [`planning/`](planning/) (en coréen) : [analyse de marché](planning/market.html) · [étude clients](planning/customers.html) · [notes de recherche](planning/research.html) · [plan de développement](planning/build-plan.md)
+D'autres recherches se trouvent dans [`planning/`](../../planning/) (en coréen) : [analyse de marché](../../planning/market.html) · [étude clients](../../planning/customers.html) · [notes de recherche](../../planning/research.html) · [plan de développement](../../planning/build-plan.md)
 
 ## Contribuer
 
@@ -211,9 +213,9 @@ Les issues et les PR sont les bienvenues.
 Bon à savoir :
 
 - Ajoutez les chaînes d'interface dans `src/lib/i18n/en.ts` et `ko.ts` **en même temps**.
-- Ce README est la source ; les traductions se trouvent dans `README.<lang>.md`. Quand vous le modifiez, mettez aussi à jour les traductions.
-- La section Contexte de [README.ko.md](README.ko.md) est générée à partir de [`planning/subject.md`](planning/subject.md). Modifiez ce fichier, pas le README, puis mettez à jour à la main les sections Contexte traduites des autres README.
-- Ce projet utilise Next.js 16, dont les API diffèrent des versions précédentes. Lisez le guide dans `node_modules/next/dist/docs/` avant d'écrire du code (voir [`AGENTS.md`](AGENTS.md)).
+- Ce README est la source ; les traductions se trouvent dans `docs/i18n/README.<lang>.md`. Quand vous le modifiez, mettez aussi à jour les traductions.
+- La section Contexte de [README.ko.md](README.ko.md) est générée à partir de [`planning/subject.md`](../../planning/subject.md). Modifiez ce fichier, pas le README, puis mettez à jour à la main les sections Contexte traduites des autres README.
+- Ce projet utilise Next.js 16, dont les API diffèrent des versions précédentes. Lisez le guide dans `node_modules/next/dist/docs/` avant d'écrire du code (voir [`AGENTS.md`](../../AGENTS.md)).
 
 ## Remerciements
 

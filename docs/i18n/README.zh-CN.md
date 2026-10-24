@@ -1,8 +1,8 @@
 <div align="center">
 
-[English](README.md) | [한국어](README.ko.md) | **简体中文** | [日本語](README.ja.md) | [Español](README.es.md) | [Français](README.fr.md) | [Deutsch](README.de.md)
+[English](../../README.md) | [한국어](README.ko.md) | **简体中文** | [日本語](README.ja.md) | [Español](README.es.md) | [Français](README.fr.md) | [Deutsch](README.de.md)
 
-<img src="src/app/opengraph-image.png" alt="maskara — synthetic persona masking for AI training data" width="600">
+<img src="../../src/app/opengraph-image.png" alt="maskara — synthetic persona masking for AI training data" width="600">
 
 # maskara
 
@@ -14,6 +14,8 @@
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-12-F69220?logo=pnpm&logoColor=white)
+
+<img src="../assets/demo.gif" alt="maskara demo" width="720">
 
 </div>
 
@@ -96,11 +98,11 @@ flowchart LR
 | 文本识别 | Claude | Anthropic API | 本地 LLM（vLLM） |
 | 替换 · 验证 · 导出 | — | 浏览器 | 客户内网 |
 
-为了尽快做出演示，MVP 只临时替代了两个部分：**数据存储（localStorage）和文本 LLM（Anthropic API）**。流水线的其余部分与正式产品使用相同的代码。完整设计见 [`planning/mvp.md`](planning/mvp.md)。
+为了尽快做出演示，MVP 只临时替代了两个部分：**数据存储（localStorage）和文本 LLM（Anthropic API）**。流水线的其余部分与正式产品使用相同的代码。完整设计见 [`planning/mvp.md`](../../planning/mvp.md)。
 
 ## 配置
 
-环境变量写在 `.env.local` 中。完整列表见 [`.env.example`](.env.example)。
+环境变量写在 `.env.local` 中。完整列表见 [`.env.example`](../../.env.example)。
 
 | 变量 | 必填 | 说明 |
 |---|---|---|
@@ -120,7 +122,7 @@ GPU 服务器 URL 留空时，会使用团队的默认服务器。无法重绘�
 | `pnpm build` | 生产构建 |
 | `pnpm start` | 运行构建产物 |
 | `pnpm lint` | 运行 ESLint |
-| `pnpm sync:readme` | 将 [`planning/subject.md`](planning/subject.md) 复制到 [README.ko.md](README.ko.md) 的背景部分 |
+| `pnpm sync:readme` | 将 [`planning/subject.md`](../../planning/subject.md) 复制到 [README.ko.md](README.ko.md) 的背景部分 |
 
 **技术栈：** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · shadcn/ui (Radix) · Zustand · React Query · Zod · Anthropic SDK
 
@@ -198,7 +200,7 @@ planning/           # 规划文档、调研资料、演示幻灯片
 - 持有数据但无法导出的机构（银行、医院）
 - 需要用这些机构的数据训练模型的金融 AI 公司
 
-更多调研资料见 [`planning/`](planning/)（韩语）：[市场分析](planning/market.html) · [客户调研](planning/customers.html) · [调研笔记](planning/research.html) · [构建计划](planning/build-plan.md)
+更多调研资料见 [`planning/`](../../planning/)（韩语）：[市场分析](../../planning/market.html) · [客户调研](../../planning/customers.html) · [调研笔记](../../planning/research.html) · [构建计划](../../planning/build-plan.md)
 
 ## 参与贡献
 
@@ -211,9 +213,9 @@ planning/           # 规划文档、调研资料、演示幻灯片
 须知：
 
 - UI 文案需要**同时**添加到 `src/lib/i18n/en.ts` 和 `ko.ts`。
-- 本 README 的源文件是英文版 [README.md](README.md)，各语言译本位于 `README.<lang>.md`。修改源文件时，请同步更新译本。
-- [README.ko.md](README.ko.md) 的背景部分由 [`planning/subject.md`](planning/subject.md) 生成。请编辑该文件而不是 README，然后手动更新其他 README 中翻译过的背景部分。
-- 本项目使用 Next.js 16，其 API 与早期版本不同。编写代码前请先阅读 `node_modules/next/dist/docs/` 中的指南（参见 [`AGENTS.md`](AGENTS.md)）。
+- 本 README 的源文件是英文版 [README.md](../../README.md)，各语言译本位于 `docs/i18n/README.<lang>.md`。修改源文件时，请同步更新译本。
+- [README.ko.md](README.ko.md) 的背景部分由 [`planning/subject.md`](../../planning/subject.md) 生成。请编辑该文件而不是 README，然后手动更新其他 README 中翻译过的背景部分。
+- 本项目使用 Next.js 16，其 API 与早期版本不同。编写代码前请先阅读 `node_modules/next/dist/docs/` 中的指南（参见 [`AGENTS.md`](../../AGENTS.md)）。
 
 ## 致谢
 
