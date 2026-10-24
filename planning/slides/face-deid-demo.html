@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RLMask · Medical image de-identification demo</title>
+<style>
+  html, body { margin: 0; }
+  .stage { width: 100%; max-width: 1600px; margin: 0 auto; }
+  svg { display: block; width: 100%; height: auto;
+        font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', system-ui, sans-serif; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .fade { transition: opacity .45s ease; }
+  .box { fill: none; transition: stroke .4s, stroke-dashoffset .7s ease, opacity .3s; }
+  .wipe { transform-box: fill-box; transition: transform .28s ease; }
+  #log text { white-space: pre; }
+  #replay { cursor: pointer; }
+  #replay:hover rect { fill: #3A2418; }
+  @keyframes pulse { 50% { stroke-width: 7; } }
+  .pulse { animation: pulse .7s ease-in-out 4; }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="svg" viewBox="0 0 1600 900" role="img"
+     aria-label="Animated demo: RLMask finds a patient's face and burned-in text in a clinical photo and swaps them for one consistent synthetic persona while keeping the lesion and skin tone">
+  <defs>
+    <clipPath id="clipPhoto"><rect x="60" y="110" width="880" height="720" rx="10"/></clipPath>
+    <clipPath id="clipA"><rect id="clipARect" x="60" y="110" width="880" height="720"/></clipPath>
+    <clipPath id="clipB"><rect id="clipBRect" x="60" y="110" width="0" height="720"/></clipPath>
+    <clipPath id="avClip"><circle cx="1080" cy="600" r="46"/></clipPath>
+    <linearGradient id="bgPhoto" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4A5C6A"/><stop offset="1" stop-color="#2A3640"/>
+    </linearGradient>
+    <linearGradient id="scanG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FF6A2B" stop-opacity="0"/><stop offset="1" stop-color="#FF6A2B" stop-opacity=".6"/>
+    </linearGradient>
+    <linearGradient id="scanG2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5BD69A" stop-opacity="0"/><stop offset="1" stop-color="#5BD69A" stop-opacity=".6"/>
+    </linearGradient>
+    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="16"/></filter>
+  </defs>
+
+  <rect width="1600" height="900" rx="28" fill="#140C09"/>
+
+  <!-- header -->
+  <text x="48" y="60" font-size="26" font-weight="800" fill="#FF6A2B">RLMask</text>
+  <text x="158" y="60" font-size="20" fill="#C9B8A6">Medical image de-identification</text>
+  <text x="1430" y="59" font-size="15" fill="#8C7B6C" text-anchor="end" class="mono">Agent 1: local LLM · Agent 2: Claude</text>
+  <g id="replay">
+    <rect x="1450" y="36" width="110" height="34" rx="17" fill="#2A1A12" stroke="rgba(255,244,232,.25)"/>
+    <text x="1505" y="59" text-anchor="middle" font-size="16" fill="#FFF4E8">↻ Replay</text>
+  </g>
+
+  <!-- viewer -->
+  <rect x="40" y="90" width="920" height="760" rx="18" fill="#0B0706" stroke="rgba(255,244,232,.14)"/>
+  <g id="photo" clip-path="url(#clipPhoto)">
+    <rect x="60" y="110" width="880" height="720" fill="url(#bgPhoto)"/>
+    <g id="body"></g>
+    <g id="faceA" clip-path="url(#clipA)"></g>
+    <g id="faceB" clip-path="url(#clipB)"></g>
+    <g id="lesion"></g>
+    <g id="bands"></g>
+    <line id="sweep" x1="350" x2="350" y1="236" y2="612" stroke="#FF6A2B" stroke-width="4" class="fade" style="opacity:0"/>
+    <g id="texts" class="mono" font-size="21" fill="#E8F0F5"></g>
+    <rect id="scan" x="60" y="50" width="880" height="60" fill="url(#scanG)" class="fade" style="opacity:0"/>
+    <g id="boxes"></g>
+  </g>
+  <text id="caption" x="500" y="883" text-anchor="middle" font-size="20" font-weight="600" fill="#E8C49A" class="fade"></text>
+
+  <!-- side panel -->
+  <rect x="990" y="90" width="570" height="760" rx="18" fill="#1C120E" stroke="rgba(255,244,232,.12)"/>
+  <text x="1020" y="128" font-size="14" font-weight="700" fill="#8C7B6C" letter-spacing="2">PIPELINE</text>
+  <g id="stages"></g>
+  <text x="1020" y="438" font-size="14" font-weight="700" fill="#8C7B6C" letter-spacing="2">ENTITY · PERSONA</text>
+  <g id="links" class="fade"></g>
+  <g id="entities"></g>
+  <g id="personaCard" class="fade" style="opacity:0"></g>
+  <text x="1020" y="692" font-size="14" font-weight="700" fill="#8C7B6C" letter-spacing="2">LOG</text>
+  <g id="log" class="mono"></g>
+
+  <!-- final comparison -->
+  <g id="compare" class="fade" style="opacity:0" pointer-events="none"></g>
+</svg>
+</div>
+
+<script>
+(() => {
+  const DEBUG = window.RLMASK_DEBUG || {};
+  const SPEED = DEBUG.speed || 1;
+  const NS = 'http://www.w3.org/2000/svg';
+  const $ = id => document.getElementById(id);
+  const el = (tag, attrs = {}, text) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    return e;
+  };
+  const C = { TEXT: '#FFF4E8', PERSON: '#FF6A2B', ID: '#FFB547', DATE: '#7CC4FF', ORG: '#C49BFF', KEEP: '#5BD69A' };
+  const LABEL = { PERSON: 'PERSON', ID: 'ID', DATE: 'DATE', ORG: 'ORG', KEEP: 'KEEP · clinical' };
+
+  // ---- artwork (all fictional) ----
+  const SKIN = '#B98563', SKIN_D = '#9E6C4C';
+  const BODY = `
+    <path d="M 230 830 C 250 700 360 650 500 650 C 640 650 750 700 770 830 Z" fill="#86AECB"/>
+    <path d="M 456 560 L 456 655 Q 500 676 544 655 L 544 560 Z" fill="${SKIN_D}"/>
+    <path d="M 446 662 Q 500 716 554 662" fill="none" stroke="#6E97B5" stroke-width="5"/>`;
+  const FACE_A = `
+    <ellipse cx="380" cy="452" rx="17" ry="30" fill="${SKIN}"/>
+    <ellipse cx="620" cy="452" rx="17" ry="30" fill="${SKIN}"/>
+    <ellipse cx="500" cy="430" rx="120" ry="150" fill="${SKIN}"/>
+    <path d="M 381 410 C 372 305 438 262 502 262 C 572 262 632 305 619 410 C 607 350 575 322 500 320 C 428 322 393 350 381 410 Z" fill="#3B3330"/>
+    <path d="M 455 352 Q 500 344 545 352" stroke="${SKIN_D}" stroke-width="2.5" fill="none" opacity=".6"/>
+    <path d="M 440 394 Q 462 384 485 392" stroke="#2A221F" stroke-width="7" stroke-linecap="round" fill="none"/>
+    <path d="M 515 392 Q 538 384 560 394" stroke="#2A221F" stroke-width="7" stroke-linecap="round" fill="none"/>
+    <ellipse cx="462" cy="420" rx="9" ry="6" fill="#2A221F"/>
+    <ellipse cx="538" cy="420" rx="9" ry="6" fill="#2A221F"/>
+    <path d="M 500 428 Q 493 468 486 480 Q 500 489 514 480" stroke="${SKIN_D}" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M 460 512 Q 500 497 540 512 Q 522 524 500 517 Q 478 524 460 512 Z" fill="#3B3330"/>
+    <path d="M 474 534 Q 500 544 526 534" stroke="#6B3A2E" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+  const FACE_B = `
+    <ellipse cx="376" cy="456" rx="17" ry="28" fill="${SKIN}"/>
+    <ellipse cx="624" cy="456" rx="17" ry="28" fill="${SKIN}"/>
+    <ellipse cx="500" cy="436" rx="128" ry="144" fill="${SKIN}"/>
+    <path d="M 374 440 C 368 372 388 326 424 304 L 432 330 C 406 348 392 386 391 440 Z" fill="#A39C95"/>
+    <path d="M 626 440 C 632 372 612 326 576 304 L 568 330 C 594 348 608 386 609 440 Z" fill="#A39C95"/>
+    <path d="M 452 332 Q 500 324 548 332 M 458 352 Q 500 345 542 352" stroke="${SKIN_D}" stroke-width="2.5" fill="none" opacity=".6"/>
+    <path d="M 395 470 C 400 556 448 582 500 582 C 552 582 600 556 605 470 C 592 534 552 556 500 556 C 448 556 408 534 395 470 Z" fill="#7A736D" opacity=".55"/>
+    <path d="M 470 520 Q 500 512 530 520 Q 516 530 500 526 Q 484 530 470 520 Z" fill="#7A736D" opacity=".55"/>
+    <path d="M 438 398 Q 461 389 486 396" stroke="#6E6863" stroke-width="9" stroke-linecap="round" fill="none"/>
+    <path d="M 514 396 Q 539 389 562 398" stroke="#6E6863" stroke-width="9" stroke-linecap="round" fill="none"/>
+    <circle cx="461" cy="426" r="6.5" fill="#2A221F"/>
+    <circle cx="539" cy="426" r="6.5" fill="#2A221F"/>
+    <rect x="426" y="404" width="68" height="46" rx="15" fill="rgba(255,255,255,.08)" stroke="#1E1A18" stroke-width="5"/>
+    <rect x="506" y="404" width="68" height="46" rx="15" fill="rgba(255,255,255,.08)" stroke="#1E1A18" stroke-width="5"/>
+    <path d="M 494 422 Q 500 415 506 422 M 426 422 L 388 430 M 574 422 L 612 430" stroke="#1E1A18" stroke-width="5" fill="none"/>
+    <path d="M 500 436 Q 489 476 480 486 Q 500 497 520 486" stroke="${SKIN_D}" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M 476 540 Q 500 548 524 540" stroke="#6B3A2E" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+  const LESION = `
+    <g transform="translate(562 482)">
+      <ellipse rx="18" ry="15" fill="#9C5B3E" opacity=".45"/>
+      <path d="M -12 -3 C -11 -11 -2 -12 5 -10 C 12 -8 13 0 11 6 C 9 11 0 12 -6 10 C -12 8 -13 3 -12 -3 Z" fill="#6B3B26"/>
+      <ellipse cx="1" cy="0" rx="5" ry="4" fill="#45231A"/>
+    </g>`;
+  const BANDS = `
+    <rect x="60" y="110" width="880" height="116" fill="#000" opacity=".45"/>
+    <rect x="60" y="748" width="880" height="82" fill="#000" opacity=".45"/>`;
+
+  // Burned-in overlay text. type: what Agent 1 decides; ent: linked entity; nt: persona value.
+  const TEXTS = [
+    { x: 80,  y: 152, t: 'MICHAEL TORRES',          type: 'PERSON', ent: 'E-012', nt: 'DANIEL REYES' },
+    { x: 80,  y: 180, t: 'MRN 4471029',             type: 'ID',     ent: 'E-012', nt: 'MRN 8830512' },
+    { x: 80,  y: 208, t: 'DOB 03/14/1968  M',       type: 'DATE',   ent: 'E-012', nt: 'DOB 04/14/1968  M' },
+    { x: 920, y: 152, a: 'end', t: "ST. MARY'S MEDICAL CTR", type: 'ORG', nt: 'NORTHFIELD GENERAL' },
+    { x: 920, y: 180, a: 'end', t: '2026-03-12 14:22', type: 'DATE', ent: 'E-012', nt: '2026-04-12 14:22' },
+    { x: 80,  y: 778, t: 'DERMATOLOGY · CLINICAL PHOTO', type: 'KEEP' },
+    { x: 80,  y: 806, t: 'REF: DR. SARAH KIM',      type: 'PERSON', ent: 'E-207', nt: 'REF: DR. ALEX MORGAN' },
+    { x: 920, y: 806, a: 'end', t: 'LESION L CHEEK 6 MM', type: 'KEEP' },
+  ];
+  const PII = TEXTS.filter(t => t.type !== 'KEEP');
+
+  const STAGES = [
+    ['OCR · burned-in text', 'local'],
+    ['Face detection', 'local'],
+    ['Agent 1 · Recognizer', 'local LLM'],
+    ['Resolve same person', 'code'],
+    ['Persona swap', 'code + vault'],
+    ['Agent 2 · Auditor', 'Claude'],
+  ];
+
+  // ---- helpers ----
+  let gen = 0;
+  const sleep = (ms, g) => new Promise((res, rej) =>
+    setTimeout(() => (g === gen ? res() : rej('cancelled')), ms / SPEED));
+  const tween = (ms, fn, g) => new Promise((res, rej) => {
+    if (DEBUG.instant) { fn(1); return res(); }
+    const t0 = performance.now(), dur = ms / SPEED;
+    const step = now => {
+      if (g !== gen) return rej('cancelled');
+      const p = Math.min(1, (now - t0) / dur);
+      fn(p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+      p < 1 ? requestAnimationFrame(step) : res();
+    };
+    requestAnimationFrame(step);
+  });
+  const nextFrame = fn => DEBUG.instant ? fn() : requestAnimationFrame(() => requestAnimationFrame(fn));
+  if (DEBUG.instant) document.head.appendChild(Object.assign(document.createElement('style'),
+    { textContent: '*{transition:none!important;animation:none!important}' }));
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+  function boxFor(t) {
+    const b = t.el.getBBox();
+    return { x: b.x - 6, y: b.y - 3, w: b.width + 12, h: b.height + 6 };
+  }
+
+  function drawBox(b, color, sw) {
+    const r = el('rect', { x: b.x, y: b.y, width: b.w, height: b.h, rx: 6, class: 'box' });
+    r.style.stroke = color;
+    r.style.strokeWidth = sw;
+    const p = 2 * (b.w + b.h);
+    r.style.strokeDasharray = p;
+    r.style.strokeDashoffset = p;
+    $('boxes').appendChild(r);
+    r.getBoundingClientRect();
+    nextFrame(() => { r.style.strokeDashoffset = 0; });
+    return r;
+  }
+
+  function makeTag(ax, ay, side, text, color) {
+    const g = el('g');
+    g.style.opacity = 0;
+    g.style.transition = 'opacity .35s';
+    const r = el('rect', { rx: 5, height: 22 });
+    r.style.transition = 'fill .4s';
+    const t = el('text', { 'font-size': 13, 'font-weight': 800, fill: '#140C09', class: 'mono' });
+    g.append(r, t);
+    $('boxes').appendChild(g);
+    const tag = {
+      g,
+      update(text, color) {
+        t.textContent = text;
+        const w = t.getComputedTextLength() + 14;
+        let x = ax, y = ay - 11;
+        if (side === 'left') x = ax - w;
+        if (side === 'top') y = ay - 26;
+        if (side === 'bottom') y = ay + 4;
+        tag.right = x + w;
+        r.setAttribute('x', x); r.setAttribute('y', y); r.setAttribute('width', w);
+        r.style.fill = color;
+        t.setAttribute('x', x + 7); t.setAttribute('y', y + 15.5);
+      },
+    };
+    tag.update(text, color);
+    nextFrame(() => { g.style.opacity = 1; });
+    return tag;
+  }
+
+  function chip(x, y, w, title, sub, color) {
+    const g = el('g');
+    g.style.opacity = 0;
+    g.style.transition = 'opacity .4s';
+    g.append(
+      el('rect', { x, y, width: w, height: 70, rx: 12, fill: '#2A1A12', stroke: color, 'stroke-width': 2 }),
+      el('text', { x: x + 16, y: y + 29, 'font-size': 18, 'font-weight': 800, fill: '#FFF4E8' }, title),
+      el('text', { x: x + 16, y: y + 52, 'font-size': 13, fill: '#C9B8A6', class: 'mono' }, sub),
+    );
+    $('entities').appendChild(g);
+    nextFrame(() => { g.style.opacity = 1; });
+  }
+
+  function link(x1, y1, x2, y2, c1, c2, color) {
+    const p = el('path', {
+      d: `M ${x1} ${y1} C ${c1[0]} ${c1[1]} ${c2[0]} ${c2[1]} ${x2} ${y2}`,
+      fill: 'none', stroke: color, 'stroke-width': 2.5, opacity: .85,
+    });
+    $('links').appendChild(p);
+    const L = p.getTotalLength();
+    p.style.strokeDasharray = L;
+    p.style.strokeDashoffset = L;
+    p.style.transition = 'stroke-dashoffset .8s ease';
+    p.getBoundingClientRect();
+    nextFrame(() => { p.style.strokeDashoffset = 0; });
+  }
+
+  const logLines = [];
+  function log(tag, msg, color = '#C9B8A6') {
+    logLines.push([tag, msg, color]);
+    const g = $('log');
+    g.innerHTML = '';
+    logLines.slice(-6).forEach(([t, m, c], i) => {
+      const tx = el('text', { x: 1020, y: 718 + i * 22, 'font-size': 15 });
+      tx.append(el('tspan', { fill: c, 'font-weight': 700 }, t.padEnd(8, ' ')), el('tspan', { fill: '#E9DCCD' }, m));
+      g.appendChild(tx);
+    });
+  }
+
+  function renderStages(a) {
+    const g = $('stages');
+    g.innerHTML = '';
+    STAGES.forEach(([label, where], i) => {
+      const y = 168 + i * 44, done = i < a, act = i === a;
+      g.append(
+        el('circle', { cx: 1038, cy: y - 6, r: 13, fill: act ? '#FF6A2B' : done ? '#22301F' : 'none',
+                       stroke: act ? '#FF6A2B' : done ? '#5BD69A' : '#5A4A3E', 'stroke-width': 2 }),
+        el('text', { x: 1038, y: y - 1, 'text-anchor': 'middle', 'font-size': 13, 'font-weight': 800,
+                     fill: act ? '#140C09' : done ? '#5BD69A' : '#8C7B6C' }, done ? '✓' : String(i + 1)),
+        el('text', { x: 1064, y, 'font-size': 18, 'font-weight': act ? 800 : 500,
+                     fill: act ? '#FFF4E8' : done ? '#C9B8A6' : '#8C7B6C' }, label),
+        el('text', { x: 1540, y, 'text-anchor': 'end', 'font-size': 13, class: 'mono',
+                     fill: act ? '#FF6A2B' : '#6E5E52' }, where),
+      );
+    });
+  }
+
+  async function caption(s) {
+    const c = $('caption');
+    c.style.opacity = 0;
+    await new Promise(r => setTimeout(r, 180));
+    c.textContent = s;
+    c.style.opacity = 1;
+  }
+
+  async function swapText(t, g) {
+    const b = boxFor(t);
+    const w = el('rect', { x: b.x, y: b.y, width: b.w, height: b.h, rx: 4, fill: C[t.type], class: 'wipe' });
+    w.style.transformOrigin = 'left center';
+    w.style.transform = 'scaleX(0)';
+    $('boxes').appendChild(w);
+    w.getBoundingClientRect();
+    w.style.transform = 'scaleX(1)';
+    await sleep(300, g);
+    t.el.textContent = '';
+    w.style.transformOrigin = 'right center';
+    w.style.transform = 'scaleX(0)';
+    await sleep(300, g);
+    w.remove();
+    for (let i = 1; i <= t.nt.length; i++) {
+      t.el.textContent = t.nt.slice(0, i);
+      await sleep(18, g);
+    }
+  }
+
+  async function swapFace(g) {
+    const sw = $('sweep');
+    sw.style.opacity = 1;
+    await tween(1300, e => {
+      const X = 350 + 310 * e;
+      $('clipBRect').setAttribute('width', X - 60);
+      $('clipARect').setAttribute('x', X);
+      $('clipARect').setAttribute('width', Math.max(0, 940 - X));
+      sw.setAttribute('x1', X); sw.setAttribute('x2', X);
+    }, g);
+    sw.style.opacity = 0;
+  }
+
+  function photoMarkup(mode) {
+    const face = mode === 'typ' ? `<g filter="url(#blur)">${FACE_A}${LESION}</g>` : `${FACE_B}${LESION}`;
+    let texts = '';
+    TEXTS.forEach(t => {
+      const pii = t.type !== 'KEEP';
+      if (mode === 'typ' && pii) {
+        const b = t.ob;
+        texts += `<rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" fill="#000"/>
+                  <text x="${b.x + 6}" y="${b.y + b.h - 6}" font-size="15" fill="#9A9A9A" class="mono">[REDACTED]</text>`;
+      } else {
+        const v = mode === 'rl' && pii ? t.nt : t.t;
+        texts += `<text x="${t.x}" y="${t.y}" text-anchor="${t.a || 'start'}" font-size="21" fill="#E8F0F5" class="mono">${esc(v)}</text>`;
+      }
+    });
+    return `<g clip-path="url(#clipPhoto)"><rect x="60" y="110" width="880" height="720" fill="url(#bgPhoto)"/>${BODY}${face}${BANDS}${texts}</g>`;
+  }
+
+  function buildCompare() {
+    const s = 420 / 880;
+    const mini = (mode, x) => `<g transform="translate(${x} 300) scale(${s}) translate(-60 -110)">${photoMarkup(mode)}</g>`;
+    $('compare').innerHTML = `
+      <rect x="40" y="90" width="920" height="760" rx="18" fill="#0B0706" stroke="rgba(255,244,232,.14)"/>
+      <text x="500" y="196" text-anchor="middle" font-size="34" font-weight="800" fill="#FFF4E8">Same photo. Two outputs.</text>
+      <text x="500" y="232" text-anchor="middle" font-size="17" fill="#C9B8A6">Typical masking hides the patient and the diagnosis. RLMask hides only the patient.</text>
+      <text x="60" y="286" font-size="15" font-weight="800" letter-spacing="2" fill="#FF8A7A">TYPICAL MASKING</text>
+      <text x="520" y="286" font-size="15" font-weight="800" letter-spacing="2" fill="#FF6A2B">RLMASK</text>
+      ${mini('typ', 60)}${mini('rl', 520)}
+      <rect x="58" y="298" width="424" height="348" rx="10" fill="none" stroke="#FF8A7A" stroke-width="2"/>
+      <rect x="518" y="298" width="424" height="348" rx="10" fill="none" stroke="#FF6A2B" stroke-width="2"/>
+      <text x="60" y="682" font-size="19" font-weight="800" fill="#FFF4E8">Face blurred → lesion lost</text>
+      <text x="60" y="708" font-size="15" fill="#C9B8A6">[REDACTED] text · clinical value ✕</text>
+      <text x="520" y="682" font-size="19" font-weight="800" fill="#FFF4E8">New identity · lesion &amp; skin tone kept</text>
+      <text x="520" y="708" font-size="15" fill="#C9B8A6">PHI leaked 0 · lesion pixels unchanged</text>
+      <text x="500" y="792" text-anchor="middle" font-size="16" fill="#E8C49A">Same persona as the EHR row, clinical notes and call audio → P-0412 Daniel Reyes</text>`;
+  }
+
+  // ---- static setup ----
+  $('body').innerHTML = BODY;
+  $('faceA').innerHTML = FACE_A;
+  $('faceB').innerHTML = FACE_B;
+  $('lesion').innerHTML = LESION;
+  $('bands').innerHTML = BANDS;
+  TEXTS.forEach(t => {
+    t.el = el('text', { x: t.x, y: t.y, 'text-anchor': t.a || 'start' }, t.t);
+    $('texts').appendChild(t.el);
+  });
+  $('personaCard').innerHTML = `
+    <rect x="1020" y="540" width="520" height="122" rx="14" fill="#2A1A12" stroke="#FF6A2B" stroke-width="2"/>
+    <g clip-path="url(#avClip)">
+      <rect x="1034" y="554" width="92" height="92" fill="url(#bgPhoto)"/>
+      <g transform="translate(1080 600) scale(.26) translate(-500 -440)">${BODY}${FACE_B}${LESION}</g>
+    </g>
+    <circle cx="1080" cy="600" r="46" fill="none" stroke="#FF6A2B" stroke-width="2"/>
+    <text x="1146" y="572" font-size="13" font-weight="700" fill="#FF6A2B" class="mono">PERSONA P-0412</text>
+    <text x="1146" y="600" font-size="24" font-weight="800" fill="#FFF4E8">Daniel Reyes</text>
+    <text x="1146" y="624" font-size="15" fill="#C9B8A6">58 · M · Sacramento, CA</text>
+    <text x="1146" y="648" font-size="13" fill="#E8C49A" class="mono">matched sex · age ±5 · skin tone · +31 d</text>`;
+
+  let faceBox, faceTag, lesBox;
+
+  function reset() {
+    $('boxes').innerHTML = '';
+    $('links').innerHTML = '';
+    $('entities').innerHTML = '';
+    $('log').innerHTML = '';
+    logLines.length = 0;
+    $('personaCard').style.opacity = 0;
+    $('compare').style.opacity = 0;
+    $('links').style.opacity = 1;
+    $('clipARect').setAttribute('x', 60); $('clipARect').setAttribute('width', 880);
+    $('clipBRect').setAttribute('x', 60); $('clipBRect').setAttribute('width', 0);
+    $('sweep').style.opacity = 0;
+    $('scan').style.opacity = 0;
+    TEXTS.forEach(t => { t.el.textContent = t.t; });
+    renderStages(-1);
+  }
+
+  async function run(g) {
+    const stop = i => DEBUG.stopAfter === i;
+
+    caption('A clinical photo arrives with PHI burned in, and a face.');
+    log('load', 'clinical_photo_0312.dcm · 880×720', '#8C7B6C');
+    await sleep(1600, g);
+
+    // 1 · OCR
+    renderStages(0);
+    caption('① Reading burned-in text (local OCR)');
+    const scan = $('scan');
+    scan.setAttribute('fill', 'url(#scanG)');
+    scan.style.opacity = 1;
+    const scanDone = tween(1500, e => scan.setAttribute('y', 50 + 780 * e), g);
+    const found = TEXTS.map(t => sleep(Math.max(0, (t.ob.y + t.ob.h - 50) / 780 * 1500), g).then(() => {
+      t.box = drawBox(t.ob, C.TEXT, 2);
+      const left = t.a === 'end';
+      t.tag = makeTag(left ? t.ob.x - 8 : t.ob.x + t.ob.w + 8, t.ob.y + t.ob.h / 2, left ? 'left' : 'right', 'TEXT', C.TEXT);
+    }));
+    await Promise.all([scanDone, ...found]);
+    scan.style.opacity = 0;
+    log('ocr', `${TEXTS.length} text regions found`);
+    await sleep(500, g);
+    if (stop(0)) return;
+
+    // 2 · face
+    renderStages(1);
+    caption('② Finding the face (local detector)');
+    faceBox = drawBox({ x: 358, y: 246, w: 284, h: 352 }, C.PERSON, 3);
+    faceTag = makeTag(358, 246, 'top', 'FACE · 0.98', C.PERSON);
+    log('face', '1 face · confidence 0.98');
+    await sleep(1300, g);
+    if (stop(1)) return;
+
+    // 3 · Agent 1 labels regions
+    renderStages(2);
+    caption('③ Agent 1 labels every region, and keeps clinical findings');
+    for (const t of TEXTS) {
+      t.box.style.stroke = C[t.type];
+      t.box.style.strokeWidth = 3;
+      if (t.type === 'KEEP') t.box.style.strokeDasharray = '8 6';
+      t.tag.update(LABEL[t.type], C[t.type]);
+      await sleep(160, g);
+    }
+    faceTag.update('FACE → identity', C.PERSON);
+    lesBox = drawBox({ x: 538, y: 460, w: 48, h: 44 }, C.KEEP, 3);
+    setTimeout(() => { lesBox.style.strokeDasharray = '8 6'; }, 750 / SPEED);
+    makeTag(538, 504, 'bottom', 'KEEP · lesion', C.KEEP);
+    log('agent1', 'PERSON ×2 · ID ×1 · DATE ×2 · ORG ×1', C.PERSON);
+    log('agent1', "'LESION 6 MM' → clinical · KEEP", C.KEEP);
+    await sleep(1500, g);
+    if (stop(2)) return;
+
+    // 4 · resolve the same person
+    renderStages(3);
+    caption('④ Linking every region to the same patient record');
+    chip(1020, 452, 330, 'E-012 · patient', 'EHR 4471029 · notes ×6 · call ×1', C.PERSON);
+    // Start each link past its tag so the line never crosses the label text.
+    const linkStart = t => (t.a === 'end' ? t.ob.x + t.ob.w : t.tag.right + 4);
+    for (const t of PII.filter(t => t.ent === 'E-012')) {
+      const x1 = linkStart(t), y1 = t.ob.y + t.ob.h / 2;
+      link(x1, y1, 1020, 487, [Math.max(x1 + 180, 960), y1], [900, 487], C[t.type]);
+      await sleep(140, g);
+    }
+    link(642, 422, 1020, 487, [960, 422], [900, 487], C.PERSON);
+    await sleep(500, g);
+    chip(1366, 452, 174, 'E-207', 'provider · ×14', '#FFB547');
+    const ref = PII.find(t => t.ent === 'E-207');
+    link(linkStart(ref), ref.ob.y + ref.ob.h / 2, 1453, 522, [720, 840], [1300, 560], '#FFB547');
+    log('resolve', 'name · MRN · DOB · date · face → E-012', '#FFB547');
+    log('resolve', "'DR. SARAH KIM' → E-207 (provider)", '#FFB547');
+    await sleep(1600, g);
+    if (stop(3)) return;
+
+    // 5 · persona swap (code, not LLM)
+    renderStages(4);
+    caption('⑤ One consistent persona. Lesion and skin tone untouched');
+    $('links').style.opacity = .12;
+    $('personaCard').style.opacity = 1;
+    log('vault', 'E-012 → P-0412 · E-207 → P-1180 · +31 d', C.PERSON);
+    await sleep(900, g);
+    PII.forEach(t => { t.box.style.opacity = 0; t.tag.g.style.opacity = 0; });
+    faceBox.style.opacity = 0;
+    faceTag.g.style.opacity = 0;
+    lesBox.classList.add('pulse');
+    await swapFace(g);
+    log('rewrite', 'face → P-0412 · lesion pixels untouched', C.KEEP);
+    await Promise.all(PII.map((t, i) => sleep(i * 150, g).then(() => swapText(t, g))));
+    log('rewrite', `${PII.length} text regions → persona values`);
+    await sleep(900, g);
+    if (stop(4)) return;
+
+    // 6 · Agent 2 audits the masked output only
+    renderStages(5);
+    caption('⑥ Agent 2 re-checks the output: no residual PHI');
+    scan.setAttribute('fill', 'url(#scanG2)');
+    scan.style.opacity = 1;
+    await tween(1400, e => scan.setAttribute('y', 50 + 780 * e), g);
+    scan.style.opacity = 0;
+    const pill = el('g');
+    pill.style.opacity = 0;
+    pill.style.transition = 'opacity .4s';
+    pill.append(
+      el('rect', { x: 270, y: 690, width: 460, height: 40, rx: 20, fill: '#5BD69A' }),
+      el('text', { x: 500, y: 716, 'text-anchor': 'middle', 'font-size': 17, 'font-weight': 800, fill: '#0E1A12' },
+         '✓  residual PHI 0 · lesion pixels unchanged'),
+    );
+    $('boxes').appendChild(pill);
+    nextFrame(() => { pill.style.opacity = 1; });
+    log('agent2', 're-OCR · residual PHI 0', C.KEEP);
+    log('agent2', 'same persona in EHR · notes · call ✓', C.KEEP);
+    await sleep(1800, g);
+    if (stop(5)) return;
+
+    // final comparison
+    renderStages(6);
+    caption('Blurring erases the finding. RLMask keeps it.');
+    $('links').style.opacity = 0;
+    buildCompare();
+    $('compare').style.opacity = 1;
+    if (DEBUG.noLoop) return;
+    await sleep(8000, g);
+    start();
+  }
+
+  function start() {
+    const g = ++gen;
+    reset();
+    run(g).catch(() => {});
+  }
+
+  $('replay').addEventListener('click', start);
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
+    TEXTS.forEach(t => { t.ob = boxFor(t); });
+    start();
+  });
+})();
+</script>
+</body>
+</html>
