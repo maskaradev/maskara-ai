@@ -1,4 +1,4 @@
-# RLMask
+# maskara
 
 > 미국 RL Eval·데이터 회사가 돈 내고 쓸 서비스 (출제 · AttentionX)
 

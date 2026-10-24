@@ -8,6 +8,13 @@ export const ko: Messages = {
     workspace: "워크스페이스",
     datasets: "데이터셋",
     toggleTheme: "테마 전환",
+    onboarding: {
+      title: "시작하기",
+      loadDataset: "데이터셋 불러오기",
+      startJob: "비식별화 작업 시작하기",
+      finishRun: "첫 실행 완료하기",
+      dismiss: "체크리스트 닫기",
+    },
   },
   status: { pending: "대기", running: "실행 중", succeeded: "성공", failed: "실패", skipped: "건너뜀" },
   roles: {
@@ -325,9 +332,7 @@ export const ko: Messages = {
     deleteDataset: "데이터셋 삭제",
     newJob: "새 마스킹 작업",
     preview: (shown, total) => `전체 ${total}행 중 처음 ${shown}행만 표시합니다.`,
-    reset: "로컬 데이터 초기화",
-    resetConfirm: "이 브라우저의 데이터셋, 실행 기록, 페르소나를 모두 삭제할까요?",
-    quotaFull: "로컬 저장소가 가득 찼습니다. 데이터셋을 삭제하거나 로컬 데이터를 초기화하세요.",
+    quotaFull: "로컬 저장소가 가득 찼습니다. 데이터셋을 삭제해 공간을 확보하세요.",
     loadFailed: "샘플을 불러오지 못했습니다.",
     uploadWarnTitle: "이 MVP에서는 자유 텍스트 컬럼이 Anthropic API로 전송됩니다.",
     uploadWarnBody:
@@ -419,7 +424,7 @@ export const ko: Messages = {
     progress: (step, total) => `${step} / ${total}`,
     steps: {
       welcome: {
-        title: "RLMask에 오신 것을 환영합니다",
+        title: "maskara에 오신 것을 환영합니다",
         body: "샘플 데이터셋을 불러오고, AI가 컬럼별 마스킹 방식을 정하게 한 뒤, 작업을 실행하고 마스킹된 데이터가 원본과 똑같이 분석되는지까지 2분 안에 둘러봅니다.",
       },
       navDatasets: { title: "데이터셋", body: "모든 작업은 로컬 DB의 데이터셋에서 시작합니다. 데이터셋 탭을 여세요." },

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RLMask · Medical image de-identification demo</title>
+<title>maskara · Medical image de-identification demo</title>
 <style>
   html, body { margin: 0; }
   .stage { width: 100%; max-width: 1600px; margin: 0 auto; }
@@ -23,7 +23,7 @@
 <body>
 <div class="stage">
 <svg id="svg" viewBox="0 0 1600 900" role="img"
-     aria-label="Animated demo: RLMask finds a patient's face and burned-in text in a clinical photo and swaps them for one consistent synthetic persona while keeping the lesion and skin tone">
+     aria-label="Animated demo: maskara finds a patient's face and burned-in text in a clinical photo and swaps them for one consistent synthetic persona while keeping the lesion and skin tone">
   <defs>
     <clipPath id="clipPhoto"><rect x="60" y="110" width="880" height="720" rx="10"/></clipPath>
     <clipPath id="clipA"><rect id="clipARect" x="60" y="110" width="880" height="720"/></clipPath>
@@ -44,7 +44,7 @@
   <rect width="1600" height="900" rx="28" fill="#140C09"/>
 
   <!-- header -->
-  <text x="48" y="60" font-size="26" font-weight="800" fill="#FF6A2B">RLMask</text>
+  <text x="48" y="60" font-size="26" font-weight="800" fill="#FF6A2B">maskara</text>
   <text x="158" y="60" font-size="20" fill="#C9B8A6">Medical image de-identification</text>
   <text x="1430" y="59" font-size="15" fill="#8C7B6C" text-anchor="end" class="mono">Agent 1: local LLM · Agent 2: Claude</text>
   <g id="replay">
@@ -86,7 +86,7 @@
 
 <script>
 (() => {
-  const DEBUG = window.RLMASK_DEBUG || {};
+  const DEBUG = window.MASKARA_DEBUG || {};
   const SPEED = DEBUG.speed || 1;
   const NS = 'http://www.w3.org/2000/svg';
   const $ = id => document.getElementById(id);
@@ -356,9 +356,9 @@
     $('compare').innerHTML = `
       <rect x="40" y="90" width="920" height="760" rx="18" fill="#0B0706" stroke="rgba(255,244,232,.14)"/>
       <text x="500" y="196" text-anchor="middle" font-size="34" font-weight="800" fill="#FFF4E8">Same photo. Two outputs.</text>
-      <text x="500" y="232" text-anchor="middle" font-size="17" fill="#C9B8A6">Typical masking hides the patient and the diagnosis. RLMask hides only the patient.</text>
+      <text x="500" y="232" text-anchor="middle" font-size="17" fill="#C9B8A6">Typical masking hides the patient and the diagnosis. maskara hides only the patient.</text>
       <text x="60" y="286" font-size="15" font-weight="800" letter-spacing="2" fill="#FF8A7A">TYPICAL MASKING</text>
-      <text x="520" y="286" font-size="15" font-weight="800" letter-spacing="2" fill="#FF6A2B">RLMASK</text>
+      <text x="520" y="286" font-size="15" font-weight="800" letter-spacing="2" fill="#FF6A2B">MASKARA</text>
       ${mini('typ', 60)}${mini('rl', 520)}
       <rect x="58" y="298" width="424" height="348" rx="10" fill="none" stroke="#FF8A7A" stroke-width="2"/>
       <rect x="518" y="298" width="424" height="348" rx="10" fill="none" stroke="#FF6A2B" stroke-width="2"/>
@@ -526,7 +526,7 @@
 
     // final comparison
     renderStages(6);
-    caption('Blurring erases the finding. RLMask keeps it.');
+    caption('Blurring erases the finding. maskara keeps it.');
     $('links').style.opacity = 0;
     buildCompare();
     $('compare').style.opacity = 1;

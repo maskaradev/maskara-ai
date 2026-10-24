@@ -1,1 +1,1 @@
-RLMask — synthetic persona masking for AI training data
+maskara — synthetic persona masking for AI training data

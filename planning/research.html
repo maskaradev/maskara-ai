@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RLMask · 리서치 정리</title>
+<title>maskara · 리서치 정리</title>
 <style>
   :root {
     --_bg: var(--background, #ffffff);
@@ -102,7 +102,7 @@
   </nav>
 
   <div class="hero">
-    <div class="k">RLMask · Research brief · AttentionX 주제</div>
+    <div class="k">maskara · Research brief · AttentionX 주제</div>
     <h1>마스킹은 다들 한다. <br>“마스킹한 뒤에도 RL 과제가 풀리는가”를 수치로 재는 곳은 아직 못 찾았다.</h1>
     <p>탐지는 공개 모델(OpenAI Privacy Filter)에 맡기고, 그 위에 <b>에피소드 단위 일관된 페르소나</b>와 <b>과제 보존 검증</b>을 얹는다.</p>
   </div>
@@ -123,7 +123,7 @@
           <tr><td><a href="https://github.com/mostly-ai/mostlyai">MOSTLY AI</a></td><td>표, 텍스트</td><td class="y">✓</td><td class="q">합성 데이터를 새로 만듦</td><td class="x">없음</td></tr>
           <tr><td><a href="https://datavant-aws-marketplace-files.s3.amazonaws.com/tokenization_user_guide.pdf">Datavant</a></td><td>표</td><td class="y">✓</td><td class="q">연결용 해시 토큰</td><td class="x">없음</td></tr>
           <tr><td><a href="https://secludy.com/solutions/rl-environments">Secludy</a> <b>⚠️ 직접 경쟁</b></td><td>CSV·JSONL·Parquet·이메일·PDF·이미지</td><td class="x">관리형 (온프렘 언급 없음)</td><td class="y">✓ RL 환경용</td><td>채점기 통과·유출 검사 (정량 지표 없음)</td></tr>
-          <tr class="us"><td>RLMask</td><td>텍스트, DB 테이블 (오늘)</td><td class="y">✓</td><td class="y">에피소드·테이블 간 일관</td><td class="y">✓ 핵심</td></tr>
+          <tr class="us"><td>maskara</td><td>텍스트, DB 테이블 (오늘)</td><td class="y">✓</td><td class="y">에피소드·테이블 간 일관</td><td class="y">✓ 핵심</td></tr>
         </tbody>
       </table>
     </div>
@@ -191,10 +191,10 @@
   <!-- 4 -->
   <section id="rl">
     <h2><span class="n">04</span>의료에서 RL로 할 수 있는 것</h2>
-    <p class="lead">두 갈래. RLMask에 맞는 건 ①번 — 에이전트가 의사·원무과처럼 일하도록 학습/평가.</p>
+    <p class="lead">두 갈래. maskara에 맞는 건 ①번 — 에이전트가 의사·원무과처럼 일하도록 학습/평가.</p>
     <div class="two">
       <div class="card" style="border-color:var(--_accent)">
-        <h4>① 의료 에이전트 과제 <span class="tag a">RLMask 적합</span></h4>
+        <h4>① 의료 에이전트 과제 <span class="tag a">maskara 적합</span></h4>
         <ul>
           <li><b>진단 대화</b>: 여러 턴 문답 → 검사 선택 → 진단. 보상 = 정답 진단 (예: AgentClinic)</li>
           <li><b>EHR 업무</b>: 기록 조회, 처방 입력, 결과 확인을 도구로 처리 (예: Stanford MedAgentBench)</li>
@@ -219,7 +219,7 @@
         <div class="res" style="color:var(--_bad)">“3월 처방과 5월 처방이 겹치나?” → 답 불가, 과제 깨짐</div>
       </div>
       <div class="cmp" style="background:var(--_acc-s)">
-        <div><b>RLMask 방식</b></div>
+        <div><b>maskara 방식</b></div>
         <code>Daniel Reyes 처방: 4/12 메트포르민 / 6/12 메트포르민</code>
         <div class="res" style="color:var(--_ok)">날짜 간격·인물 일관 유지 → 정답 그대로</div>
       </div>
@@ -278,10 +278,10 @@
         <li>원본 개인정보 잔존율(유출률), 재식별 위험 — “유용성 최대, 유출 0”을 한 화면에</li>
       </ul></div>
     </div>
-    <h3>데모 대시보드 — 숫자 4개, [REDACTED] vs RLMask 나란히</h3>
+    <h3>데모 대시보드 — 숫자 4개, [REDACTED] vs maskara 나란히</h3>
     <div class="tbl">
       <table style="min-width:520px">
-        <thead><tr><th>지표</th><th>목표</th><th>[REDACTED]</th><th>RLMask</th></tr></thead>
+        <thead><tr><th>지표</th><th>목표</th><th>[REDACTED]</th><th>maskara</th></tr></thead>
         <tbody>
           <tr><td>정답 보존율</td><td>↑ 높을수록</td><td class="q">측정 예정</td><td class="q">측정 예정</td></tr>
           <tr><td>모델 순위 상관 (Spearman)</td><td>→ 1.0</td><td class="q">측정 예정</td><td class="q">측정 예정</td></tr>

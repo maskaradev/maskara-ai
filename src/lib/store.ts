@@ -28,10 +28,9 @@ type Actions = {
   updateRun: (id: string, update: (run: Run) => Run) => void
   mergePersonas: (personas: Record<string, Persona>) => void
   cacheDetection: (key: string, entities: DetectedEntity[]) => void
-  reset: () => void
 }
 
-export const QUOTA_EVENT = "rlmask:quota-exceeded"
+export const QUOTA_EVENT = "maskara:quota-exceeded"
 
 const safeLocalStorage = {
   getItem: (key: string) => localStorage.getItem(key),
@@ -79,9 +78,9 @@ export const useAppStore = create<State & Actions>()(
       updateRun: (id, update) => set((s) => ({ runs: s.runs.map((r) => (r.id === id ? update(r) : r)) })),
       mergePersonas: (personas) => set((s) => ({ personas: { ...s.personas, ...personas } })),
       cacheDetection: (key, entities) => set((s) => ({ detectionCache: { ...s.detectionCache, [key]: entities } })),
-      reset: () => set(initialState()),
     }),
     {
+      // Keeps the pre-rename key so data saved under the old RLMask name still loads.
       name: "rlmask-local-db",
       version: 4,
       // v2–v4 changed the pipeline stages (image, text-DB, then photo/document agents); older runs can't be drawn.

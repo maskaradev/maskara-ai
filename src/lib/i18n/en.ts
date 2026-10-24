@@ -11,6 +11,13 @@ export const en = {
     workspace: "Workspace",
     datasets: "Datasets",
     toggleTheme: "Toggle theme",
+    onboarding: {
+      title: "Getting started",
+      loadDataset: "Load a dataset",
+      startJob: "Start a de-identification job",
+      finishRun: "Finish your first run",
+      dismiss: "Dismiss checklist",
+    },
   },
   status: { pending: "Pending", running: "Running", succeeded: "Succeeded", failed: "Failed", skipped: "Skipped" },
   roles: {
@@ -327,9 +334,7 @@ export const en = {
     deleteDataset: "Delete dataset",
     newJob: "New masking job",
     preview: (shown: number, total: number) => `Showing the first ${shown} of ${total} rows.`,
-    reset: "Reset local data",
-    resetConfirm: "Delete all datasets, runs and personas from this browser?",
-    quotaFull: "Local storage is full. Delete a dataset or reset local data.",
+    quotaFull: "Local storage is full. Delete a dataset to free up space.",
     loadFailed: "Could not load the sample.",
     uploadWarnTitle: "Free-text columns are sent to the Anthropic API in this MVP.",
     uploadWarnBody:
@@ -427,7 +432,7 @@ export const en = {
     progress: (step: number, total: number) => `${step} / ${total}`,
     steps: {
       welcome: {
-        title: "Welcome to RLMask",
+        title: "Welcome to maskara",
         body: "A 2-minute walkthrough: load a sample dataset, let AI pick how each column is masked, run the job, and check that the masked data still analyzes the same.",
       },
       navDatasets: { title: "Datasets", body: "Everything starts from a dataset in the local DB. Open the Datasets tab." },

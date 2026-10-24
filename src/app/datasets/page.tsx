@@ -178,7 +178,7 @@ export default function DatasetsPage() {
   const hydrated = useHydrated()
   const m = useMessages()
   const t = m.datasets
-  const { datasets, upsertDataset, removeDataset, reset } = useAppStore()
+  const { datasets, upsertDataset, removeDataset } = useAppStore()
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -308,18 +308,6 @@ export default function DatasetsPage() {
             {selected && <DatasetViewer dataset={selected} />}
           </>
         )}
-
-        <footer className="mt-auto flex items-center justify-end border-t pt-4 text-xs text-muted-foreground">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              if (confirm(t.resetConfirm)) reset()
-            }}
-          >
-            {t.reset}
-          </Button>
-        </footer>
       </main>
     </div>
   )

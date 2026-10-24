@@ -8,6 +8,7 @@ import { ko } from "@/lib/i18n/ko"
 export type Locale = "en" | "ko"
 
 const MESSAGES: Record<Locale, Messages> = { en, ko }
+// Keeps the pre-rename key so the saved language survives the RLMask → maskara rename.
 const STORAGE_KEY = "rlmask-locale"
 const listeners = new Set<() => void>()
 

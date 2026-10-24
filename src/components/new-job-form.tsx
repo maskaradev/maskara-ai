@@ -294,7 +294,7 @@ export function NewJobForm() {
               ))}
             </div>
 
-            <aside className="flex h-fit flex-col gap-4 rounded-xl border p-4 xl:sticky xl:top-4">
+            <aside className="flex h-fit flex-col gap-4 rounded-xl border p-4 xl:sticky xl:top-16">
               <h2 className="text-sm font-semibold">{t.summary}</h2>
               <dl className="grid grid-cols-[1fr_auto] gap-y-1 text-[13px]">
                 <dt className="text-muted-foreground">{t.tables}</dt>

@@ -18,8 +18,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
+const TITLE = "Maskara | Mask data locally"
+
+// The title is rendered by the root layout rather than set in `metadata`: Next re-renders metadata for
+// each route, so on every client navigation <title> left the DOM for a few ms and the tab showed the URL.
+// The root layout never unmounts, so this <title> stays put.
 export const metadata: Metadata = {
-  title: "RLMask | Synthetic persona masking for AI training data",
   description:
     "Replace sensitive data with consistent synthetic personas while keeping it useful for AI training.",
 }
@@ -31,6 +35,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <title>{TITLE}</title>
+      </head>
       <body className="min-h-full">
         <Providers>
           <SidebarProvider className="md:h-svh md:overflow-hidden">

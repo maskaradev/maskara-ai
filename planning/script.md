@@ -1,7 +1,7 @@
-# Slide 1. What RLMask Does
+# Slide 1. What maskara Does
 ## Introduction
-Hello, we are Team "[Team Name]," and this is RLMask.
-RLMask turns sensitive data into data that AI can safely learn from.
+Hello, we are Team "[Team Name]," and this is maskara.
+maskara turns sensitive data into data that AI can safely learn from.
 
 ## Problem
 Some of the most valuable data for AI is inside hospitals and banks.
@@ -11,7 +11,7 @@ That also erases the context a model learns from: who the patient is, who the fa
 So the data stays locked away, and AI companies can't use it.
 
 ## Solution
-RLMask doesn't delete personal information. It replaces it with consistent virtual personas.
+maskara doesn't delete personal information. It replaces it with consistent virtual personas.
 The same patient becomes the same fictional person in every table, note, image, and recording.
 Diagnoses, prescriptions, and time intervals stay exactly as they were.
 We are starting in the United States, with hospitals and the RL eval and training-data companies that need their data.
@@ -20,7 +20,7 @@ We are starting in the United States, with hospitals and the RL eval and trainin
 
 ## Load the Data
 On the first screen, we load a synthetic US hospital dataset: a patient table, clinical notes, and media files such as an ECG printout, an insurance card, and a voicemail.
-In the real product, RLMask connects to the customer's database with read-only access.
+In the real product, maskara connects to the customer's database with read-only access.
 
 ## Detect & Replace
 Next, we run a masking job. The pipeline view shows every step and where it runs.
@@ -37,7 +37,7 @@ Utility: all 14 checks pass. Visit intervals, age distribution, readmission rate
 
 ## Business Model
 Hospital data can't come out, so we go in.
-We sell RLMask as installed software that runs inside the customer's network with a local model, so nothing is sent to an outside API.
+We sell maskara as installed software that runs inside the customer's network with a local model, so nothing is sent to an outside API.
 Revenue comes from a license fee for each installation, plus an annual subscription for deployment and updates.
 Hospitals and banks use it to share or sell their data, and AI companies finally get data they can train on.
 

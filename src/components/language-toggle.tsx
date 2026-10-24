@@ -24,7 +24,7 @@ export function LanguageToggle() {
       className="gap-1 px-1.5 text-[11px] font-semibold"
     >
       <Languages />
-      {m.language.current}
+      <span className="group-data-[collapsible=icon]:hidden">{m.language.current}</span>
     </Button>
   )
 }

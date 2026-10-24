@@ -17,7 +17,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 
 export function PageHeader({ trail, back }: { trail: string[]; back?: { href: string; label: string } }) {
   return (
-    <header className="flex h-12 shrink-0 items-center gap-2 border-b px-4">
+    <header className="sticky top-0 z-20 flex h-12 shrink-0 items-center gap-2 border-b bg-background px-4">
       <SidebarTrigger className="-ml-1" />
       {back && (
         <>

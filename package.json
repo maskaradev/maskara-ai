@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "maskara",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -24,6 +24,7 @@
     "radix-ui": "^1.8.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "react-hotkeys-hook": "^5.3.3",
     "react-joyride": "^3.2.0",
     "shadcn": "^4.22.1",
     "sharp": "^0.35.5",
