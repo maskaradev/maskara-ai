@@ -134,9 +134,14 @@ function TourTooltip({ index, size, isLastStep, tooltipProps }: TooltipRenderPro
       className="pointer-events-auto flex w-[340px] max-w-[calc(100vw-2rem)] flex-col gap-3 rounded-xl border bg-popover p-4 text-popover-foreground shadow-lg"
     >
       <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          {/* The welcome card isn't counted, so numbering runs 1…size-1. */}
+          {index > 0 && (
+            <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary tabular-nums">
+              {t.progress(index, size - 1)}
+            </span>
+          )}
           <h3 className="mr-auto text-sm font-semibold">{title}</h3>
-          {index > 0 && <span className="text-[11px] text-muted-foreground tabular-nums">{t.progress(index, size - 1)}</span>}
           <Button variant="ghost" size="icon-xs" className="-mr-1.5 text-muted-foreground" aria-label={t.close} title={t.close} onClick={controls.skip}>
             <X />
           </Button>
