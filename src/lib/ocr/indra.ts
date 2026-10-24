@@ -2,8 +2,8 @@ import { z } from "zod"
 
 import type { Box, LayoutBlock, LayoutKind, OcrDocument, OcrWord } from "@/lib/types"
 
-// Client for the in-house GPU OCR server (indra-ocr, `datalab-to/indra-ocr`). Server-only: the API
-// key never reaches the browser. `node --env-file=.env.local scripts/probe-ocr.mjs` dumps raw responses.
+// Client for the in-house GPU OCR server (indra-ocr, `datalab-to/indra-ocr`). Server-only (the
+// server is on the tailnet). `node scripts/probe-ocr.mjs` dumps raw responses.
 //
 // POST /v1/ocr, multipart: file, format=md|text|json, mode=auto|ocr|text, math, max_pages.
 // format=json returns per page: text lines with boxes and confidence, layout blocks (Surya labels:
@@ -41,8 +41,6 @@ const ResponseSchema = z.object({
 })
 
 export async function runOcr(file: Blob, filename: string, size: { width: number; height: number }): Promise<OcrDocument> {
-  const apiKey = process.env.OCR_API_KEY
-  if (!apiKey) throw new OcrServerError("OCR_API_KEY is not set in .env.local.", 500)
   const base = (process.env.OCR_API_URL || DEFAULT_URL).replace(/\/+$/, "")
 
   const form = new FormData()
@@ -55,7 +53,6 @@ export async function runOcr(file: Blob, filename: string, size: { width: number
   try {
     res = await fetch(`${base}/v1/ocr`, {
       method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}` },
       body: form,
       signal: AbortSignal.timeout(TIMEOUT_MS),
     })
@@ -65,7 +62,6 @@ export async function runOcr(file: Blob, filename: string, size: { width: number
     throw new OcrServerError(`Could not reach the OCR server at ${base} (${cause}). Is this machine on the tailnet?`, 502)
   }
   const body = await res.text()
-  if (res.status === 401 || res.status === 403) throw new OcrServerError("The OCR server rejected OCR_API_KEY.", 500)
   if (!res.ok) throw new OcrServerError(`OCR server error ${res.status}: ${body.slice(0, 300)}`, 502)
 
   let json: unknown

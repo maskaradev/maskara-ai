@@ -7,10 +7,8 @@ import { mkdir, readFile, writeFile } from "node:fs/promises"
 import { basename } from "node:path"
 
 const base = (process.env.OCR_API_URL || "https://gx10-a4ea.tail0fa1f7.ts.net:8443").replace(/\/+$/, "")
-const key = process.env.OCR_API_KEY
-if (!key) throw new Error("OCR_API_KEY is not set (run with --env-file=.env.local).")
 const [image = "public/samples/hospital/media/images/M003_wristband.png", ...formats] = process.argv.slice(2)
-const headers = { Authorization: `Bearer ${key}` }
+const headers = {}
 await mkdir(".ocr-probe", { recursive: true })
 
 for (const path of ["/openapi.json", "/docs", "/v1/models", "/health"]) {

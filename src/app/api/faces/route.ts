@@ -1,7 +1,7 @@
 import type { FaceBox } from "@/lib/types"
 
-// Proxy to the on-prem face detector on the GPU box (same host as the OCR server). Server-only so the
-// key never reaches the browser. POST /detect, multipart `image` → { width, height, faces: [{ bbox, det_score, landmarks_5 }] }.
+// Proxy to the on-prem face detector on the GPU box (same host as the OCR server). Server-side so the
+// browser doesn't need to reach the tailnet. POST /detect, multipart `image` → { width, height, faces: [{ bbox, det_score, landmarks_5 }] }.
 
 const DEFAULT_URL = "https://gx10-a4ea.tail0fa1f7.ts.net:10000"
 const TIMEOUT_MS = 60_000
@@ -16,8 +16,6 @@ export async function POST(request: Request) {
   const file = form?.get("file")
   if (!(file instanceof Blob)) return Response.json({ error: "Expected a multipart `file` field." }, { status: 400 })
   if (file.size > MAX_BYTES) return Response.json({ error: "Image is larger than 20 MB." }, { status: 413 })
-  const apiKey = process.env.FACE_API_KEY || process.env.OCR_API_KEY
-  if (!apiKey) return Response.json({ error: "FACE_API_KEY (or OCR_API_KEY) is not set in .env.local." }, { status: 500 })
   const base = (process.env.FACE_API_URL || DEFAULT_URL).replace(/\/+$/, "")
 
   const body = new FormData()
@@ -26,7 +24,6 @@ export async function POST(request: Request) {
   try {
     res = await fetch(`${base}/detect`, {
       method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}` },
       body,
       signal: AbortSignal.timeout(TIMEOUT_MS),
     })

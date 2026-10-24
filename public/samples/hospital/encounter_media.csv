@@ -21,3 +21,5 @@ M008,P009,2026-02-17,Endocrinology,"Registration: Aisha Rahman issued a new pati
 M009,P009,2026-02-17,Endocrinology,"Baseline facial photo taken by Dr. Farouk to track Graves ophthalmopathy. Patient consented to clinical photography.",clinical_photo,media/photos/M009_clinical_photo.png,,,
 M010,P005,2026-03-04,Oncology,"Scanned clinical record (2 pages) for Priya Natarajan's cycle 4 visit, exported to PDF for the chart.",clinical_record_pdf,media/documents/M010_oncology_record.pdf,,,
 M011,P013,2026-03-02,General Surgery,"Pre-op identification photo for Linda Fitzgerald taken at check-in. Husband waiting in family lounge.",preop_photo,media/photos/M011_preop_photo.png,,,
+M012,P016,2018-08-05,Critical Care,"Portable semi-upright chest X-ray for Timothy Sanchez in the ICU, ordered by Dr. Laura Benson. Wife at bedside, asked to be called at (555) 010-3090 with results.",chest_xray,media/images/M012_chest_xray.jpg,,,
+M013,P017,2019-03-09,Cardiology,"Lateral chest X-ray for Larry Johnson after pacemaker placement and prior sternotomy. Lead position reviewed by Dr. Michael Torres; daughter drove him home.",chest_xray,media/images/M013_chest_xray_lateral.jpg,,,

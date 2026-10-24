@@ -140,3 +140,11 @@
     transform: translateX(100%);
   }
 }
+@keyframes live-scan {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}

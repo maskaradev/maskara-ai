@@ -192,6 +192,12 @@ export const en = {
     legendPersona: "persona value",
     dbNotGenerated: "The generation agent hasn't rewritten the DB yet.",
     otherLane: { image: "image lane", audio: "audio lane", transcript: "audio lane" },
+    phases: { original: "Original", identify: "Identified", generate: "Generated" },
+    liveTitle: "Live media",
+    liveDescription: "Agents work in parallel; each photo and page animates the moment it's done. Click one to replay original → identified → generated.",
+    photoLane: "Photos & scans",
+    documentLane: "PDF pages",
+    replay: "Replay",
   },
   results: {
     pendingRunning: "Results appear here when the run finishes.",

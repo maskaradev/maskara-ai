@@ -6,6 +6,7 @@ import { useMemo, useState } from "react"
 
 import { AgentPanel } from "@/components/agent-panel"
 import { DbAgentPanel } from "@/components/db-agent-panel"
+import { LiveWall } from "@/components/live-wall"
 import { PipelineGraph, stageDuration } from "@/components/pipeline-graph"
 import { QualityView, utilityFor } from "@/components/quality-view"
 import { ResultsView } from "@/components/results-view"
@@ -156,6 +157,7 @@ export function RunView({ run }: { run: Run }) {
         </TabsList>
         <TabsContent value="pipeline" className="flex flex-col gap-4 pt-2">
           <PipelineGraph run={run} now={now} selected={focus} onSelect={setSelected} />
+          <LiveWall run={run} />
           {(focus === "identify" || focus === "generate") && (
             <section className="rounded-xl border p-4">
               <AgentPanel key={focus} run={run} agent={focus} lane="photo" />

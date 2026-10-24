@@ -76,8 +76,11 @@
 | M009 | P009 Aisha Rahman | 임상 얼굴 사진 + 하단 라벨 (M008과 같은 얼굴) | — |
 | M010 | P005 Priya Natarajan | **진료 기록서 PDF 2쪽** (종양내과) | — |
 | M011 | P013 Linda Fitzgerald | 수술 전 신원 확인 사진 | — |
+| M012 | P016 Timothy Sanchez | 흉부 X-ray 정면 (JPEG, 좌상단에 이름·촬영일·생년월일 번인) | — |
+| M013 | P017 Larry Johnson | 흉부 X-ray 측면 (JPEG, 우하단에 이름·촬영일·생년월일 번인, 심박조율기) | — |
 
 - **얼굴 사진:** StyleGAN2로 생성된 실존하지 않는 인물 얼굴(thispersondoesnotexist)을 받아 headless Chrome으로 사진·라벨을 합성했습니다. 생성 이미지의 라이선스가 불명확하므로 내부 데모용으로만 씁니다. M008·M009는 같은 환자·같은 얼굴이라 "같은 사람 = 같은 페르소나 얼굴"을 보여 줍니다.
+- **X-ray:** 사용자가 제공한 흉부 X-ray 이미지로, 픽셀에 박힌 환자 정보(`SANCHEZ TIMOTHY [M] 08.05.2018 / DOB: 07.01.1972` 형식, 날짜는 MM.DD.YYYY)를 지워야 하는 의료영상 사례입니다. 얼굴이 없으므로 OCR 경로만 탑니다.
 - **PDF:** HTML로 작성한 진료 기록서를 headless Chrome으로 Letter 2쪽 PDF로 인쇄했습니다. 1쪽에서 소개된 이름(남편 Arjun, 딸 Meera)이 2쪽에 다시 나옵니다.
 
 - **정답지:** `encounter_media_answer_key.json` 에 레코드별로 이미지·오디오 안에 들어 있는 개인정보 값 목록이 있습니다. 검증 단계에서 "놓친 PII"를 계산하는 데 씁니다.

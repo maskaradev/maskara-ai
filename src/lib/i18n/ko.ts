@@ -190,6 +190,12 @@ export const ko: Messages = {
     legendPersona: "페르소나 값",
     dbNotGenerated: "생성 에이전트가 아직 DB를 다시 쓰지 않았습니다.",
     otherLane: { image: "이미지 레인", audio: "오디오 레인", transcript: "오디오 레인" },
+    phases: { original: "원본", identify: "인식", generate: "생성" },
+    liveTitle: "라이브 미디어",
+    liveDescription: "에이전트가 병렬로 처리하고, 끝나는 즉시 사진·페이지마다 변환 장면이 재생됩니다. 클릭하면 원본 → 인식 → 생성을 다시 볼 수 있습니다.",
+    photoLane: "사진·스캔 이미지",
+    documentLane: "PDF 페이지",
+    replay: "다시 재생",
   },
   results: {
     pendingRunning: "실행이 끝나면 결과가 여기에 표시됩니다.",

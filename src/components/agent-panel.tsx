@@ -4,6 +4,7 @@ import { Download } from "lucide-react"
 import { useCallback, useRef, useState } from "react"
 
 import { ImageCanvas } from "@/components/image-canvas"
+import { LiveCanvas } from "@/components/live-canvas"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useMessages } from "@/lib/i18n"
@@ -28,7 +29,7 @@ export function AgentPanel({ run, agent, lane }: { run: Run; agent: "identify" |
   const a = m.agents
   const images = (run.images ?? []).filter((img) => img.kind === lane)
   const [selected, setSelected] = useState(0)
-  const [showLayout, setShowLayout] = useState(false)
+  const [showLayout, setShowLayout] = useState(true)
   const [showOriginal, setShowOriginal] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const onCanvas = useCallback((c: HTMLCanvasElement) => (canvasRef.current = c), [])
@@ -134,7 +135,16 @@ export function AgentPanel({ run, agent, lane }: { run: Run; agent: "identify" |
                 <ImageCanvas item={item} mode="generate" onCanvas={onCanvas} />
               </div>
             ) : (
-              <ImageCanvas item={item} mode={agent} showLayout={showLayout} onCanvas={onCanvas} />
+              // Plays original → identified (→ generated) whenever an item is opened or finishes.
+              <LiveCanvas
+                key={item.id}
+                item={item}
+                animateOnMount
+                steps
+                until={agent}
+                layout={agent === "generate" || showLayout}
+                onCanvas={onCanvas}
+              />
             )}
             <div className="overflow-x-auto rounded-lg border">
               <table className="w-full text-[12.5px]">
