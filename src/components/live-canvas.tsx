@@ -8,8 +8,8 @@ import type { Box, ImageItem, ImageRegion } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 // Demo view of the media agents: one canvas that animates original → identified → generated.
-// Photos: a scan bar reveals the OCR layout and the detected PII, then a second bar wipes in the
-// generated photo (repainted faces, persona values). Documents: the scan bar drops blanks over the PII,
+// Photos: a bar passes over and reveals the OCR layout and the detected PII, then a second pass wipes in
+// the generated photo (repainted faces, persona values). Documents: the bar drops blanks over the PII,
 // then the blanks fill in one after another in reading order.
 
 export type Phase = "original" | "identify" | "generate"
@@ -19,11 +19,11 @@ export const PHASES: Phase[] = ["original", "identify", "generate"]
 /** Colour dot for each phase in phase tabs. */
 export const PHASE_DOT: Record<Phase, string> = {
   original: "bg-foreground/40",
-  identify: "bg-sky-500",
+  identify: "bg-amber-500",
   generate: "bg-emerald-500",
 }
 
-const rank = (p: Phase) => PHASES.indexOf(p)
+export const rank = (p: Phase) => PHASES.indexOf(p)
 
 export function phaseOf(item: ImageItem, until: Phase = "generate"): Phase {
   const phase = item.status === "generated" ? "generate" : item.status === "identified" ? "identify" : "original"
@@ -129,70 +129,101 @@ function offscreen(ctx: CanvasRenderingContext2D, paint: (c: CanvasRenderingCont
   return c
 }
 
-/** A glowing scan bar at `pos` (x for a vertical bar, y for a horizontal one) with a fading trail behind it. */
-function drawBar(ctx: CanvasRenderingContext2D, pos: number, vertical: boolean, rgb: string) {
-  const { width, height } = ctx.canvas
-  const span = vertical ? width : height
-  const across = vertical ? height : width
-  const trail = span * 0.08
-  const core = Math.max(3, span * 0.005)
+/**
+ * Tick height along the bar, `x` from -1 to 1: a tall swell in the middle and smaller ripples dying out
+ * towards the ends. Ticks never vanish, so the nodes between ripples still show.
+ */
+export const barProfile = (x: number) =>
+  Math.max(0.1, Math.abs(Math.cos(3.5 * Math.PI * x)) * (0.28 + 0.72 * Math.exp(-8 * x * x)))
+
+/** The bar that passes over an image, as long as `length`, lying along x and centred on y = half. */
+type Bar = { sprite: HTMLCanvasElement; half: number }
+
+function bar(length: number): Bar {
+  const b = Math.max(6, length * 0.03)
+  const half = Math.ceil(b * 1.4)
+  const ink = document.createElement("canvas")
+  ink.width = Math.ceil(length)
+  ink.height = half * 2
+  const g = ink.getContext("2d")!
+  g.translate(0, half)
+  g.fillStyle = "#171717"
+  // A hairline across the image carrying evenly spaced ticks shaped by `barProfile`.
+  const unit = Math.max(1, length / 400)
+  g.fillRect(0, -unit / 2, length, unit)
+  const start = length * 0.04
+  const end = length * 0.96
+  const gap = Math.max(3, b * 0.28)
+  const w = gap * 0.38
+  for (let u = start; u <= end; u += gap) {
+    const r = b * barProfile(((u - start) / (end - start)) * 2 - 1)
+    g.fillRect(u - w / 2, -r, w, r * 2)
+  }
+
+  // A pale rim keeps it readable on dark images.
+  const sprite = document.createElement("canvas")
+  sprite.width = ink.width
+  sprite.height = ink.height
+  const ctx = sprite.getContext("2d")!
+  ctx.shadowColor = "rgba(255,255,255,0.75)"
+  ctx.shadowBlur = Math.max(2, b * 0.15)
+  ctx.drawImage(ink, 0, 0)
+  return { sprite, half }
+}
+
+/** The bar across the image at `pos`: upright for a vertical pass, else lying flat. */
+function drawBar(ctx: CanvasRenderingContext2D, pass: Bar, pos: number, vertical: boolean) {
   ctx.save()
-  const g = vertical ? ctx.createLinearGradient(pos - trail, 0, pos, 0) : ctx.createLinearGradient(0, pos - trail, 0, pos)
-  g.addColorStop(0, `rgba(${rgb},0)`)
-  g.addColorStop(1, `rgba(${rgb},0.35)`)
-  ctx.fillStyle = g
-  if (vertical) ctx.fillRect(pos - trail, 0, trail, across)
-  else ctx.fillRect(0, pos - trail, across, trail)
-  ctx.shadowColor = `rgba(${rgb},1)`
-  ctx.shadowBlur = core * 6
-  ctx.fillStyle = `rgba(${rgb},1)`
-  if (vertical) ctx.fillRect(pos - core / 2, 0, core, across)
-  else ctx.fillRect(0, pos - core / 2, across, core)
-  ctx.fillStyle = "rgba(255,255,255,0.9)"
-  ctx.shadowBlur = 0
-  if (vertical) ctx.fillRect(pos - core / 6, 0, core / 3, across)
-  else ctx.fillRect(0, pos - core / 6, across, core / 3)
+  if (vertical) {
+    ctx.translate(pos, 0)
+    ctx.rotate(Math.PI / 2)
+  } else ctx.translate(0, pos)
+  ctx.drawImage(pass.sprite, 0, -pass.half)
   ctx.restore()
 }
 
-const SKY = "56,189,248"
+/** Bar position at progress `p`: it enters and leaves the image whole. */
+const barAt = (pass: Bar, p: number, span: number) => -pass.half + ease(p) * (span + 2 * pass.half)
+
 const EMERALD = "16,185,129"
 
 /** One step of the animation: `draw` paints time `t` in [0, duration] ms; played backwards, t runs down. */
 type Step = { duration: number; draw: (t: number) => void }
 
-/** original → identify: the scan bar drops the layout boxes and PII marks as it passes them. */
+/** original → identify: the bar drops the layout boxes and PII marks as it passes them. */
 function scanStep(ctx: CanvasRenderingContext2D, item: ImageItem, layers: Layers, layout: boolean): Step {
   const { width, height } = ctx.canvas
   const vertical = item.kind === "photo"
+  const pass = bar(vertical ? height : width)
   const duration = vertical ? 1100 : 1300
   const draw = (t: number) => {
     const p = Math.min(1, t / duration)
-    const pos = ease(p) * (vertical ? width : height) * 1.04
+    const pos = barAt(pass, p, vertical ? width : height)
     drawPhase(ctx, item, "identify", layers, layout, (b) => (vertical ? b.x0 : b.y0) <= pos)
-    if (p < 1) drawBar(ctx, pos, vertical, SKY)
+    if (p < 1) drawBar(ctx, pass, pos, vertical)
   }
   return { duration, draw }
 }
 
-/** identify → generate for photos: a vertical bar wipes the generated image over the identified one. */
+/** identify → generate for photos: the bar wipes the generated image over the identified one. */
 function sweepStep(ctx: CanvasRenderingContext2D, item: ImageItem, layers: Layers, layout: boolean): Step {
   const { width, height } = ctx.canvas
   const before = offscreen(ctx, (c) => drawPhase(c, item, "identify", layers, layout))
   const after = offscreen(ctx, (c) => drawPhase(c, item, "generate", layers, layout))
+  const pass = bar(height)
   const duration = 1600
   const draw = (t: number) => {
     const p = Math.min(1, t / duration)
-    const x = ease(p) * width
+    const x = barAt(pass, p, width)
     ctx.clearRect(0, 0, width, height)
     ctx.drawImage(before, 0, 0)
     ctx.save()
     ctx.beginPath()
-    ctx.rect(0, 0, x, height)
+    ctx.rect(0, 0, Math.max(0, x), height)
     ctx.clip()
     ctx.drawImage(after, 0, 0)
     ctx.restore()
-    if (p < 1) drawBar(ctx, x, true, EMERALD)
+    if (p < 1) drawBar(ctx, pass, x, true)
   }
   return { duration, draw }
 }
@@ -432,16 +463,16 @@ export function LiveCanvas({
     <div className={cn("relative", className)}>
       <canvas ref={ref} className={cn("block h-auto w-full rounded border bg-white", canvasClassName)} />
       {steps && (
-        <div className="pointer-events-none absolute top-2 left-2 flex items-center gap-1 rounded-full bg-black/60 px-1.5 py-1 text-[11px] font-semibold text-white/50 backdrop-blur-sm">
+        <div className="pointer-events-none absolute top-2 left-2 flex items-center gap-1 rounded-full border bg-background/90 px-1.5 py-1 text-[11px] font-semibold text-muted-foreground shadow-sm backdrop-blur-sm">
           {PHASES.slice(0, rank(until) + 1).map((p, i) => (
             <span key={p} className="flex items-center gap-1">
-              {i > 0 && <span className="text-white/40">→</span>}
+              {i > 0 && <span className="text-muted-foreground/50">→</span>}
               <span
                 className={cn(
                   "rounded-full px-2 py-0.5 transition-colors duration-300",
-                  p === displayed && p === "original" && "bg-white/90 text-black",
-                  p === displayed && p === "identify" && "bg-sky-400 text-black",
-                  p === displayed && p === "generate" && "bg-emerald-400 text-black",
+                  p === displayed && p === "original" && "bg-foreground text-background",
+                  p === displayed && p === "identify" && "bg-amber-500/15 text-amber-700 dark:text-amber-300",
+                  p === displayed && p === "generate" && "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
                 )}
               >
                 {m.phases[p]}

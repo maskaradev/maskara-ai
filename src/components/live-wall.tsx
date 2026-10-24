@@ -4,7 +4,7 @@ import { Maximize2, Play, RotateCcw } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import { ITEM_STYLE } from "@/components/agent-panel"
-import { LiveCanvas, PHASE_DOT, PHASES, phaseOf, type Phase } from "@/components/live-canvas"
+import { barProfile, LiveCanvas, PHASE_DOT, PHASES, phaseOf, rank, type Phase } from "@/components/live-canvas"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -21,14 +21,28 @@ const HOLD_MS = 1400
 const RUSH_MS = 350
 const RUSH_AT = 4
 
-const rank = (p: Phase) => PHASES.indexOf(p)
-
 type Spot = { id: string; from: Phase; to: Phase; n: number }
 
-function Scan() {
+/** The item sits on the stage like a sheet on a desk: no backdrop of its own, just a shadow. */
+const STAGE_CANVAS =
+  "h-full rounded-none border-0 bg-transparent object-contain [filter:drop-shadow(0_1px_2px_rgb(0_0_0/0.08))_drop-shadow(0_10px_24px_rgb(0_0_0/0.14))]"
+
+// The ticks the canvas bar carries, upright: 6 wide, one every 2 along y.
+const TICKS = Array.from({ length: 61 }, (_, i) => {
+  const r = 6 * barProfile(i / 30 - 1)
+  return `M${6 - r} ${i * 2 + 0.5}h${r * 2}`
+}).join("")
+
+/** An agent reading the item: the canvas bar passes over it again and again. */
+function Scan({ className }: { className?: string }) {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="absolute inset-y-0 w-1/3 animate-[live-scan_1.3s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-sky-400/35 to-transparent" />
+      <div className="absolute inset-y-0 flex w-1/3 animate-[live-scan_1.3s_ease-in-out_infinite] items-center justify-center text-neutral-900 [filter:drop-shadow(0_0_1.5px_rgb(255_255_255/0.85))]">
+        <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-current" />
+        <svg viewBox="0 0 12 121" className={cn("relative h-4/5 w-auto", className)} aria-hidden="true">
+          <path d={TICKS} stroke="currentColor" strokeWidth={1} vectorEffect="non-scaling-stroke" />
+        </svg>
+      </div>
     </div>
   )
 }
@@ -183,7 +197,7 @@ export function LiveWall({ run }: { run: Run }) {
           <p className="hidden text-xs text-muted-foreground md:block">{a.liveDescription}</p>
         </div>
         <div className="flex items-center gap-3 text-xs tabular-nums">
-          <span className="text-sky-700 dark:text-sky-300">
+          <span className="text-amber-700 dark:text-amber-300">
             {a.phases.identify} {identified}/{images.length}
           </span>
           <span className="text-emerald-700 dark:text-emerald-300">
@@ -197,7 +211,7 @@ export function LiveWall({ run }: { run: Run }) {
       </div>
 
       <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_240px]">
-        <div className="group relative h-[clamp(300px,50vh,620px)] overflow-hidden rounded-lg bg-zinc-950">
+        <div className="group relative h-[clamp(300px,50vh,620px)] overflow-hidden rounded-lg bg-muted/50">
           {spot && spotItem ? (
             <LiveCanvas
               key={spot.n}
@@ -208,7 +222,7 @@ export function LiveWall({ run }: { run: Run }) {
               onPhase={setSpotPhase}
               onSettled={onSettled}
               className="h-full w-full px-3 pt-12 pb-16"
-              canvasClassName="h-full rounded-none border-0 bg-transparent object-contain"
+              canvasClassName={STAGE_CANVAS}
             />
           ) : (
             <>
@@ -218,10 +232,10 @@ export function LiveWall({ run }: { run: Run }) {
                 phase="original"
                 animate={false}
                 className="h-full w-full px-3 pt-12 pb-16"
-                canvasClassName={cn("h-full rounded-none border-0 bg-transparent object-contain", stageItem.status === "pending" && "opacity-40")}
+                canvasClassName={cn(STAGE_CANVAS, stageItem.status === "pending" && "opacity-40")}
               />
-              {stageItem.status === "identifying" && <Scan />}
-              <div className="absolute top-3 left-3 rounded-full bg-black/60 px-3 py-1 text-[11px] font-medium text-white/70 backdrop-blur-sm">
+              {stageItem.status === "identifying" && <Scan className="max-h-48" />}
+              <div className="absolute top-3 left-3 rounded-full border bg-background/90 px-3 py-1 text-[11px] font-medium text-muted-foreground shadow-sm backdrop-blur-sm">
                 {stageItem.status === "identifying" ? a.item.identifying : a.liveIdle}
               </div>
             </>
@@ -229,24 +243,24 @@ export function LiveWall({ run }: { run: Run }) {
           {agentLabel && (
             <div
               className={cn(
-                "absolute top-3 right-3 rounded-full px-3 py-1 text-[11px] font-semibold text-black transition-colors",
-                spotPhase === "identify" ? "bg-sky-400" : "bg-emerald-400",
+                "absolute top-3 right-3 rounded-full px-3 py-1 text-[11px] font-semibold transition-colors",
+                ITEM_STYLE[spotPhase === "identify" ? "identified" : "generated"],
               )}
             >
               {agentLabel}
             </div>
           )}
-          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-black/80 to-transparent px-4 pt-8 pb-3 text-white">
+          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 px-4 pb-3">
             <div className="min-w-0">
               <div className="truncate text-sm font-semibold">{stageItem.id}</div>
-              <div className="truncate text-xs text-white/60">
+              <div className="truncate text-xs text-muted-foreground">
                 {caption(stageItem, a.page)}
                 {spotItem && spotPhase !== "original" && ` · ${a.pii(spotItem.regions.filter((r) => r.first).length)}`}
               </div>
             </div>
             <div className="flex shrink-0 items-center gap-2">
-              {queued.length > 0 && <span className="text-xs text-white/60 tabular-nums">{a.upNext(queued.length)}</span>}
-              <Button variant="secondary" size="sm" onClick={() => setOpen(stageItem.id)}>
+              {queued.length > 0 && <span className="text-xs text-muted-foreground tabular-nums">{a.upNext(queued.length)}</span>}
+              <Button variant="outline" size="sm" onClick={() => setOpen(stageItem.id)}>
                 <Maximize2 />
                 {a.inspect}
               </Button>
