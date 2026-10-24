@@ -1,0 +1,16 @@
+patient_id,mrn,full_name,sex,date_of_birth,ssn,phone,email,street_address,city,state,zip,insurance_member_id,primary_physician
+P001,MRN-100231,Margaret Whitaker,F,1951-03-14,900-12-4471,(555) 010-2231,m.whitaker@example.com,418 Linden Ave,Springfield,IL,62704,BCX-55120931,Dr. Alan Brooks
+P002,MRN-100458,Daniel Okafor,M,1984-07-22,900-34-1187,(555) 010-4417,d.okafor@example.com,72 Prairie Rd,Springfield,IL,62711,UHN-30018874,Dr. Alan Brooks
+P003,MRN-100502,Sofia Ramirez,F,1992-11-05,900-56-9023,(555) 010-5128,sofia.ramirez@example.com,1550 Oak Hollow Dr,Chatham,IL,62629,AET-77410236,Dr. Laura Benson
+P004,MRN-100512,Harold Jensen,M,1934-01-30,900-21-3348,(555) 010-1902,,210 Maple Grove Ln Apt 214,Springfield,IL,62702,MCR-1HT7QR2WX45,Dr. Alan Brooks
+P005,MRN-100537,Priya Natarajan,F,1978-09-17,900-63-5520,(555) 010-6643,priya.n@example.com,33 Sycamore Ct,Sherman,IL,62684,BCX-55198420,Dr. James Liu
+P006,MRN-100561,Marcus Bell,M,1966-04-02,900-47-2219,(555) 010-3381,marcus.bell@example.com,905 Lakeview Dr,Springfield,IL,62704,CIG-40027713,Dr. Susan Patel
+P007,MRN-100588,Emily Chen,F,2003-06-11,900-15-7764,(555) 010-9052,emily.chen@example.edu,12 College Ave Unit 3B,Springfield,IL,62703,UHN-30044519,Dr. Hannah Weiss
+P008,MRN-100603,Robert Kowalski,M,1959-12-25,900-38-6612,(555) 010-7720,,2241 Furnace St,Rochester,IL,62563,MCR-2KT5HW8NP31,Dr. Alan Brooks
+P009,MRN-100627,Aisha Rahman,F,1988-02-08,900-72-4408,(555) 010-5579,aisha.rahman@example.com,61 Willow Bend,Springfield,IL,62707,AET-77455012,Dr. Nadia Farouk
+P010,MRN-100649,Thomas Reyes,M,1971-08-19,900-29-8851,(555) 010-6618,t.reyes@example.com,780 Main St Apt 5,Springfield,IL,62701,CIG-40061298,Dr. Alan Brooks
+P011,MRN-100672,Grace Holloway,F,1945-05-27,900-44-1093,(555) 010-2867,,19 Birch St,Petersburg,IL,62675,MCR-3PW9DK2RT64,Dr. Rebecca Shaw
+P012,MRN-100690,Kevin Nguyen,M,1996-10-03,900-81-3326,(555) 010-2295,kevin.nguyen@example.com,450 Harbor View Rd,Springfield,IL,62702,UHN-30087761,Dr. Alan Brooks
+P013,MRN-100714,Linda Fitzgerald,F,1963-07-09,900-17-5582,(555) 010-4736,linda.fitz@example.com,88 Glenwood Pl,Chatham,IL,62629,BCX-55233057,Dr. James Liu
+P014,MRN-100738,Jamal Washington,M,1980-03-21,900-66-2047,(555) 010-8834,j.washington@example.com,3120 Riverside Blvd,Springfield,IL,62703,AET-77498163,Dr. Alan Brooks
+P015,MRN-100759,Olivia Brennan,F,2011-01-15,900-53-9174,(555) 010-1458,,57 Lincoln Ave,Springfield,IL,62704,BCX-55276644,Dr. Rachel Kim

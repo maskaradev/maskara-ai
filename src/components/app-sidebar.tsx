@@ -1,18 +1,17 @@
 "use client"
 
 import {
-  BarChart3,
-  ChevronRight,
   Database,
   FilePlus2,
-  KeyRound,
   ListChecks,
   Plus,
-  Settings,
-  ShieldCheck,
   UserRoundCog,
   Users,
+  type LucideIcon,
 } from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Suspense } from "react"
 
 import {
   Sidebar,
@@ -30,25 +29,32 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import { LanguageToggle } from "@/components/language-toggle"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { useMessages, type Messages } from "@/lib/i18n"
 
-const mainNav = [
-  { title: "New masking job", icon: FilePlus2 },
-  { title: "Jobs", icon: ListChecks },
-  { title: "Usage", icon: BarChart3 },
+type NavItem = { title: keyof Messages["sidebar"]; icon?: LucideIcon; href?: string }
+
+const mainNav: NavItem[] = [
+  { title: "newJob", icon: FilePlus2, href: "/jobs/new" },
+  { title: "jobs", icon: ListChecks, href: "/jobs" },
 ]
 
-const personaNav = [
-  { title: "Persona library", active: true },
-  { title: "Templates" },
-  { title: "Consistency rules" },
+const personaNav: NavItem[] = [
+  { title: "personaLibrary", href: "/personas" },
+  { title: "templates" },
+  { title: "consistencyRules" },
 ]
 
-const opsNav = [
-  { title: "Masking policies", icon: ShieldCheck },
-  { title: "API keys", icon: KeyRound },
-  { title: "Settings", icon: Settings, hasChildren: true },
-]
+function isActive(pathname: string, href?: string) {
+  if (!href) return false
+  if (href === "/jobs") return pathname === "/jobs" || (pathname.startsWith("/jobs/") && pathname !== "/jobs/new")
+  return pathname === href || pathname.startsWith(href + "/")
+}
+
+function ActiveNav() {
+  return <Nav pathname={usePathname()} />
+}
 
 export function AppSidebar() {
   return (
@@ -58,79 +64,94 @@ export function AppSidebar() {
         <div className="text-xs text-muted-foreground">AttentionX</div>
       </SidebarHeader>
 
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {mainNav.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton>
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <Database />
-                  <span>Datasets</span>
-                </SidebarMenuButton>
-                <SidebarMenuAction showOnHover>
-                  <Plus />
-                </SidebarMenuAction>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <Users />
-                  <span>Personas</span>
-                </SidebarMenuButton>
-                <SidebarMenuSub>
-                  {personaNav.map((item) => (
-                    <SidebarMenuSubItem key={item.title}>
-                      <SidebarMenuSubButton isActive={item.active}>
-                        <span>{item.title}</span>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  ))}
-                </SidebarMenuSub>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <SidebarGroupLabel>Operations</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {opsNav.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton>
-                    <item.icon />
-                    <span>{item.title}</span>
-                    {item.hasChildren && <ChevronRight className="ml-auto" />}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
+      {/* The pathname is unknown while prerendering dynamic routes; render inactive links until it resolves. */}
+      <Suspense fallback={<Nav pathname="" />}>
+        <ActiveNav />
+      </Suspense>
 
       <SidebarFooter className="px-4 pb-4">
         <div className="flex items-center gap-3 text-muted-foreground">
           <UserRoundCog className="size-4" />
           <ThemeToggle />
+          <LanguageToggle />
           <span className="ml-auto text-[11px]">v0.1.0</span>
         </div>
       </SidebarFooter>
     </Sidebar>
+  )
+}
+
+function Nav({ pathname }: { pathname: string }) {
+  const m = useMessages().sidebar
+  return (
+    <SidebarContent>
+      <SidebarGroup>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            {mainNav.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                {item.href ? (
+                  <SidebarMenuButton asChild isActive={isActive(pathname, item.href)}>
+                    <Link href={item.href}>
+                      {item.icon && <item.icon />}
+                      <span>{m[item.title]}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                ) : (
+                  <SidebarMenuButton>
+                    {item.icon && <item.icon />}
+                    <span>{m[item.title]}</span>
+                  </SidebarMenuButton>
+                )}
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+
+      <SidebarGroup>
+        <SidebarGroupLabel>{m.workspace}</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={isActive(pathname, "/datasets")}>
+                <Link href="/datasets">
+                  <Database />
+                  <span>{m.datasets}</span>
+                </Link>
+              </SidebarMenuButton>
+              <SidebarMenuAction showOnHover asChild>
+                <Link href="/datasets" aria-label={m.addDataset}>
+                  <Plus />
+                </Link>
+              </SidebarMenuAction>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <Users />
+                <span>{m.personas}</span>
+              </SidebarMenuButton>
+              <SidebarMenuSub>
+                {personaNav.map((item) => (
+                  <SidebarMenuSubItem key={item.title}>
+                    {item.href ? (
+                      <SidebarMenuSubButton asChild isActive={isActive(pathname, item.href)}>
+                        <Link href={item.href}>
+                          <span>{m[item.title]}</span>
+                        </Link>
+                      </SidebarMenuSubButton>
+                    ) : (
+                      <SidebarMenuSubButton>
+                        <span>{m[item.title]}</span>
+                      </SidebarMenuSubButton>
+                    )}
+                  </SidebarMenuSubItem>
+                ))}
+              </SidebarMenuSub>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+    </SidebarContent>
   )
 }
