@@ -16,7 +16,13 @@ export type StageDef = {
   next: StageId[]
   agent?: boolean
   mock?: boolean
+  /** Models the stage runs, shown on its card. All but Claude are served on our own GPU box. */
+  models?: string[]
 }
+
+const FACE = "YuNet"
+const OCR = "indra-ocr"
+const PII = ["OpenAI privacy-filter", "Stanford de-identifier"]
 
 const TRUNK = 1.5
 
@@ -24,11 +30,11 @@ export const STAGES: StageDef[] = [
   { id: "ingest", col: 0, lane: TRUNK, next: ["scan"], location: "local-db" },
   { id: "scan", col: 1, lane: TRUNK, next: ["persona"], location: "browser" },
   { id: "persona", col: 2, lane: TRUNK, next: ["identify", "doc_identify", "text_identify", "audio_transcribe"], location: "browser" },
-  { id: "identify", col: 3, lane: 0, next: ["generate"], location: "external-api", agent: true },
-  { id: "generate", col: 4, lane: 0, next: ["validate"], location: "gpu-repaint", agent: true },
-  { id: "doc_identify", col: 3, lane: 1, next: ["doc_generate"], location: "external-api", agent: true },
+  { id: "identify", col: 3, lane: 0, next: ["generate"], location: "external-api", agent: true, models: [FACE, OCR, ...PII] },
+  { id: "generate", col: 4, lane: 0, next: ["validate"], location: "gpu-repaint", agent: true, models: ["SD 1.5 Inpainting", FACE] },
+  { id: "doc_identify", col: 3, lane: 1, next: ["doc_generate"], location: "external-api", agent: true, models: [OCR, ...PII] },
   { id: "doc_generate", col: 4, lane: 1, next: ["validate"], location: "browser", agent: true },
-  { id: "text_identify", col: 3, lane: 2, next: ["text_generate"], location: "llm-api", agent: true },
+  { id: "text_identify", col: 3, lane: 2, next: ["text_generate"], location: "llm-api", agent: true, models: ["Claude Opus 5.5"] },
   { id: "text_generate", col: 4, lane: 2, next: ["validate"], location: "browser", agent: true },
   { id: "audio_transcribe", col: 3, lane: 3, next: ["validate"], location: "mock", mock: true },
   { id: "validate", col: 5, lane: TRUNK, next: ["export"], location: "browser" },

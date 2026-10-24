@@ -10,7 +10,7 @@ import type { Run, StageId, StageState } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 const W = 172
-const H = 96
+const H = 112
 const GAP_X = 36
 const ROW = H + 16
 const PAD = 26
@@ -181,6 +181,11 @@ export function PipelineGraph({
                     <Icon className="size-3 shrink-0" />
                     {m.locations[def.location]}
                   </div>
+                  {def.models && (
+                    <div className="truncate font-mono text-[10px] text-muted-foreground" title={def.models.join(" · ")}>
+                      {def.models.join(" · ")}
+                    </div>
+                  )}
                 </button>
               )
             })}

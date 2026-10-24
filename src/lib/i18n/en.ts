@@ -78,6 +78,7 @@ export const en = {
     tabs: { flow: "Data flow", results: "Results", quality: "Privacy & utility" },
     runsIn: "Runs in (MVP)",
     onPrem: "On-prem product",
+    models: "Models",
     progress: "Progress",
     noOutput: "No output yet.",
   },

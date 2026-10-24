@@ -75,6 +75,7 @@ export const ko: Messages = {
     tabs: { flow: "데이터 흐름", results: "결과", quality: "개인정보 & 유용성" },
     runsIn: "실행 위치 (MVP)",
     onPrem: "온프렘 제품",
+    models: "모델",
     progress: "진행률",
     noOutput: "아직 출력이 없습니다.",
   },

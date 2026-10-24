@@ -58,6 +58,12 @@ function StageDetail({ run, id, now }: { run: Run; id: StageId; now: number }) {
           <dd className={cn(isExternal(def.location) && "font-medium text-amber-700 dark:text-amber-300")}>
             {m.graph.locations[def.location]}
           </dd>
+          {def.models && (
+            <>
+              <dt className="text-muted-foreground">{m.run.models}</dt>
+              <dd className="font-mono text-[12px]">{def.models.join(", ")}</dd>
+            </>
+          )}
           <dt className="text-muted-foreground">{m.run.onPrem}</dt>
           <dd>{text.production}</dd>
           <dt className="text-muted-foreground">{m.run.progress}</dt>
