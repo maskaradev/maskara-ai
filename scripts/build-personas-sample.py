@@ -2,13 +2,15 @@
 
 Writes a small table of synthetic US personas. The demographic columns are structured; the
 persona and background columns are free text that names the person, so they exercise the
-free-text lane.
+free-text lane. The dataset has no name column, so full_name is taken from the persona text:
+with person_id it gives every row a persona, and the names in the free text map to it.
 
     python3 scripts/build-personas-sample.py
 """
 
 import csv
 import json
+import re
 import urllib.request
 from pathlib import Path
 
@@ -19,7 +21,7 @@ URL = (
     "https://datasets-server.huggingface.co/rows?dataset=nvidia/Nemotron-Personas-USA"
     f"&config=default&split=train&offset=0&length={ROWS}"
 )
-COLUMNS = ["persona_id", "sex", "age", "marital_status", "occupation", "city", "state", "zipcode",
+COLUMNS = ["person_id", "full_name", "sex", "age", "marital_status", "occupation", "city", "state", "zipcode",
            "persona", "cultural_background", "career_goals_and_ambitions"]
 
 
@@ -31,7 +33,11 @@ def main() -> None:
         w = csv.writer(f, lineterminator="\n")
         w.writerow(COLUMNS)
         for i, r in enumerate(rows, 1):
-            w.writerow([f"NPP{i:03d}"] + [str(r[c]) for c in COLUMNS[1:]])
+            # Every persona text opens with the full name: "Mary Alberti is a ..."
+            name = re.match(r"[A-Z][\w'.-]*(?: [A-Z][\w'.-]*)+", r["persona"])
+            if not name:
+                raise ValueError(f"no name at the start of row {i}: {r['persona'][:60]}")
+            w.writerow([f"NPP{i:03d}", name.group(0)] + [str(r[c]) for c in COLUMNS[2:]])
     print(f"{len(rows)} personas -> {OUT}")
 
 

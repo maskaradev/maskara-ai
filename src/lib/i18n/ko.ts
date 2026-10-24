@@ -124,17 +124,17 @@ export const ko: Messages = {
         production: "고객 GPU 서버의 같은 OCR 서버와 프라이버시 필터.",
       },
       doc_generate: {
-        label: "문서 생성",
+        label: "문서 치환",
         description: "모든 페이지의 빈칸을 매핑표의 페르소나 값으로 채웁니다. 페이지마다 DB·사진과 같은 값이 들어갑니다.",
         production: "같은 코드를 고객 네트워크 안에서 실행합니다.",
       },
       text_identify: {
-        label: "식별 에이전트",
+        label: "텍스트 식별",
         description: "확정한 스키마 역할로 정형 PII 컬럼을 표시하고, 자유 텍스트 셀은 하나씩 Claude로 보내 이름·가족·날짜·연락처·ID·장소를 찾습니다.",
         production: "같은 출력 형식의 로컬 LLM(고객 GPU 서버의 vLLM).",
       },
       text_generate: {
-        label: "생성 에이전트",
+        label: "텍스트 치환",
         description: "매핑표로 DB를 다시 씁니다. 정형 값과 식별된 모든 구간이 같은 페르소나 값으로 바뀌고, 날짜는 환자별로 이동합니다. 이미지·음성 생성보다 먼저 돌아 모든 레인이 같은 매핑을 씁니다.",
         production: "같은 코드를 고객 네트워크 안에서 실행합니다.",
       },

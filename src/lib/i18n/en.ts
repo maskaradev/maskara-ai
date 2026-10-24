@@ -122,22 +122,22 @@ export const en = {
         production: "The same repaint model on the customer's GPU server.",
       },
       doc_identify: {
-        label: "Document identification",
+        label: "PDF identification",
         description: "Document lane (PDF, e.g. clinical records). Renders each page in the browser and sends it to the same GPU OCR server as the photo lane. The pages' text goes to the privacy filter as one document, so a name on page 1 is still recognised on page 2, and each PII word box on every page becomes a blank.",
         production: "The same OCR server and privacy filter on the customer's GPU server.",
       },
       doc_generate: {
-        label: "Document generation",
+        label: "PDF substitution",
         description: "Fills the blanks on every page with the persona values from the mapping table, so each page is consistent with the DB and the photos.",
         production: "Same code, inside the customer network.",
       },
       text_identify: {
-        label: "Identification agent",
+        label: "Text identification",
         description: "Marks the structured PII columns from the confirmed schema roles, and sends each free-text cell to Claude to find names, relatives, dates, contacts, IDs and places.",
         production: "Local LLM (vLLM on the customer's GPU server) with the same output schema.",
       },
       text_generate: {
-        label: "Generation agent",
+        label: "Text substitution",
         description: "Rewrites the DB from the mapping table: structured values and every identified span become the same persona values, with dates shifted per patient. Runs before the image and speech generation so all lanes share its mappings.",
         production: "Same code, inside the customer network.",
       },

@@ -182,7 +182,7 @@ export function PipelineGraph({
                     {m.locations[def.location]}
                   </div>
                   {def.models && (
-                    <div className="truncate font-mono text-[10px] text-muted-foreground" title={def.models.join(" · ")}>
+                    <div className="truncate text-[10.5px] text-muted-foreground" title={def.models.join(" · ")}>
                       {def.models.join(" · ")}
                     </div>
                   )}
