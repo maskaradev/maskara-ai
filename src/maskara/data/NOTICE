@@ -1,0 +1,32 @@
+maskara bundled persona data
+============================
+
+personas.csv.gz and the surnames in names.csv.gz are derived from:
+
+  Nemotron-Personas-USA (v1.1), NVIDIA Corporation
+  https://huggingface.co/datasets/nvidia/Nemotron-Personas-USA (revision 5b4cd35ab46490c1da1bd2b5a2324d6f871be180)
+  Licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0)
+  https://creativecommons.org/licenses/by/4.0/
+
+  Changes made: a fixed pseudo-random sample of 150,000 of the 1,000,000 records, reduced to the
+  columns sex, age, state, zipcode (leading zeros restored), city, education_level and occupation;
+  a city size tier computed from record counts; surnames extracted from the persona text and
+  counted. All records are synthetic. NVIDIA does not endorse maskara.
+
+The first names in names.csv.gz are derived from:
+
+  Social Security Administration, "Beyond the Top 1000 Names", national data
+  https://www.ssa.gov/oact/babynames/limits.html
+  A work of the US federal government, in the public domain. Retrieved through the CC0 mirror
+  https://huggingface.co/datasets/nkrishnaswami/us-ssa-baby-names-national
+  (revision b10af862de8b3bb8d315b2e11d1a334813b3ed8d).
+
+  Changes made: counts summed by sex and birth decade (1910s-2020s), top 500 names per cell kept.
+
+The demo dataset in demo/ (customers, agents, orders, tickets, notes) is a work derived from the
+same Nemotron-Personas-USA revision, CC BY 4.0: names, sex, age and home city of 66 personas, with
+all other fields (contact details, ids, orders, conversations) generated from a fixed seed by
+maskara.data.build_demo. All people in it are synthetic.
+
+Rebuild both files with `uv run --extra bench python -m maskara.data.build`, and the demo with
+`uv run --extra bench python -m maskara.data.build_demo`.

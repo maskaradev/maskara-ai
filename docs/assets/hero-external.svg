@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1112 502" width="1112" height="502" role="img" aria-label="Hide the identifiers, keep people apart">
+<style>
+  .bg { fill: #fcfcfb } .ink { fill: #0b0b0b } .muted { fill: #52514e } .grid { stroke: #e4e3df }
+  .axis { stroke: #8a8984 } .lead { stroke: #8a8984 } .ring { stroke: #fcfcfb }
+  .base { fill: #8a8984 } .ours { fill: #2a78d6 }
+  @media (prefers-color-scheme: dark) {
+    .bg { fill: #1a1a19 } .ink { fill: #f0efec } .muted { fill: #c3c2b7 } .grid { stroke: #33332f }
+    .axis, .lead { stroke: #8a8984 } .ring { stroke: #1a1a19 } .base { fill: #a3a29b } .ours { fill: #3987e5 }
+  }
+  text { font: 12px system-ui, -apple-system, sans-serif }
+  .title { font-size: 16px; font-weight: 600 } .label { font-size: 12px }
+</style>
+<rect class="bg" width="1112" height="502"/>
+<text class="ink title" x="70" y="28">Hide the identifiers, keep people apart</text>
+<text class="muted" x="70" y="48">Direct identifiers hidden (x) against distinctness (y): different people stay different after masking. Up and right is better. echr pack: the opt-in legal-echr pattern pack for case numbers.</text>
+<text class="muted" x="0" y="0" transform="translate(18 270.0) rotate(-90)" text-anchor="middle">Distinctness (a proxy for utility)</text>
+<text class="muted" x="556.0" y="488" text-anchor="middle">Direct identifiers hidden (1 - direct leak rate; axis starts at 40%)</text>
+<text class="ink label" x="70" y="90">ABCD: human-written support chats (1,004)</text>
+<line class="grid" x1="70.0" x2="70.0" y1="100" y2="440"/>
+<text class="muted" x="70.0" y="458" text-anchor="middle">40%</text>
+<line class="grid" x1="219.99999999999997" x2="219.99999999999997" y1="100" y2="440"/>
+<text class="muted" x="219.99999999999997" y="458" text-anchor="middle">70%</text>
+<line class="grid" x1="370.0" x2="370.0" y1="100" y2="440"/>
+<text class="muted" x="370.0" y="458" text-anchor="middle">100%</text>
+<line class="grid" x1="70" x2="370" y1="440" y2="440"/>
+<text class="muted" x="62" y="444" text-anchor="end">0%</text>
+<line class="grid" x1="70" x2="370" y1="270.0" y2="270.0"/>
+<text class="muted" x="62" y="274.0" text-anchor="end">50%</text>
+<line class="grid" x1="70" x2="370" y1="100" y2="100"/>
+<text class="muted" x="62" y="104" text-anchor="end">100%</text>
+<line class="axis" x1="70" x2="370" y1="440" y2="440"/>
+<text class="ink label" x="176.6" y="119.646">Presidio + Faker</text>
+<line class="lead" x1="357.8" y1="110.47200000000002" x2="349.8" y2="138.47200000000004"/><text class="ink label" x="301.6" y="142.47200000000004">maskara</text>
+<line class="lead" x1="329.05" y1="121.08000000000001" x2="321.05" y2="177.08"/><text class="ink label" x="246.45000000000002" y="181.08">GLiNER2-PII</text>
+<text class="ink label" x="290.65" y="156.87">Presidio</text>
+<text class="ink label" x="188.4" y="201.75">perfect detection + redact</text>
+<text class="ink label" x="188.79999999999998" y="225.04">OpenAI Privacy Filter</text>
+<circle class="base ring" cx="370.0" cy="197.75" r="5" stroke-width="2"><title>perfect detection + redact: 0.0% of direct identifiers leaked, distinctness 71.2%, consistency 100.0%</title></circle>
+<circle class="base ring" cx="280.65" cy="152.87" r="5" stroke-width="2"><title>Presidio: 17.9% of direct identifiers leaked, distinctness 84.5%, consistency 98.4%</title></circle>
+<circle class="base ring" cx="329.05" cy="121.08000000000001" r="5" stroke-width="2"><title>GLiNER2-PII: 8.2% of direct identifiers leaked, distinctness 93.8%, consistency 99.2%</title></circle>
+<circle class="base ring" cx="337.4" cy="221.04" r="5" stroke-width="2"><title>OpenAI Privacy Filter: 6.5% of direct identifiers leaked, distinctness 64.4%, consistency 99.4%</title></circle>
+<circle class="base ring" cx="280.2" cy="100.646" r="5" stroke-width="2"><title>Presidio + Faker: 18.0% of direct identifiers leaked, distinctness 99.8%, consistency 97.1%</title></circle>
+<circle class="ours ring" cx="357.8" cy="110.47200000000002" r="5" stroke-width="2"><title>maskara: 2.4% of direct identifiers leaked, distinctness 96.9%, consistency 98.8%</title></circle>
+<text class="ink label" x="426" y="90">Nemotron-PII: synthetic (1,000)</text>
+<line class="grid" x1="426.0" x2="426.0" y1="100" y2="440"/>
+<text class="muted" x="426.0" y="458" text-anchor="middle">40%</text>
+<line class="grid" x1="576.0" x2="576.0" y1="100" y2="440"/>
+<text class="muted" x="576.0" y="458" text-anchor="middle">70%</text>
+<line class="grid" x1="726.0" x2="726.0" y1="100" y2="440"/>
+<text class="muted" x="726.0" y="458" text-anchor="middle">100%</text>
+<line class="grid" x1="426" x2="726" y1="440" y2="440"/>
+<line class="grid" x1="426" x2="726" y1="270.0" y2="270.0"/>
+<line class="grid" x1="426" x2="726" y1="100" y2="100"/>
+<line class="axis" x1="426" x2="726" y1="440" y2="440"/>
+<text class="ink label" x="645.1499999999999" y="128.752">maskara</text>
+<text class="ink label" x="500.65" y="129.5">Presidio + Faker</text>
+<text class="ink label" x="639.35" y="142.896">GLiNER2-PII</text>
+<text class="ink label" x="626.7" y="190.394">Presidio</text>
+<text class="ink label" x="485.29999999999995" y="214.024">OpenAI Privacy Filter</text>
+<text class="ink label" x="556.4" y="235.95999999999998">perfect detection + redact</text>
+<circle class="base ring" cx="726.0" cy="216.95999999999998" r="5" stroke-width="2"><title>perfect detection + redact: 0.0% of direct identifiers leaked, distinctness 65.6%, consistency 100.0%</title></circle>
+<circle class="base ring" cx="616.7" cy="186.394" r="5" stroke-width="2"><title>Presidio: 21.9% of direct identifiers leaked, distinctness 74.6%, consistency 99.1%</title></circle>
+<circle class="base ring" cx="629.35" cy="138.896" r="5" stroke-width="2"><title>GLiNER2-PII: 19.3% of direct identifiers leaked, distinctness 88.6%, consistency 98.4%</title></circle>
+<circle class="base ring" cx="633.9" cy="210.024" r="5" stroke-width="2"><title>OpenAI Privacy Filter: 18.4% of direct identifiers leaked, distinctness 67.6%, consistency 99.6%</title></circle>
+<circle class="base ring" cx="616.25" cy="125.49999999999999" r="5" stroke-width="2"><title>Presidio + Faker: 21.9% of direct identifiers leaked, distinctness 92.5%, consistency 95.6%</title></circle>
+<circle class="ours ring" cx="701.3499999999999" cy="124.752" r="5" stroke-width="2"><title>maskara: 4.9% of direct identifiers leaked, distinctness 92.7%, consistency 97.6%</title></circle>
+<text class="ink label" x="782" y="90">TAB: real court cases (127)</text>
+<line class="grid" x1="782.0" x2="782.0" y1="100" y2="440"/>
+<text class="muted" x="782.0" y="458" text-anchor="middle">40%</text>
+<line class="grid" x1="932.0" x2="932.0" y1="100" y2="440"/>
+<text class="muted" x="932.0" y="458" text-anchor="middle">70%</text>
+<line class="grid" x1="1082.0" x2="1082.0" y1="100" y2="440"/>
+<text class="muted" x="1082.0" y="458" text-anchor="middle">100%</text>
+<line class="grid" x1="782" x2="1082" y1="440" y2="440"/>
+<line class="grid" x1="782" x2="1082" y1="270.0" y2="270.0"/>
+<line class="grid" x1="782" x2="1082" y1="100" y2="100"/>
+<line class="axis" x1="782" x2="1082" y1="440" y2="440"/>
+<text class="ink label" x="946.15" y="119.57800000000002">maskara + echr pack</text>
+<line class="lead" x1="895.6" y1="100.61200000000001" x2="903.6" y2="128.61200000000002"/><text class="ink label" x="905.6" y="132.61200000000002">maskara · Presidio + Faker</text>
+<text class="ink label" x="885.9" y="303.24">GLiNER2-PII</text>
+<text class="ink label" x="903.85" y="367.024">Presidio</text>
+<text class="ink label" x="825.45" y="385.526">OpenAI Privacy Filter</text>
+<line class="lead" x1="1082.0" y1="370.67400000000004" x2="1074.0" y2="342.67400000000004"/><text class="ink label" x="900.4" y="346.67400000000004">perfect detection + redact</text>
+<circle class="base ring" cx="1082.0" cy="370.67400000000004" r="5" stroke-width="2"><title>perfect detection + redact: 0.0% of direct identifiers leaked, distinctness 20.4%, consistency 99.6%</title></circle>
+<circle class="base ring" cx="893.85" cy="363.024" r="5" stroke-width="2"><title>Presidio: 37.6% of direct identifiers leaked, distinctness 22.6%, consistency 99.4%</title></circle>
+<circle class="base ring" cx="875.9" cy="299.24" r="5" stroke-width="2"><title>GLiNER2-PII: 41.2% of direct identifiers leaked, distinctness 41.4%, consistency 97.8%</title></circle>
+<circle class="base ring" cx="827.45" cy="366.526" r="5" stroke-width="2"><title>OpenAI Privacy Filter: 50.9% of direct identifiers leaked, distinctness 21.6%, consistency 99.8%</title></circle>
+<circle class="base ring" cx="893.85" cy="101.46199999999999" r="5" stroke-width="2"><title>Presidio + Faker: 37.6% of direct identifiers leaked, distinctness 99.6%, consistency 98.8%</title></circle>
+<circle class="ours ring" cx="895.6" cy="100.61200000000001" r="5" stroke-width="2"><title>maskara: 37.3% of direct identifiers leaked, distinctness 99.8%, consistency 99.7%</title></circle>
+<circle class="ours ring" cx="1069.55" cy="100.57800000000002" r="5" stroke-width="2"><title>maskara + echr pack: 2.5% of direct identifiers leaked, distinctness 99.8%, consistency 99.7%</title></circle>
+</svg>
