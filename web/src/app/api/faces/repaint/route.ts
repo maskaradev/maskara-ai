@@ -1,3 +1,5 @@
+import { hostedAppOff } from "@/lib/hosted-app"
+
 // Proxy to the on-prem face repaint model on the GPU box (Funnel path /face-inpaint → :8200): POST /v1/repaint, multipart image + persona
 // (+ prompt) → the whole image as PNG with every face repainted as that persona. The same persona
 // always gets the same face, so a patient looks the same in every photo.
@@ -29,6 +31,9 @@ async function reachable(base: string): Promise<string | null> {
 }
 
 export async function POST(request: Request) {
+  const off = hostedAppOff()
+  if (off) return off
+
   const form = await request.formData().catch(() => null)
   const file = form?.get("file")
   const persona = String(form?.get("persona") ?? "")

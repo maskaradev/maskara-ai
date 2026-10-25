@@ -1,8 +1,12 @@
+import { hostedAppOff } from "@/lib/hosted-app"
 import { OcrServerError, runOcr } from "@/lib/ocr/indra"
 
 const MAX_BYTES = 20 * 1024 * 1024
 
 export async function POST(request: Request) {
+  const off = hostedAppOff()
+  if (off) return off
+
   const form = await request.formData().catch(() => null)
   const file = form?.get("file")
   const width = Number(form?.get("width"))

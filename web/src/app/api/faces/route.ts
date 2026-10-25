@@ -1,3 +1,4 @@
+import { hostedAppOff } from "@/lib/hosted-app"
 import type { FaceBox } from "@/lib/types"
 
 // Proxy to the on-prem face detector on the GPU box (same host as the OCR server). Server-side so the
@@ -12,6 +13,9 @@ const MIN_SCORE = 0.5
 type Raw = { width: number; height: number; faces: { bbox: number[]; det_score: number; landmarks_5?: number[][] }[] }
 
 export async function POST(request: Request) {
+  const off = hostedAppOff()
+  if (off) return off
+
   const form = await request.formData().catch(() => null)
   const file = form?.get("file")
   if (!(file instanceof Blob)) return Response.json({ error: "Expected a multipart `file` field." }, { status: 400 })

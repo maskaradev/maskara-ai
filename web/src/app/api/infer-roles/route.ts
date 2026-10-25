@@ -1,8 +1,12 @@
 import Anthropic from "@anthropic-ai/sdk"
 
+import { hostedAppOff } from "@/lib/hosted-app"
 import { InferRolesRequestSchema, inferColumnRoles } from "@/lib/llm/role-classifier"
 
 export async function POST(request: Request) {
+  const off = hostedAppOff()
+  if (off) return off
+
   const body = InferRolesRequestSchema.safeParse(await request.json().catch(() => null))
   if (!body.success) {
     return Response.json({ error: "Invalid request body." }, { status: 400 })

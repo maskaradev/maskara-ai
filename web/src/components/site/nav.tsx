@@ -1,12 +1,12 @@
 "use client"
 
 import Link from "next/link"
-import { Moon, Sun } from "lucide-react"
+import { Moon, Sun } from "@carbon/icons-react"
 import { useEffect, useRef, useState, useSyncExternalStore } from "react"
 
 import { LogoMark } from "@/components/logo"
 import { GithubMark } from "@/components/site/github-mark"
-import { APP_URL, DOCS_URL, REPO_URL, ROADMAP_URL } from "@/components/site/links"
+import { DEMO_URL, DOCS_URL, REPO_URL, ROADMAP_URL } from "@/components/site/links"
 
 type Theme = "light" | "dark"
 
@@ -109,6 +109,7 @@ export function Nav() {
         <div className="nav-links">
           <a href="#local">Local</a>
           <a href="#how">How it works</a>
+          <a href={DEMO_URL}>Demo</a>
           <a href={DOCS_URL}>Docs</a>
           <a href={ROADMAP_URL}>Roadmap</a>
         </div>
@@ -118,8 +119,8 @@ export function Nav() {
             {stars !== null && <b>{stars.toLocaleString("en-US")}</b>}
           </a>
           <ThemeToggle />
-          <a className="btn btn-primary btn-sm" href={APP_URL}>
-            Open app
+          <a className="btn btn-primary btn-sm" href="#waitlist">
+            Join waitlist
           </a>
           <button
             type="button"
@@ -144,9 +145,10 @@ export function Nav() {
         <a href="#how" onClick={() => setOpen(false)}>
           How it works
         </a>
+        <a href={DEMO_URL}>Demo</a>
         <a href={DOCS_URL}>Docs</a>
         <a href={ROADMAP_URL}>Roadmap</a>
-        <a href={APP_URL}>Open app</a>
+        <a href={REPO_URL}>GitHub</a>
       </div>
     </header>
   )

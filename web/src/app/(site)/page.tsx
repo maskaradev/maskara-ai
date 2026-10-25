@@ -1,24 +1,15 @@
-import {
-  ArrowRight,
-  AudioLines,
-  Cpu,
-  Database,
-  FileScan,
-  FileText,
-  KeyRound,
-  ScanFace,
-  ScanText,
-  Table2,
-} from "lucide-react"
+import { ArrowRight } from "@carbon/icons-react"
+import { Database, Eye, FileText, Gpu, Key } from "pixelarticons/react"
 
 import { LogoMark } from "@/components/logo"
 import { Brush } from "@/components/site/brush"
 import { CopyCommand } from "@/components/site/copy-command"
 import { GithubMark } from "@/components/site/github-mark"
-import { APP_URL, CLONE_COMMAND, DOCS_URL, QUICK_START_URL, REPO_URL, ROADMAP_URL } from "@/components/site/links"
+import { DEMO_URL, DOCS_URL, INSTALL_COMMAND, QUICK_START_URL, REPO_URL, ROADMAP_URL } from "@/components/site/links"
 import { MaskMock } from "@/components/site/mask-mock"
 import { Nav } from "@/components/site/nav"
 import { Tape } from "@/components/site/tape"
+import { WaitlistForm } from "@/components/site/waitlist-form"
 import { ROLES, TREATMENTS } from "@/lib/roles"
 
 const SAMPLE_DATASETS = 4
@@ -55,10 +46,13 @@ export default function Landing() {
               the data stays fit for AI training.
             </p>
             <div className="go">
-              <a className="btn btn-primary" href={APP_URL}>
-                Open the app <ArrowRight aria-hidden="true" />
+              <a className="btn btn-primary" href={DEMO_URL}>
+                Try the demo <ArrowRight aria-hidden="true" />
               </a>
-              <CopyCommand command={CLONE_COMMAND} />
+              <a className="btn btn-secondary" href={REPO_URL}>
+                View on GitHub
+              </a>
+              <CopyCommand command={INSTALL_COMMAND} />
             </div>
           </div>
         </section>
@@ -99,7 +93,7 @@ export default function Landing() {
                 <i />
                 <i />
                 <i />
-                <span>app.maskara.dev</span>
+                <span>maskara · synthetic sample</span>
               </div>
               <div className="plate">
                 <MaskMock />
@@ -125,7 +119,7 @@ export default function Landing() {
                 <span className="zone-label">your network</span>
                 <div className="flow">
                   <div className="node">
-                    <Database aria-hidden="true" />
+                    <Database className="px" aria-hidden="true" />
                     <b>Source DB</b>
                     <small>read-only</small>
                   </div>
@@ -137,22 +131,22 @@ export default function Landing() {
                   </div>
                   <span className="arrow" aria-hidden="true" />
                   <div className="node">
-                    <FileText aria-hidden="true" />
+                    <FileText className="px" aria-hidden="true" />
                     <b>Masked copy</b>
                     <small>ready to export</small>
                   </div>
                 </div>
                 <div className="deps">
                   <span>
-                    <Cpu aria-hidden="true" />
+                    <Gpu className="px" aria-hidden="true" />
                     Local LLM on your GPUs
                   </span>
                   <span>
-                    <ScanFace aria-hidden="true" />
+                    <Eye className="px" aria-hidden="true" />
                     Vision models on your GPUs
                   </span>
                   <span>
-                    <KeyRound aria-hidden="true" />
+                    <Key className="px" aria-hidden="true" />
                     Persona map, encrypted with your key
                   </span>
                 </div>
@@ -167,7 +161,8 @@ export default function Landing() {
             </div>
 
             <p className="footnote">
-              The public demo runs on hosted models; a fully on-prem build is on the way.{" "}
+              The <a href={DEMO_URL}>public demo</a> shows results precomputed on synthetic sample data, so nothing is
+              uploaded; on your own data, maskara runs on your machine. A supported on-prem build is on the way.{" "}
               <a href={ROADMAP_URL}>
                 See the roadmap <ArrowRight aria-hidden="true" />
               </a>
@@ -230,30 +225,12 @@ export default function Landing() {
                 <h3>Tables, documents and photos.</h3>
                 <p>Columns by policy, text and PDF pages by PII detection, faces repainted as the persona.</p>
                 <div className="ev chips" aria-hidden="true">
-                  <span>
-                    <Table2 />
-                    Columns
-                  </span>
-                  <span>
-                    <FileText />
-                    Free text
-                  </span>
-                  <span>
-                    <FileScan />
-                    PDF (OCR)
-                  </span>
-                  <span>
-                    <ScanFace />
-                    Faces
-                  </span>
-                  <span>
-                    <ScanText />
-                    Text in images
-                  </span>
-                  <span className="soon">
-                    <AudioLines />
-                    Audio, next
-                  </span>
+                  <span>Columns</span>
+                  <span>Free text</span>
+                  <span>PDF (OCR)</span>
+                  <span>Faces</span>
+                  <span>Text in images</span>
+                  <span className="soon">Audio, next</span>
                 </div>
               </article>
 
@@ -291,6 +268,20 @@ export default function Landing() {
           </div>
         </section>
 
+        <section className="section waitlist-section" id="waitlist">
+          <div className="wrap">
+            <div className="head">
+              <p className="kicker">Teams and on-prem</p>
+              <h2>Running it inside a hospital or bank?</h2>
+              <p>
+                We&apos;re preparing a supported on-prem build for teams. Join the waitlist and we&apos;ll reach out
+                when it&apos;s ready.
+              </p>
+            </div>
+            <WaitlistForm />
+          </div>
+        </section>
+
         <section className="end">
           <Brush center={[0.5, 0.52]} angle={7} span={0.6} flip />
           <div className="wrap">
@@ -298,16 +289,11 @@ export default function Landing() {
               <LogoMark />
             </div>
             <h2>Give your data a new face.</h2>
-            <p>
-              Open the app, load the synthetic hospital sample and run a masking job. A guided tour walks you through
-              it, or clone the repo and run it on your own machine.
-            </p>
+            <p>Install it and run it on your own machine; the quick start walks you through the first run.</p>
             <div className="go">
-              <a className="btn btn-primary" href={APP_URL}>
-                Open the app <ArrowRight aria-hidden="true" />
-              </a>
+              <CopyCommand command={INSTALL_COMMAND} />
               <a className="btn btn-secondary" href={QUICK_START_URL}>
-                Self-host quick start
+                Quick start <ArrowRight aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -322,7 +308,7 @@ export default function Landing() {
             <span>Apache-2.0</span>
           </div>
           <nav className="foot-links">
-            <a href={APP_URL}>App</a>
+            <a href="#waitlist">Waitlist</a>
             <a href={DOCS_URL}>Docs</a>
             <a href={ROADMAP_URL}>Roadmap</a>
             <a className="gh" href={REPO_URL} aria-label="maskara on GitHub">

@@ -47,6 +47,8 @@ body.site ::selection { background: var(--ink); color: var(--bg); }
 body.site a { color: inherit; }
 body.site code { font-family: var(--mono); }
 body.site svg { flex: 0 0 auto; }
+/* Pixelarticons sit on a 24px grid: keep them at 24px so every pixel lands on one. */
+body.site svg.px { shape-rendering: crispEdges; }
 body.site .wrap { max-width: 1160px; margin: 0 auto; padding: 0 var(--gut); }
 
 /* ── buttons ── */
@@ -433,7 +435,7 @@ body.site .node {
   display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 22px 16px;
   border: 1px solid var(--line2); border-radius: var(--r); background: var(--card); text-align: center;
 }
-body.site .node svg { width: 22px; height: 22px; color: var(--dim); }
+body.site .node svg { width: 24px; height: 24px; color: var(--dim); }
 body.site .node b { font-weight: 600; font-size: 15px; }
 body.site .node small { color: var(--faint); font: 12px var(--mono); }
 body.site .node.core { padding: 30px 16px; background: var(--ink); border-color: var(--ink); color: var(--bg); }
@@ -452,7 +454,7 @@ body.site .deps span {
   border: 1px solid var(--line); border-radius: 999px; background: var(--bg2);
   color: var(--dim); font-size: 13.5px;
 }
-body.site .deps svg { width: 15px; height: 15px; }
+body.site .deps svg { width: 24px; height: 24px; margin: -4px 0; }
 body.site .outside { display: flex; align-items: center; }
 body.site .cut {
   position: relative; flex: 0 0 56px; height: 1.5px;
@@ -514,7 +516,6 @@ body.site .chips span {
   border: 1px solid var(--line2); border-radius: 999px; color: var(--ink);
 }
 body.site .chips span.soon { border-style: dashed; color: var(--faint); }
-body.site .chips svg { width: 14px; height: 14px; }
 body.site .tape {
   display: flex; align-items: baseline; gap: 9px; margin: 0;
   color: var(--ink); min-height: 19px; overflow: hidden; white-space: nowrap;
@@ -527,6 +528,40 @@ body.site .tape > span {
   animation: site-caret 1.05s steps(1) infinite;
 }
 @keyframes site-caret { 0%, 49% { border-color: var(--ink) } 50%, 100% { border-color: transparent } }
+
+/* ── waitlist ── */
+body.site .waitlist-section { border-top: 1px solid var(--line); }
+body.site .waitlist {
+  display: grid; gap: 16px; max-width: 520px; margin: 0 auto; padding: 28px;
+  border: 1px solid var(--line); border-radius: 16px; background: var(--bg2);
+}
+body.site .waitlist label { display: grid; gap: 6px; }
+body.site .waitlist label > span { font-size: 13.5px; font-weight: 500; }
+body.site .waitlist label small { margin-left: 4px; color: var(--faint); font: 12px var(--mono); }
+body.site .waitlist input, body.site .waitlist textarea {
+  width: 100%; padding: 10px 14px; border: 1px solid var(--line2); border-radius: 10px;
+  background: var(--card); color: var(--ink); font: 14.5px/1.5 var(--sans); outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+body.site .waitlist input { height: 44px; }
+body.site .waitlist textarea { min-height: 84px; resize: vertical; }
+body.site .waitlist ::placeholder { color: var(--faint); }
+body.site .waitlist input:focus, body.site .waitlist textarea:focus {
+  border-color: var(--ink); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink) 9%, transparent);
+}
+body.site .waitlist .btn { width: 100%; margin-top: 4px; font-family: inherit; cursor: pointer; }
+body.site .waitlist .btn:disabled { opacity: .6; cursor: default; }
+/* the honeypot: off-screen, since some bots skip fields that are display: none */
+body.site .waitlist .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+body.site .waitlist-error {
+  margin: 0; padding: 10px 14px; border: 1px dashed var(--line2); border-radius: 10px;
+  color: var(--ink); font-size: 14px; text-wrap: pretty;
+}
+body.site .waitlist-error a { font-weight: 500; }
+body.site .waitlist-note { margin: 0; color: var(--faint); font-size: 13px; text-align: center; text-wrap: pretty; }
+body.site .waitlist.done { gap: 6px; text-align: center; }
+body.site .waitlist.done b { font-size: 17px; font-weight: 600; letter-spacing: -.02em; }
+body.site .waitlist.done p { margin: 0; color: var(--dim); }
 
 /* ── close ── */
 body.site .end {
@@ -587,6 +622,7 @@ body.site .foot-links .gh:hover { background: none; }
   body.site .arrow::after { right: auto; top: auto; bottom: 0; left: 50%; transform: translateX(-50%) rotate(135deg); }
   body.site .bento { grid-template-columns: minmax(0, 1fr); }
   body.site .card { padding: 22px; }
+  body.site .waitlist { padding: 22px; }
   body.site .section { padding: 72px 0; }
   body.site .end { padding: 88px 0 96px; }
   body.site .foot .wrap { flex-direction: column; justify-content: center; height: auto; padding-top: 28px; padding-bottom: 28px; }

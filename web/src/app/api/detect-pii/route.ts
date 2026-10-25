@@ -1,10 +1,14 @@
 import Anthropic from "@anthropic-ai/sdk"
 
+import { hostedAppOff } from "@/lib/hosted-app"
 import { detectPii } from "@/lib/llm/anthropic-detector"
 import { DetectRequestSchema } from "@/lib/pii-schema"
 import { PrivacyFilterError, detectPiiLocal } from "@/lib/pii/local-detector"
 
 export async function POST(request: Request) {
+  const off = hostedAppOff()
+  if (off) return off
+
   const body = DetectRequestSchema.safeParse(await request.json().catch(() => null))
   if (!body.success) {
     return Response.json({ error: "Invalid request body." }, { status: 400 })
