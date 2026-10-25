@@ -8,6 +8,20 @@ license = "Apache-2.0"
 license-files = ["LICENSE", "src/maskara/data/NOTICE"]
 requires-python = ">=3.11"
 dependencies = []
+keywords = ["pii", "anonymization", "pseudonymization", "privacy", "synthetic-data", "de-identification"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Topic :: Security",
+    "Topic :: Text Processing",
+]
+
+[project.urls]
+Homepage = "https://maskara.dev"
+Repository = "https://github.com/maskaradev/maskara"
+Issues = "https://github.com/maskaradev/maskara/issues"
 
 [project.optional-dependencies]
 # The default PII model of `detector="auto"`. gliner2 2.1.0 imports transformers without declaring it.
@@ -43,6 +57,10 @@ build-backend = "hatchling.build"
 # The distribution is maskara-ai (PyPI `maskara` is another project); the import name stays maskara.
 [tool.hatch.build.targets.wheel]
 packages = ["src/maskara"]
+
+# Without this the sdist picks up web/, node_modules and all.
+[tool.hatch.build.targets.sdist]
+include = ["/src/maskara", "/tests", "/README.md", "/LICENSE"]
 
 [tool.ruff]
 line-length = 110

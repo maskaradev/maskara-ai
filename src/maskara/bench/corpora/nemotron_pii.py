@@ -52,7 +52,7 @@ INFO = {
 
 
 def load(split: str = "test", limit: int | None = 1000) -> list[Document]:
-    import pyarrow.parquet as pq  # optional dependency: maskara[bench]
+    import pyarrow.parquet as pq  # optional dependency: maskara-ai[bench]
 
     url = (f"https://huggingface.co/datasets/nvidia/Nemotron-PII/resolve/{REVISION}"
            f"/data/{split}-00000-of-00001.parquet")

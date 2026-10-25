@@ -54,7 +54,7 @@ def extract_name(texts: list[str]) -> tuple[str, str] | None:
 
 def load(n: int) -> list[Person]:
     """The first `n` adults with a clean name and a surname not yet taken, in a fixed hash order."""
-    import pyarrow.parquet as pq  # optional dependency: maskara[bench]
+    import pyarrow.parquet as pq  # optional dependency: maskara-ai[bench]
 
     from ..corpora._fetch import fetch  # imported here: the corpora package imports this one
 

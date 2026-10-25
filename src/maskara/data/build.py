@@ -107,7 +107,7 @@ def extract_name(persona: str, professional: str) -> tuple[str, str] | None:
 
 
 def personas_and_surnames() -> tuple[str, str]:
-    import pyarrow.parquet as pq  # optional dependency: maskara[bench]
+    import pyarrow.parquet as pq  # optional dependency: maskara-ai[bench]
 
     columns = ["uuid", "persona", "professional_persona", "sex", "age", "education_level", "occupation",
                "city", "state", "zipcode"]
