@@ -1,0 +1,45 @@
+[project]
+name = "maskara"
+version = "0.0.1"
+description = "Swap personal data for consistent synthetic personas, and measure that the data stayed useful."
+readme = "README.md"
+license = "Apache-2.0"
+# The bundled persona data is CC BY 4.0 (NVIDIA) and public domain (SSA); see its NOTICE.
+license-files = ["LICENSE", "src/maskara/data/NOTICE"]
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+# The default PII model of `detector="auto"`. gliner2 2.1.0 imports transformers without declaring it.
+gliner = ["gliner2>=2.1", "transformers"]
+bench = ["pyarrow>=17"]
+presidio = [
+    "presidio-analyzer>=2.2",
+    "presidio-anonymizer>=2.2",
+    "faker>=30",
+    # preshed 3.0.14 fails to load en_core_web_lg 3.8.0 (OverflowError in the tokenizer).
+    "preshed<3.0.14",
+]
+
+[project.scripts]
+maskara = "maskara.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.8"]
+# The spaCy model Presidio's default analyzer loads; pinned by URL, so it stays out of the package.
+presidio-model = ["en-core-web-lg"]
+# PII detection models compared in the benchmark. opf is not on PyPI, so it is pinned to a commit.
+# gliner2 2.1.0 imports transformers without declaring it.
+detectors = ["opf", "gliner2", "transformers"]
+
+[tool.uv.sources]
+opf = { git = "https://github.com/openai/privacy-filter", rev = "f7f00ca7fb869683eb732c010299d901457f19c3" }
+en-core-web-lg = { url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.8.0/en_core_web_lg-3.8.0-py3-none-any.whl" }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 110
+src = ["src", "tests"]
