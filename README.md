@@ -2,7 +2,7 @@
 
 
 <p align="center">
-  <img src="public/brand/logo.png" alt="maskara" width="100" />
+  <img src="web/public/brand/logo.png" alt="maskara" width="100" />
 </p>
 
 <p align="center">
@@ -38,13 +38,13 @@ https://github.com/user-attachments/assets/9f8c173c-8290-444c-8a75-a590fc4b9fdb
 
 ```bash
 git clone https://github.com/maskaradev/maskara
-cd maskara
+cd maskara/web
 pnpm install
 cp .env.example .env.local   # set MASKING_ANTHROPIC_API_KEY
 pnpm dev
 ```
 
-needs node 20.9+, pnpm 12, and an anthropic api key. open http://localhost:3000, load the hospital sample under **Datasets**, run a masking job, and check its **Privacy & utility** tab. a guided tour walks you through it. other settings are in [`.env.example`](.env.example).
+needs node 20.9+, pnpm 12, and an anthropic api key. open http://localhost:3000, load the hospital sample under **Datasets**, run a masking job, and check its **Privacy & utility** tab. a guided tour walks you through it. other settings are in [`.env.example`](web/.env.example).
 
 > [!WARNING]
 > this build isn't the on-prem one yet. **don't put real personal data into it.** free text is sent to the anthropic api, and photos and pdf pages to gpu servers. report security issues through a [private advisory](https://github.com/maskaradev/maskara/security/advisories/new).
@@ -55,7 +55,7 @@ needs node 20.9+, pnpm 12, and an anthropic api key. open http://localhost:3000,
 
 ## agent instructions
 
-if you are an ai agent helping with this repository, read [`AGENTS.md`](./AGENTS.md) before making changes.
+if you are an ai agent helping with this repository, read [`AGENTS.md`](web/AGENTS.md) before making changes.
 
 ## development
 
@@ -65,8 +65,8 @@ pnpm lint     # eslint
 pnpm build    # production build
 ```
 
-add ui strings to `src/lib/i18n/en.ts` and `ko.ts` together. this readme is the source for the translations in `docs/i18n/`.
+add ui strings to `web/src/lib/i18n/en.ts` and `ko.ts` together. this readme is the source for the translations in `docs/i18n/`.
 
 ## license
 
-maskara is licensed under the [Apache License 2.0](LICENSE). the sample datasets in `public/samples/` keep their own licenses.
+maskara is licensed under the [Apache License 2.0](LICENSE). the sample datasets in `web/public/samples/` keep their own licenses.

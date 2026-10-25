@@ -2,7 +2,7 @@
 
 
 <p align="center">
-  <img src="../../public/brand/logo.png" alt="maskara" width="100" />
+  <img src="../../web/public/brand/logo.png" alt="maskara" width="100" />
 </p>
 
 <p align="center">
@@ -38,13 +38,13 @@ https://github.com/user-attachments/assets/9f8c173c-8290-444c-8a75-a590fc4b9fdb
 
 ```bash
 git clone https://github.com/maskaradev/maskara
-cd maskara
+cd maskara/web
 pnpm install
 cp .env.example .env.local   # 填写 MASKING_ANTHROPIC_API_KEY
 pnpm dev
 ```
 
-需要 Node.js 20.9+、pnpm 12 和 Anthropic API 密钥。打开 http://localhost:3000，在 **Datasets** 中加载医院样本，运行一次脱敏任务，然后查看 **Privacy & utility** 标签页。引导教程会带你走完这个流程。其他设置见 [`.env.example`](../../.env.example)。
+需要 Node.js 20.9+、pnpm 12 和 Anthropic API 密钥。打开 http://localhost:3000，在 **Datasets** 中加载医院样本，运行一次脱敏任务，然后查看 **Privacy & utility** 标签页。引导教程会带你走完这个流程。其他设置见 [`.env.example`](../../web/.env.example)。
 
 > [!WARNING]
 > 这还不是本地部署版本。**请勿放入真实个人数据。** 自由文本会发送到 Anthropic API，照片和 PDF 页面会发送到 GPU 服务器。安全问题请通过[私密 advisory](https://github.com/maskaradev/maskara/security/advisories/new) 报告。
@@ -55,7 +55,7 @@ pnpm dev
 
 ## 给 AI 代理的说明
 
-如果你是协助本仓库的 AI 代理，修改前请先阅读 [`AGENTS.md`](../../AGENTS.md)。
+如果你是协助本仓库的 AI 代理，修改前请先阅读 [`AGENTS.md`](../../web/AGENTS.md)。
 
 ## 开发
 
@@ -65,8 +65,8 @@ pnpm lint     # ESLint
 pnpm build    # 生产构建
 ```
 
-UI 字符串请同时添加到 `src/lib/i18n/en.ts` 和 `ko.ts`。翻译以英文 [README](../../README.md) 为准。
+UI 字符串请同时添加到 `web/src/lib/i18n/en.ts` 和 `ko.ts`。翻译以英文 [README](../../README.md) 为准。
 
 ## 许可证
 
-maskara 采用 [Apache License 2.0](../../LICENSE) 许可。`public/samples/` 中的样本数据集保留各自的许可证。
+maskara 采用 [Apache License 2.0](../../LICENSE) 许可。`web/public/samples/` 中的样本数据集保留各自的许可证。

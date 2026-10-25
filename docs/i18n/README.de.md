@@ -2,7 +2,7 @@
 
 
 <p align="center">
-  <img src="../../public/brand/logo.png" alt="maskara" width="100" />
+  <img src="../../web/public/brand/logo.png" alt="maskara" width="100" />
 </p>
 
 <p align="center">
@@ -38,13 +38,13 @@ https://github.com/user-attachments/assets/9f8c173c-8290-444c-8a75-a590fc4b9fdb
 
 ```bash
 git clone https://github.com/maskaradev/maskara
-cd maskara
+cd maskara/web
 pnpm install
 cp .env.example .env.local   # MASKING_ANTHROPIC_API_KEY eintragen
 pnpm dev
 ```
 
-Benötigt Node.js 20.9+, pnpm 12 und einen Anthropic-API-Schlüssel. Öffne http://localhost:3000, lade unter **Datasets** das Krankenhaus-Beispiel, starte einen Maskierungsjob und sieh dir den Tab **Privacy & utility** an. Eine geführte Tour begleitet dich dabei. Weitere Einstellungen stehen in [`.env.example`](../../.env.example).
+Benötigt Node.js 20.9+, pnpm 12 und einen Anthropic-API-Schlüssel. Öffne http://localhost:3000, lade unter **Datasets** das Krankenhaus-Beispiel, starte einen Maskierungsjob und sieh dir den Tab **Privacy & utility** an. Eine geführte Tour begleitet dich dabei. Weitere Einstellungen stehen in [`.env.example`](../../web/.env.example).
 
 > [!WARNING]
 > Das ist noch nicht die On-Prem-Version. **Gib keine echten personenbezogenen Daten ein.** Freitext wird an die Anthropic-API gesendet, Fotos und PDF-Seiten an GPU-Server. Sicherheitslücken bitte über ein [privates Advisory](https://github.com/maskaradev/maskara/security/advisories/new) melden.
@@ -55,7 +55,7 @@ Benötigt Node.js 20.9+, pnpm 12 und einen Anthropic-API-Schlüssel. Öffne http
 
 ## Hinweise für Agenten
 
-Wenn du ein KI-Agent bist, der an diesem Repository mitarbeitet, lies vor Änderungen [`AGENTS.md`](../../AGENTS.md).
+Wenn du ein KI-Agent bist, der an diesem Repository mitarbeitet, lies vor Änderungen [`AGENTS.md`](../../web/AGENTS.md).
 
 ## Entwicklung
 
@@ -65,8 +65,8 @@ pnpm lint     # ESLint
 pnpm build    # Produktions-Build
 ```
 
-UI-Texte immer gleichzeitig in `src/lib/i18n/en.ts` und `ko.ts` eintragen. Das englische [README](../../README.md) ist die Quelle der Übersetzungen.
+UI-Texte immer gleichzeitig in `web/src/lib/i18n/en.ts` und `ko.ts` eintragen. Das englische [README](../../README.md) ist die Quelle der Übersetzungen.
 
 ## Lizenz
 
-maskara steht unter der [Apache License 2.0](../../LICENSE). Die Beispieldatensätze in `public/samples/` behalten ihre eigenen Lizenzen.
+maskara steht unter der [Apache License 2.0](../../LICENSE). Die Beispieldatensätze in `web/public/samples/` behalten ihre eigenen Lizenzen.

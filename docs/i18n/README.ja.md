@@ -2,7 +2,7 @@
 
 
 <p align="center">
-  <img src="../../public/brand/logo.png" alt="maskara" width="100" />
+  <img src="../../web/public/brand/logo.png" alt="maskara" width="100" />
 </p>
 
 <p align="center">
@@ -38,13 +38,13 @@ https://github.com/user-attachments/assets/9f8c173c-8290-444c-8a75-a590fc4b9fdb
 
 ```bash
 git clone https://github.com/maskaradev/maskara
-cd maskara
+cd maskara/web
 pnpm install
 cp .env.example .env.local   # MASKING_ANTHROPIC_API_KEY を設定
 pnpm dev
 ```
 
-Node.js 20.9 以上、pnpm 12、Anthropic API キーが必要です。http://localhost:3000 を開き、**Datasets** で病院サンプルを読み込んでマスキングジョブを実行し、**Privacy & utility** タブを確認してください。ガイドツアーが同じ流れを案内します。その他の設定は [`.env.example`](../../.env.example) にあります。
+Node.js 20.9 以上、pnpm 12、Anthropic API キーが必要です。http://localhost:3000 を開き、**Datasets** で病院サンプルを読み込んでマスキングジョブを実行し、**Privacy & utility** タブを確認してください。ガイドツアーが同じ流れを案内します。その他の設定は [`.env.example`](../../web/.env.example) にあります。
 
 > [!WARNING]
 > これはまだオンプレミス版ではありません。**実際の個人データを入れないでください。** 自由記述テキストは Anthropic API に、写真と PDF ページは GPU サーバーに送信されます。セキュリティ上の問題は[非公開の advisory](https://github.com/maskaradev/maskara/security/advisories/new) で報告してください。
@@ -55,7 +55,7 @@ Node.js 20.9 以上、pnpm 12、Anthropic API キーが必要です。http://loc
 
 ## AI エージェントへ
 
-このリポジトリを手伝う AI エージェントは、変更の前に [`AGENTS.md`](../../AGENTS.md) を読んでください。
+このリポジトリを手伝う AI エージェントは、変更の前に [`AGENTS.md`](../../web/AGENTS.md) を読んでください。
 
 ## 開発
 
@@ -65,8 +65,8 @@ pnpm lint     # ESLint
 pnpm build    # 本番ビルド
 ```
 
-UI 文字列は `src/lib/i18n/en.ts` と `ko.ts` に一緒に追加します。翻訳の原文は英語の [README](../../README.md) です。
+UI 文字列は `web/src/lib/i18n/en.ts` と `ko.ts` に一緒に追加します。翻訳の原文は英語の [README](../../README.md) です。
 
 ## ライセンス
 
-maskara は [Apache License 2.0](../../LICENSE) で提供されます。`public/samples/` のサンプルデータセットはそれぞれのライセンスに従います。
+maskara は [Apache License 2.0](../../LICENSE) で提供されます。`web/public/samples/` のサンプルデータセットはそれぞれのライセンスに従います。

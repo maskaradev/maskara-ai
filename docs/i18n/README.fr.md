@@ -2,7 +2,7 @@
 
 
 <p align="center">
-  <img src="../../public/brand/logo.png" alt="maskara" width="100" />
+  <img src="../../web/public/brand/logo.png" alt="maskara" width="100" />
 </p>
 
 <p align="center">
@@ -38,13 +38,13 @@ https://github.com/user-attachments/assets/9f8c173c-8290-444c-8a75-a590fc4b9fdb
 
 ```bash
 git clone https://github.com/maskaradev/maskara
-cd maskara
+cd maskara/web
 pnpm install
 cp .env.example .env.local   # renseignez MASKING_ANTHROPIC_API_KEY
 pnpm dev
 ```
 
-il faut node 20.9+, pnpm 12 et une clé d'api anthropic. ouvrez http://localhost:3000, chargez l'échantillon hospitalier dans **Datasets**, lancez une tâche de masquage et consultez son onglet **Privacy & utility**. une visite guidée vous accompagne. les autres réglages sont dans [`.env.example`](../../.env.example).
+il faut node 20.9+, pnpm 12 et une clé d'api anthropic. ouvrez http://localhost:3000, chargez l'échantillon hospitalier dans **Datasets**, lancez une tâche de masquage et consultez son onglet **Privacy & utility**. une visite guidée vous accompagne. les autres réglages sont dans [`.env.example`](../../web/.env.example).
 
 > [!WARNING]
 > ce n'est pas encore la version on-prem. **n'y mettez pas de vraies données personnelles.** le texte libre est envoyé à l'api anthropic, et les photos et pages pdf à des serveurs gpu. signalez les failles de sécurité via un [advisory privé](https://github.com/maskaradev/maskara/security/advisories/new).
@@ -55,7 +55,7 @@ il faut node 20.9+, pnpm 12 et une clé d'api anthropic. ouvrez http://localhost
 
 ## instructions pour les agents
 
-si vous êtes un agent d'ia qui aide sur ce dépôt, lisez [`AGENTS.md`](../../AGENTS.md) avant toute modification.
+si vous êtes un agent d'ia qui aide sur ce dépôt, lisez [`AGENTS.md`](../../web/AGENTS.md) avant toute modification.
 
 ## développement
 
@@ -65,8 +65,8 @@ pnpm lint     # eslint
 pnpm build    # build de production
 ```
 
-ajoutez les textes de l'interface à `src/lib/i18n/en.ts` et `ko.ts` en même temps. le [README](../../README.md) anglais est la source des traductions.
+ajoutez les textes de l'interface à `web/src/lib/i18n/en.ts` et `ko.ts` en même temps. le [README](../../README.md) anglais est la source des traductions.
 
 ## licence
 
-maskara est distribué sous [Apache License 2.0](../../LICENSE). les jeux de données de `public/samples/` gardent leurs propres licences.
+maskara est distribué sous [Apache License 2.0](../../LICENSE). les jeux de données de `web/public/samples/` gardent leurs propres licences.
