@@ -1,6 +1,6 @@
 """Optional PII models behind the same `Detector` shape. Neither is a dependency of the core package.
 
-gliner2  fastino/gliner2-privacy-filter-PII-multi (Apache-2.0, 1.2 GB), `pip install 'maskara[gliner]'`
+gliner2  fastino/gliner2-privacy-filter-PII-multi (Apache-2.0, 1.2 GB), `pip install 'maskara-ai[gliner]'`
 opf      OpenAI Privacy Filter (Apache-2.0, 2.8 GB), not on PyPI:
          `pip install 'opf @ git+https://github.com/openai/privacy-filter'`
 
@@ -103,7 +103,7 @@ def load(name: str):
     if name not in PACKAGES:
         raise ValueError(f"unknown model {name!r}; expected one of {sorted(PACKAGES)}")
     if not available(name):
-        hint = "pip install 'maskara[gliner]'" if name == "gliner2" else \
+        hint = "pip install 'maskara-ai[gliner]'" if name == "gliner2" else \
             "pip install 'opf @ git+https://github.com/openai/privacy-filter'"
         raise ImportError(f"the {name} detector is not installed; {hint}")
     return GLiNER2Detector() if name == "gliner2" else OPFDetector()

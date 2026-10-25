@@ -10,9 +10,12 @@ import { MaskMock } from "@/components/site/mask-mock"
 import { Nav } from "@/components/site/nav"
 import { Tape } from "@/components/site/tape"
 import { WaitlistForm } from "@/components/site/waitlist-form"
-import { ROLES, TREATMENTS } from "@/lib/roles"
 
 const SAMPLE_DATASETS = 4
+// Column roles and treatments of the web prototype this page was written for (removed; see web/src/lib/roles.ts
+// in git history).
+const COLUMN_ROLES = 18
+const COLUMN_TREATMENTS = 6
 
 const POLICY_LINES = [
   "full_name      → persona",
@@ -64,11 +67,11 @@ export default function Landing() {
               <span>input lanes in one run</span>
             </div>
             <div className="stat">
-              <b>{ROLES.length}</b>
+              <b>{COLUMN_ROLES}</b>
               <span>column roles detected</span>
             </div>
             <div className="stat">
-              <b>{TREATMENTS.length}</b>
+              <b>{COLUMN_TREATMENTS}</b>
               <span>column treatments</span>
             </div>
             <div className="stat">

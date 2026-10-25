@@ -1,4 +1,4 @@
-// One patient from the built-in synthetic hospital sample (public/samples/hospital): P009 Aisha Rahman,
+// One patient from the web prototype's synthetic hospital sample (removed; see git history): P009 Aisha Rahman,
 // who has a clinical note, a portal message, a lab requisition, a clinical photo and a voicemail.
 // The masked side is what the pipeline produces for her; the repainted face is real output of the
 // face repaint model, cropped to the photo (public/landing).

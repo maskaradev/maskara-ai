@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <a href="https://maskara.dev">maskara.dev</a> · <a href="#クイックスタート">クイックスタート</a> · <a href="../../intents.md">意図</a>
+  <a href="https://maskara.dev">maskara.dev</a> · <a href="https://app.maskara.dev">デモ</a> · <a href="#クイックスタート">クイックスタート</a> · <a href="../../intents.md">意図</a>
 </p>
 
 <p align="center">
@@ -15,58 +15,113 @@
 
 <p align="center">
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-666666?labelColor=333333" alt="Apache 2.0 license" /></a>
-  <img src="https://img.shields.io/badge/status-MVP-666666?labelColor=333333" alt="status: MVP" />
+  <img src="https://img.shields.io/badge/status-v0-666666?labelColor=333333" alt="status: v0" />
   <a href="https://github.com/maskaradev/maskara/stargazers"><img src="https://img.shields.io/github/stars/maskaradev/maskara?labelColor=333333&color=666666&logo=github" alt="GitHub stars" /></a>
 </p>
 
 ---
 
-https://github.com/user-attachments/assets/9f8c173c-8290-444c-8a75-a590fc4b9fdb
+**個人情報を消すのではなく、一貫した架空のペルソナに置き換え、データが使えるまま漏れていないことを数字で示します。**
 
-**機微データを一貫した合成ペルソナに置き換え、AI の学習に使えるデータとして残します。**
+<p align="center">
+  <a href="https://app.maskara.dev"><img src="../assets/showroom.png" alt="maskara のショールーム：サンプル実行の指標と、マスキング前後のサポートチケット" width="880" /></a>
+</p>
 
-- **消さずに置き換える** — 氏名・年齢・日付・ID は `[REDACTED]` ではなく合成ペルソナになります。診断・処方・テーブル間の関係はそのまま残ります。
-- **1 人に 1 ペルソナ** — 同じ患者はすべてのテーブル・メモ・PDF・写真で同じペルソナになります。日付は患者ごとに同じだけずらすので、受診間隔が保たれます。
-- **テキスト・PDF・写真を 1 回で** — 構造化カラムと自由記述のメモ、PDF はページごとの OCR、写真は顔をペルソナとして描き直し、画像内の文字も置き換えます。
-- **AI が提案し、人が決める** — AI がカラムごとの扱い（保持、仮名化、ペルソナ、日付シフト…）を提案し、人が確定します。
-- **エクスポート前に確認** — Privacy & utility レポートが出力に元の値が残っていないかを探し、受診間隔・年齢・テーブルの結合・分布が保たれたかを数値で示します。分析画面は両方に同じクエリを実行して比較します。
-- **オンプレミス前提** — maskara は顧客ネットワーク内でローカル LLM により動くよう設計されています。現時点ではこの 2 つをブラウザストレージと Anthropic API で代用しています。[ロードマップ →](../../intents.md#roadmap)
-
----
+- **消さずに置き換える** — 名前・メール・電話番号・住所・日付・ID は `[REDACTED]` ではなく、架空のペルソナの値になります。それ以外のテキストはそのままです。
+- **一人に一つのペルソナ** — 同じ顧客は、すべてのテーブルとその人が登場するすべてのテキストで同じペルソナになります。vault を使えば次の実行でも同じです。
+- **日付はまとめてずらす** — 一人の日付はすべて同じ日数だけずれるので、日付の間隔は正確に保たれます。
+- **結合が壊れない** — 同じ ID はすべてのテーブルとテキストで同じ値に置き換わり、英字の接頭辞は残ります（`CUS-575198` → `CUS-224730`）。
+- **プリセット** — `strict`、`balanced`（既定）、`max_utility` から、ペルソナが元の年齢・地域・背景にどこまで合わせるかを選びます。
+- **ローカルの vault、元の値は保存しない** — `.maskara/vault.db` が実行をまたいでペルソナを固定します。保存するのは鍵付きハッシュと架空の値だけで、元の値は一切保存しません。
+- **検出** — メール・電話・カード・ID・日付のルールに加え、テーブルにすでにある値をテキストからも探します。`maskara-ai[gliner]` で GLiNER2 の PII モデルを追加でき、分野固有の ID 形式はオプトインのパターンパックで有効にします（`legal-echr`）。
+- **実行ごとのレポート** — 出力に残った元の値、壊れた結合、日付の間隔、パースできる形式、残した属性の k-匿名性とそれに対する連結攻撃。測れなかった項目も一覧にします。
+- **`maskara ui`** — 実行結果の前後を並べて見るローカルビューアで、127.0.0.1 だけで開きます。
+- **小さく、オフライン** — コアは Python 標準ライブラリだけで動き、ネットワークを使いません。
 
 ## クイックスタート
 
 ```bash
-git clone https://github.com/maskaradev/maskara
-cd maskara/web
-pnpm install
-cp .env.example .env.local   # MASKING_ANTHROPIC_API_KEY を設定
-pnpm dev
+pip install git+https://github.com/maskaradev/maskara   # python 3.11+
+maskara demo        # mask the bundled sample store and print the report
+maskara ui --demo   # see it side by side in the browser
 ```
 
-Node.js 20.9 以上、pnpm 12、Anthropic API キーが必要です。http://localhost:3000 を開き、**Datasets** で病院サンプルを読み込んでマスキングジョブを実行し、**Privacy & utility** タブを確認してください。ガイドツアーが同じ流れを案内します。その他の設定は [`.env.example`](../../web/.env.example) にあります。
+PyPI に公開されたら `pip install maskara-ai` になります。PyPI の `maskara` は別のプロジェクトです。GLiNER2 モデルも入れる場合：
 
-> [!WARNING]
-> これはまだオンプレミス版ではありません。**実際の個人データを入れないでください。** 自由記述テキストは Anthropic API に、写真と PDF ページは GPU サーバーに送信されます。セキュリティ上の問題は[非公開の advisory](https://github.com/maskaradev/maskara/security/advisories/new) で報告してください。
+```bash
+pip install "maskara-ai[gliner] @ git+https://github.com/maskaradev/maskara"
+```
+
+### Python
+
+```python
+import maskara
+
+result = maskara.mask(
+    tables={
+        "customers": [
+            {"customer_id": "C-1001", "name": "Maria Lopez", "email": "maria.lopez@gmail.com", "birth_date": "1984-03-02"},
+        ],
+        "orders": [
+            {"order_id": "ORD-55012", "customer_id": "C-1001", "ordered_on": "2025-04-14"},
+            {"order_id": "ORD-55019", "customer_id": "C-1001", "ordered_on": "2025-04-20"},
+        ],
+    },
+    texts={"notes": ["Maria Lopez called on April 21, 2025 about order ORD-55019. Reach her at maria.lopez@gmail.com."]},
+    subjects={"customers": "customer_id", "orders": "customer_id"},
+    vault=".maskara/vault.db",  # same person, same persona on the next run
+)
+print(result.texts["notes"])
+# ['Kara Brown called on May 9, 2025 about order ORD-10991. Reach her at kara.brown@example.org.']
+print(result.report.summary())
+```
+
+テーブルは dict のリスト、CSV・JSONL のパス、pandas DataFrame を受け取り、入力と同じ型で返します。テキストは文字列のリスト、`.txt`・`.jsonl` のパス、pandas Series を受け取ります。ペルソナは vault の鍵から決まるので、上の例とは違う結果になります。
+
+### CLI
+
+```bash
+maskara mask --table customers=customers.csv --table orders=orders.csv --text tickets=tickets.jsonl \
+  --subject customers=customer_id --subject orders=customer_id --subject tickets=customer_id \
+  --out masked/
+```
+
+`masked/` には入力ごとに同じ名前のファイルと、`report.json`、`report.html`、`mentions.jsonl`（どこで何を置き換えたか。元の値は含みません）ができます。`maskara report masked/` でレポートを再表示でき、その他のオプション（`--preset`、`--detector`、`--pattern`、TOML 設定）は `maskara mask --help` にあります。
+
+## ベンチマーク
+
+`maskara bench` は maskara と比較対象（redaction、Presidio、GLiNER2、OpenAI Privacy Filter）を同じ採点器で、何が漏れたか・何が使えるまま残ったかの両面から、4 つのコーパスで採点します：[TAB](https://github.com/NorskRegnesentral/text-anonymization-benchmark)（実際の判決文）、[ABCD](https://github.com/asappresearch/abcd)（人が書いたサポート対話）、[Nemotron-PII](https://huggingface.co/datasets/nvidia/Nemotron-PII)（合成）、`linked`（誰が誰かが分かっている、私たちが生成した連結テーブルとテキスト）。公開する数値は最初の 3 つを基準にし、`linked` は自作のデータなので別に報告します。設計と決定の記録は [`docs/research/v0-design.md`](../research/v0-design.md)（韓国語）にあります。
+
+現在は v0 で、英語のみ対応です。ペルソナは [NVIDIA Nemotron-Personas-USA](https://huggingface.co/datasets/nvidia/Nemotron-Personas-USA)（CC BY 4.0）から、名前は [SSA の出生名統計](https://www.ssa.gov/oact/babynames/limits.html)から取るため、アメリカ人のペルソナになります。
+
+## セキュリティ
+
+maskara は手元のマシンで動き、何も外部に送りません。ネットワークを使うのは明示的に選んだときだけです：オプションのモデルは初回に一度だけダウンロードされ、`maskara bench` はコーパスをダウンロードし、`bench --qa llm` は設定したモデルのエンドポイントを呼び出します。v0 はセキュリティ監査を受けていないので、出力を共有する前にレポートを確認してください。セキュリティの問題は[非公開の advisory](https://github.com/maskaradev/maskara/security/advisories/new) で報告してください。
 
 ## 謝辞
 
-サンプルデータを提供する [Synthea](https://github.com/synthetichealth/synthea)、[NVIDIA Nemotron-PII](https://huggingface.co/datasets/nvidia/Nemotron-PII)、[Nemotron-Personas-USA](https://huggingface.co/datasets/nvidia/Nemotron-Personas-USA)
-
-## AI エージェントへ
-
-このリポジトリを手伝う AI エージェントは、変更の前に [`AGENTS.md`](../../web/AGENTS.md) を読んでください。
+ペルソナとサンプルデータの [NVIDIA Nemotron-PII](https://huggingface.co/datasets/nvidia/Nemotron-PII)、[Nemotron-Personas-USA](https://huggingface.co/datasets/nvidia/Nemotron-Personas-USA)、[SSA の出生名統計](https://www.ssa.gov/oact/babynames/limits.html)、そしてベンチマークの [TAB](https://github.com/NorskRegnesentral/text-anonymization-benchmark) と [ABCD](https://github.com/asappresearch/abcd) に感謝します
 
 ## 開発
 
 ```bash
-pnpm dev      # 開発サーバー
-pnpm lint     # ESLint
-pnpm build    # 本番ビルド
+uv sync --all-extras --all-groups
+uv run pytest
+uv run ruff check src tests
 ```
 
-UI 文字列は `web/src/lib/i18n/en.ts` と `ko.ts` に一緒に追加します。翻訳の原文は英語の [README](../../README.md) です。
+ランディングページとホスト版デモは `web/` にあります（Node.js 20.9 以上、pnpm 12）：
+
+```bash
+cd web
+pnpm install
+pnpm dev      # dev server: localhost:3000, and the demo at app.localhost:3000
+pnpm lint     # eslint
+pnpm build    # production build
+```
+
+ホスト版デモは `maskara ui --export web/public/demo` で作り直します。`web/` で作業する AI エージェントは、まず [`web/AGENTS.md`](../../web/AGENTS.md) を読んでください。各言語の README は英語の [README](../../README.md) を原文としています。
 
 ## ライセンス
 
-maskara は [Apache License 2.0](../../LICENSE) で提供されます。`web/public/samples/` のサンプルデータセットはそれぞれのライセンスに従います。
+maskara は [Apache License 2.0](../../LICENSE) で提供されます。同梱のペルソナとサンプルデータは CC BY 4.0 とパブリックドメインの資料から派生しています。詳しくは [`src/maskara/data/NOTICE`](../../src/maskara/data/NOTICE) を参照してください。

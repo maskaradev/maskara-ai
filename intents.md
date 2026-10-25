@@ -37,12 +37,17 @@ the data can't come out, so **maskara goes to where the data is.**
 
 ## roadmap
 
-this repository stands in for two pieces of the on-prem build: browser storage instead of the customer's database, and the anthropic api instead of a local llm. the rest of the pipeline is the same code.
+this repository is the python package: `maskara.mask()` and the `maskara` cli, running on the machine where the data is. v0 covers english tables and free text, cpu only; the pdf, photo, and audio lanes of the earlier web prototype come later. the design and its decision log are in [`docs/research/v0-design.md`](docs/research/v0-design.md).
 
-- [x] three-lane pipeline: text db, pdf, photos
-- [x] consistent persona mapping across tables, documents, and images
-- [x] privacy & utility report and analysis comparison screen
-- [ ] replace browser storage with a read-only connector to the customer db
-- [ ] replace the anthropic api with a local llm (vllm) on the customer's gpus
+- [x] tables (csv, jsonl, pandas) and free text (txt, jsonl) linked by one subject key
+- [x] consistent personas from nemotron-personas-usa, with three presets: strict, balanced, max_utility
+- [x] local vault that keeps personas stable across runs and stores no originals
+- [x] detection: rules and known table values, plus gliner2 when installed
+- [x] privacy and fidelity report (text, json, html) and `maskara bench` on four corpora
+- [x] offline, with a stdlib-only core
+- [ ] publish to pypi as `maskara-ai`
+- [ ] parquet input and an encrypted vault (sqlcipher)
+- [ ] read-only connectors to the customer's database
 - [ ] offline install bundle for air-gapped networks
-- [ ] audio (call recording) processing
+- [ ] languages other than english
+- [ ] pdfs and ocr, images and faces, audio

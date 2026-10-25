@@ -3,15 +3,12 @@ import { Geist, Geist_Mono } from "next/font/google"
 
 import "./site.css"
 
-// The same faces as the app, so the landing page and the product read as one thing.
 const sans = Geist({ variable: "--font-sans", subsets: ["latin"] })
 const mono = Geist_Mono({ variable: "--font-mono", subsets: ["latin"] })
 
 const TITLE = "maskara: precise masking, uncompromised data"
 const DESCRIPTION =
   "maskara swaps the people in sensitive data for consistent synthetic personas across tables, notes, PDFs and photos, so the data stays usable for AI training. Built to run where the data lives."
-// Set here rather than as an opengraph-image file: this layout's `openGraph` replaces the root one, and a
-// file in this route group would collide with the app's /opengraph-image.
 const IMAGE = {
   url: "/landing/og.png",
   width: 1200,

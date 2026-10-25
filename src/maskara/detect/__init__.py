@@ -24,7 +24,7 @@ from .packs import PACKS, Pattern, pattern, patterns_for
 from .rules import RulesDetector
 
 NO_MODEL_NOTICE = ("maskara: no PII model installed, using rules and known table values only; names in free text "
-                   "that are not in your tables may be missed (pip install 'maskara[gliner]' adds a model)")
+                   "that are not in your tables may be missed (pip install 'maskara-ai[gliner]' adds a model)")
 
 
 def models_for(spec) -> tuple[list[Detector], str | None]:

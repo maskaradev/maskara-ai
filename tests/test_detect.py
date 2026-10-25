@@ -151,7 +151,7 @@ def test_model_selection_and_label_mapping(monkeypatch):
     monkeypatch.setattr(models, "available", lambda name: False)
     assert models_for("auto") == ([], NO_MODEL_NOTICE)
     assert models_for("rules") == ([], None)
-    with pytest.raises(ImportError, match="maskara\\[gliner\\]"):
+    with pytest.raises(ImportError, match="maskara-ai\\[gliner\\]"):
         models_for("gliner2")
 
     class Fake:
