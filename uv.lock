@@ -925,7 +925,7 @@ wheels = [
 ]
 
 [[package]]
-name = "maskara"
+name = "maskara-ai"
 version = "0.0.1"
 source = { editable = "." }
 
