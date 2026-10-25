@@ -43,6 +43,9 @@ const SCORED_LABELS: Record<string, EntityType> = {
   mac_address: "OTHER",
 }
 
+/** Whether the scorer counts a gold label, as opposed to an attribute the policy keeps. */
+export const isScoredLabel = (label: string) => label in SCORED_LABELS
+
 export type DetectedSpan = { start: number; end: number; type: EntityType }
 
 const MAX_EXAMPLES = 50

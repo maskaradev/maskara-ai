@@ -1,6 +1,6 @@
 "use client"
 
-import { Check, Sparkles, Target, X } from "lucide-react"
+import { Checkmark, Close } from "@carbon/icons-react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 
@@ -48,10 +48,7 @@ export function AiGoalDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="gap-5 sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-1.5">
-            <Target className="size-4" />
-            {t.goalTitle}
-          </DialogTitle>
+          <DialogTitle>{t.goalTitle}</DialogTitle>
           <DialogDescription className="text-[12.5px]">{t.goalHint}</DialogDescription>
         </DialogHeader>
 
@@ -68,7 +65,7 @@ export function AiGoalDialog({
                   onClick={() => toggle(tag)}
                   className={cn(CHIP, on ? CHIP_ON : "border-border text-muted-foreground hover:border-foreground/40 hover:text-foreground")}
                 >
-                  {on && <Check className="size-3" />}
+                  {on && <Checkmark className="size-3" />}
                   {tag}
                 </button>
               )
@@ -77,7 +74,7 @@ export function AiGoalDialog({
               <span key={tag} className={cn(CHIP, CHIP_ON, "pr-1.5")}>
                 #{tag}
                 <button type="button" aria-label={t.removeTag(tag)} onClick={() => toggle(tag)} className="rounded-full p-0.5 hover:bg-background/20">
-                  <X className="size-3" />
+                  <Close className="size-3" />
                 </button>
               </span>
             ))}
@@ -122,7 +119,6 @@ export function AiGoalDialog({
               {t.cancel}
             </Button>
             <Button onClick={onRun} data-tour="ai-start">
-              <Sparkles />
               {t.goalRun}
               <kbd className="ml-1 rounded bg-primary-foreground/15 px-1 font-sans text-[10.5px]">{t.goalShortcut}</kbd>
             </Button>
@@ -138,7 +134,6 @@ export function GoalSummary({ goal }: { goal: Goal }) {
   const t = useMessages().newJob
   return (
     <div className="flex min-w-0 flex-wrap items-center gap-1.5 text-[12px] text-muted-foreground">
-      <Target className="size-3.5 shrink-0" />
       <span className="font-medium text-foreground">{t.goalUsed}</span>
       {goal.tags.map((tag) => (
         <span key={tag} className="rounded-full border px-2 py-px">

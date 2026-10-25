@@ -1,3 +1,5 @@
 allowBuilds:
+  '@carbon/icon-helpers': false
+  '@carbon/icons-react': false
   sharp: false
   unrs-resolver: false

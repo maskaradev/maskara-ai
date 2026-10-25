@@ -1,6 +1,6 @@
 "use client"
 
-import { Download } from "lucide-react"
+import { Download } from "@carbon/icons-react"
 import { useCallback, useRef, useState } from "react"
 
 import { ImageCanvas } from "@/components/image-canvas"

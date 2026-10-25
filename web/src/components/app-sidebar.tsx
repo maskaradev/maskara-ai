@@ -1,6 +1,6 @@
 "use client"
 
-import { CircleCheck, CircleDashed, Database, FlaskConical, VenetianMask, X, type LucideIcon } from "lucide-react"
+import { CheckmarkFilled, Chemistry, CircleDash, Close, Compare, DataBase, Home, Play } from "@carbon/icons-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Suspense, useSyncExternalStore } from "react"
@@ -21,16 +21,22 @@ import {
 } from "@/components/ui/sidebar"
 import { Kbd } from "@/components/ui/kbd"
 import { LanguageToggle } from "@/components/language-toggle"
+import { Redact, type IconType } from "@/components/icons"
 import { LogoMark } from "@/components/logo"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { useMessages, type Messages } from "@/lib/i18n"
+import { startTour } from "@/components/tutorial"
+import { useMessages } from "@/lib/i18n"
 import { useAppStore, useHydrated } from "@/lib/store"
 
-type NavItem = { title: Exclude<keyof Messages["sidebar"], "onboarding">; icon?: LucideIcon; href?: string }
+type NavItem = { title: "home" | "datasets" | "mask" | "playground" | "lab"; icon: IconType; href: string; tour?: string }
 
-const mainNav: NavItem[] = [
-  { title: "mask", icon: VenetianMask, href: "/jobs" },
-  { title: "lab", icon: FlaskConical, href: "/lab" },
+const homeNav: NavItem = { title: "home", icon: Home, href: "/home" }
+
+const workspaceNav: NavItem[] = [
+  { title: "datasets", icon: DataBase, href: "/datasets", tour: "nav-datasets" },
+  { title: "mask", icon: Redact, href: "/jobs" },
+  { title: "playground", icon: Compare, href: "/playground" },
+  { title: "lab", icon: Chemistry, href: "/lab" },
 ]
 
 function isActive(pathname: string, href?: string) {
@@ -46,12 +52,12 @@ export function AppSidebar() {
   return (
     <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader className="px-4 pt-5 pb-3 group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:px-2">
-        <div className="flex items-center gap-2 font-mono text-base font-bold tracking-tighter">
+        <Link href="/home" className="flex items-center gap-2 font-mono text-base font-bold tracking-tighter">
           <LogoMark className="size-5 shrink-0" />
           <span className="group-data-[collapsible=icon]:hidden">
             mask<span className="text-muted-foreground">ara</span>
           </span>
-        </div>
+        </Link>
       </SidebarHeader>
 
       {/* The pathname is unknown while prerendering dynamic routes; render inactive links until it resolves. */}
@@ -76,43 +82,20 @@ function Nav({ pathname }: { pathname: string }) {
   return (
     <SidebarContent>
       <SidebarGroup>
-        {/* Fade the label but keep its height so the icons don't jump when the sidebar collapses. */}
-        <SidebarGroupLabel className="group-data-[collapsible=icon]:mt-0!">{m.workspace}</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={isActive(pathname, "/datasets")} tooltip={m.datasets}>
-                <Link href="/datasets" data-tour="nav-datasets">
-                  <Database />
-                  <span>{m.datasets}</span>
-                </Link>
-              </SidebarMenuButton>
-              <NavShortcut step={1} href="/datasets" active={isActive(pathname, "/datasets")} />
-            </SidebarMenuItem>
+            <NavLink item={homeNav} step={1} pathname={pathname} label={m[homeNav.title]} />
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
 
       <SidebarGroup>
+        {/* Fade the label but keep its height so the icons don't jump when the sidebar collapses. */}
+        <SidebarGroupLabel className="group-data-[collapsible=icon]:mt-0!">{m.workspace}</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
-            {mainNav.map((item, i) => (
-              <SidebarMenuItem key={item.title}>
-                {item.href ? (
-                  <SidebarMenuButton asChild isActive={isActive(pathname, item.href)} tooltip={m[item.title]}>
-                    <Link href={item.href}>
-                      {item.icon && <item.icon />}
-                      <span>{m[item.title]}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                ) : (
-                  <SidebarMenuButton tooltip={m[item.title]}>
-                    {item.icon && <item.icon />}
-                    <span>{m[item.title]}</span>
-                  </SidebarMenuButton>
-                )}
-                <NavShortcut step={i + 2} href={item.href} active={isActive(pathname, item.href)} />
-              </SidebarMenuItem>
+            {workspaceNav.map((item, i) => (
+              <NavLink key={item.href} item={item} step={i + 2} pathname={pathname} label={m[item.title]} />
             ))}
           </SidebarMenu>
         </SidebarGroupContent>
@@ -121,10 +104,25 @@ function Nav({ pathname }: { pathname: string }) {
   )
 }
 
-/** Demo walkthrough order (datasets → mask → lab), doubling as the ⌘+number shortcut to jump there. */
-function NavShortcut({ step, href, active }: { step: number; href?: string; active: boolean }) {
+function NavLink({ item, step, pathname, label }: { item: NavItem; step: number; pathname: string; label: string }) {
+  const active = isActive(pathname, item.href)
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild isActive={active} tooltip={label}>
+        <Link href={item.href} data-tour={item.tour}>
+          <item.icon />
+          <span>{label}</span>
+        </Link>
+      </SidebarMenuButton>
+      <NavShortcut step={step} href={item.href} active={active} />
+    </SidebarMenuItem>
+  )
+}
+
+/** Sidebar order, doubling as the ⌘+number shortcut to jump there. */
+function NavShortcut({ step, href, active }: { step: number; href: string; active: boolean }) {
   const router = useRouter()
-  useHotkeys(`mod+${step}`, () => href && router.push(href), { enabled: !!href, preventDefault: true }, [href, router])
+  useHotkeys(`mod+${step}`, () => router.push(href), { preventDefault: true }, [href, router])
   return (
     <SidebarMenuBadge className="right-1.5 p-0">
       <Kbd
@@ -192,7 +190,7 @@ function OnboardingCard() {
           aria-label={m.dismiss}
           className="-mr-1 rounded p-0.5 text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground"
         >
-          <X className="size-3.5" />
+          <Close className="size-3.5" />
         </button>
       </div>
       <div className="mt-2 h-1 overflow-hidden rounded-full bg-sidebar-border">
@@ -209,15 +207,23 @@ function OnboardingCard() {
               className="flex items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-foreground"
             >
               {step.done ? (
-                <CircleCheck className="size-3.5 shrink-0 text-primary" />
+                <CheckmarkFilled className="size-3.5 shrink-0 text-primary" />
               ) : (
-                <CircleDashed className="size-3.5 shrink-0" />
+                <CircleDash className="size-3.5 shrink-0" />
               )}
               <span className={step.done ? "line-through decoration-muted-foreground/50" : undefined}>{step.label}</span>
             </Link>
           </li>
         ))}
       </ul>
+      <button
+        type="button"
+        onClick={startTour}
+        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-md border bg-background py-1.5 text-xs font-medium transition-colors hover:bg-sidebar-accent"
+      >
+        <Play className="size-3" />
+        {m.takeTour}
+      </button>
     </div>
   )
 }

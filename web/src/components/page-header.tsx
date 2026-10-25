@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft } from "@carbon/icons-react"
 import Link from "next/link"
 import { Fragment } from "react"
 

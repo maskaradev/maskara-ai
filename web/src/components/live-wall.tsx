@@ -1,6 +1,6 @@
 "use client"
 
-import { Maximize2, Play, RotateCcw } from "lucide-react"
+import { Maximize, Play, Reset } from "@carbon/icons-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import { ITEM_STYLE } from "@/components/agent-panel"
@@ -261,7 +261,7 @@ export function LiveWall({ run }: { run: Run }) {
             <div className="flex shrink-0 items-center gap-2">
               {queued.length > 0 && <span className="text-xs text-muted-foreground tabular-nums">{a.upNext(queued.length)}</span>}
               <Button variant="outline" size="sm" onClick={() => setOpen(stageItem.id)}>
-                <Maximize2 />
+                <Maximize />
                 {a.inspect}
               </Button>
             </div>
@@ -330,7 +330,7 @@ function ItemDialog({ item, onClose }: { item: ImageItem | undefined; onClose: (
                 setReplay((n) => n + 1)
               }}
             >
-              <RotateCcw />
+              <Reset />
               {a.replay}
             </Button>
           </>

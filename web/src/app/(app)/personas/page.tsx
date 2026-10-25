@@ -1,6 +1,6 @@
 "use client"
 
-import { Search } from "lucide-react"
+import { Search } from "@carbon/icons-react"
 import { useState } from "react"
 
 import { PageHeader } from "@/components/page-header"

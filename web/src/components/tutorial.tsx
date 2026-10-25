@@ -1,6 +1,6 @@
 "use client"
 
-import { X } from "lucide-react"
+import { Close } from "@carbon/icons-react"
 import { usePathname, useRouter } from "next/navigation"
 import { createContext, use, useEffect, useMemo, useRef, useState } from "react"
 import { EVENTS, Joyride, STATUS, type EventData, type Step, type TooltipRenderProps } from "react-joyride"
@@ -143,7 +143,7 @@ function TourTooltip({ index, size, isLastStep, tooltipProps }: TooltipRenderPro
           )}
           <h3 className="mr-auto text-sm font-semibold">{title}</h3>
           <Button variant="ghost" size="icon-xs" className="-mr-1.5 text-muted-foreground" aria-label={t.close} title={t.close} onClick={controls.skip}>
-            <X />
+            <Close />
           </Button>
         </div>
         <p className="text-[13px] leading-relaxed text-muted-foreground">{body}</p>
@@ -178,17 +178,36 @@ function TourTooltip({ index, size, isLastStep, tooltipProps }: TooltipRenderPro
   )
 }
 
-/** Guided tour shown on every visit; there is no "seen it" flag, only the Skip button. */
+const startListeners = new Set<() => void>()
+
+/** Starts the guided tour from its first step. It never starts on its own. */
+export function startTour() {
+  startListeners.forEach((l) => l())
+}
+
+/** Guided tour, opened from the Home page or the sidebar checklist. */
 export function Tutorial() {
   const pathname = usePathname()
   const router = useRouter()
-  const [dismissed, setDismissed] = useState(false)
+  const [dismissed, setDismissed] = useState(true)
   const [index, setIndex] = useState(0)
   const current = STEPS[index]
   // Start once local data is loaded, so dataset cards and runs exist to point at.
   const active = useHydrated() && !dismissed
   /** The URL each step was last shown on, so Back returns to the same run or dataset. */
   const visited = useRef<Partial<Record<StepId, string>>>({})
+
+  useEffect(() => {
+    const start = () => {
+      visited.current = {}
+      setIndex(0)
+      setDismissed(false)
+    }
+    startListeners.add(start)
+    return () => {
+      startListeners.delete(start)
+    }
+  }, [])
 
   // Navigating by any means (a highlighted link, the sidebar, a redirect) jumps ahead
   // to the first upcoming step that lives on the new page.

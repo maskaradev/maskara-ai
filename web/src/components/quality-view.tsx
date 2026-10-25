@@ -1,6 +1,6 @@
 "use client"
 
-import { Check, Minus, ScanSearch, ShieldCheck, Sparkles, X } from "lucide-react"
+import { Checkmark, Close, Subtract } from "@carbon/icons-react"
 import { Fragment, useMemo } from "react"
 
 import { useMessages, type Messages } from "@/lib/i18n"
@@ -17,11 +17,11 @@ export function utilityFor(run: Run, u: Messages["utility"]): UtilityReport | nu
 }
 
 function Result({ pass }: { pass: UtilityCheck["pass"] }) {
-  if (pass === null) return <Minus className="size-4 text-muted-foreground" />
+  if (pass === null) return <Subtract className="size-4 text-muted-foreground" />
   return pass ? (
-    <Check className="size-4 text-emerald-600 dark:text-emerald-400" />
+    <Checkmark className="size-4 text-emerald-600 dark:text-emerald-400" />
   ) : (
-    <X className="size-4 text-red-600 dark:text-red-400" />
+    <Close className="size-4 text-red-600 dark:text-red-400" />
   )
 }
 
@@ -51,10 +51,7 @@ function UtilitySection({ utility }: { utility: UtilityReport }) {
     <section className="flex flex-col gap-4 rounded-xl border p-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h3 className="flex items-center gap-1.5 text-sm font-semibold">
-            <Sparkles className="size-4" />
-            {q.utilityTitle}
-          </h3>
+          <h3 className="text-sm font-semibold">{q.utilityTitle}</h3>
           <p className="text-xs text-muted-foreground">{q.utilityDesc}</p>
         </div>
         <div className="flex items-baseline gap-3">
@@ -144,10 +141,7 @@ function PrivacySection({ run }: { run: Run }) {
   return (
     <section className="flex flex-col gap-4 rounded-xl border p-4">
       <div>
-        <h3 className="flex items-center gap-1.5 text-sm font-semibold">
-          <ShieldCheck className="size-4" />
-          {q.privacyTitle}
-        </h3>
+        <h3 className="text-sm font-semibold">{q.privacyTitle}</h3>
         <p className="text-xs text-muted-foreground">{q.privacyDesc(r.checkedValues)}</p>
       </div>
       <div className="grid gap-4 lg:grid-cols-3">
@@ -221,10 +215,7 @@ function DetectionSection({ report }: { report: SpanReport }) {
   return (
     <section className="flex flex-col gap-4 rounded-xl border p-4">
       <div>
-        <h3 className="flex items-center gap-1.5 text-sm font-semibold">
-          <ScanSearch className="size-4" />
-          {q.spanTitle}
-        </h3>
+        <h3 className="text-sm font-semibold">{q.spanTitle}</h3>
         <p className="text-xs text-muted-foreground">{q.spanDesc(report.source, report.docs)}</p>
       </div>
       <div className="grid grid-cols-3 gap-3">

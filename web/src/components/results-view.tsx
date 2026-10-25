@@ -1,6 +1,6 @@
 "use client"
 
-import { Download } from "lucide-react"
+import { Download } from "@carbon/icons-react"
 import { useState } from "react"
 
 import { HighlightedText } from "@/components/highlighted-text"

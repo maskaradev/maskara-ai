@@ -1,6 +1,6 @@
 "use client"
 
-import { ChartColumn, FlaskConical } from "lucide-react"
+import { ChartColumn, Chemistry } from "@carbon/icons-react"
 import Link from "next/link"
 import { useState } from "react"
 
@@ -105,7 +105,7 @@ export function RunView({ run }: { run: Run }) {
           {run.output && (
             <Button variant="outline" size="sm" asChild>
               <Link href={`/lab/${run.id}`}>
-                <FlaskConical />
+                <Chemistry />
                 {r.lab}
               </Link>
             </Button>

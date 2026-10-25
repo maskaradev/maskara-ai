@@ -1,6 +1,6 @@
 "use client"
 
-import { FilePlus2 } from "lucide-react"
+import { DocumentAdd } from "@carbon/icons-react"
 import Link from "next/link"
 
 import { PageHeader } from "@/components/page-header"
@@ -35,7 +35,7 @@ export function JobsScreen({ runId }: { runId?: string }) {
                 </p>
                 <Button asChild>
                   <Link href="/jobs/new">
-                    <FilePlus2 />
+                    <DocumentAdd />
                     {m.newJob}
                   </Link>
                 </Button>

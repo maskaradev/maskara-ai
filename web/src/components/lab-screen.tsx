@@ -1,7 +1,7 @@
 "use client"
 
 import type Anthropic from "@anthropic-ai/sdk"
-import { ArrowUp, ChevronRight, Download, LoaderCircle, Plus, ShieldCheck, Square, Table2 } from "lucide-react"
+import { Add, ArrowUp, ChevronRight, CircleDash, DataTable, Download, Security, StopFilledAlt } from "@carbon/icons-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Fragment, useEffect, useMemo, useRef, useState } from "react"
@@ -190,7 +190,7 @@ function ToolCard({ title, code, run, live }: { title?: string; code?: string; r
         <span className="ml-auto shrink-0 tabular-nums">
           {live ? (
             <span className="flex items-center gap-1.5">
-              <LoaderCircle className="size-3 animate-spin" />
+              <CircleDash className="size-3 animate-spin" />
               {live === "writing" ? l.writing : l.running}
             </span>
           ) : run ? (
@@ -264,7 +264,7 @@ function Composer({ busy, onSend, onStop }: { busy: boolean; onSend: (text: stri
         />
         {busy ? (
           <Button size="icon" variant="outline" className="size-9 rounded-xl" aria-label={l.stop} onClick={onStop}>
-            <Square className="size-3.5 fill-current" />
+            <StopFilledAlt className="size-3.5" />
           </Button>
         ) : (
           <Button size="icon" className="size-9 rounded-xl" aria-label={l.send} disabled={!text.trim()} onClick={submit}>
@@ -282,7 +282,7 @@ function TablesPanel({ output, saved, onNewChat, canReset }: { output: MaskedTab
   return (
     <aside className="flex flex-col gap-5 lg:sticky lg:top-18 lg:self-start">
       <Button variant="outline" size="sm" className="self-start" disabled={!canReset} onClick={onNewChat}>
-        <Plus />
+        <Add />
         {l.newChat}
       </Button>
       <section className="flex flex-col gap-2">
@@ -290,7 +290,7 @@ function TablesPanel({ output, saved, onNewChat, canReset }: { output: MaskedTab
         <ul className="flex flex-col gap-1">
           {output.map((t) => (
             <li key={t.name} className="flex items-center gap-2 text-[13px]">
-              <Table2 className="size-3.5 shrink-0 text-muted-foreground" />
+              <DataTable className="size-3.5 shrink-0 text-muted-foreground" />
               <span className="truncate font-mono text-[12.5px]">{t.name}</span>
               <span className="ml-auto shrink-0 text-[11px] text-muted-foreground tabular-nums">{t.rows.length}</span>
             </li>
@@ -305,7 +305,7 @@ function TablesPanel({ output, saved, onNewChat, canReset }: { output: MaskedTab
           <ul className="flex flex-col gap-1">
             {savedNames.map((name) => (
               <li key={name} className="flex items-center gap-2 text-[13px]">
-                <Table2 className="size-3.5 shrink-0 text-primary" />
+                <DataTable className="size-3.5 shrink-0 text-primary" />
                 <span className="truncate font-mono text-[12.5px]">{name}</span>
                 <span className="ml-auto shrink-0 text-[11px] text-muted-foreground tabular-nums">{saved[name].length}</span>
                 <Button size="icon" variant="ghost" className="size-6" aria-label={`${l.csv} ${name}`} onClick={() => downloadRows(name, saved[name])}>
@@ -317,7 +317,7 @@ function TablesPanel({ output, saved, onNewChat, canReset }: { output: MaskedTab
         )}
       </section>
       <p className="flex gap-1.5 text-[11px] leading-relaxed text-muted-foreground">
-        <ShieldCheck className="size-3.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+        <Security className="size-3.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
         {l.privacy}
       </p>
     </aside>
@@ -511,7 +511,7 @@ function Lab({ run }: { run: Run & { output: MaskedTable[] } }) {
 
           {waiting && (
             <p className="flex items-center gap-2 text-xs text-muted-foreground">
-              <LoaderCircle className="size-3.5 animate-spin" />
+              <CircleDash className="size-3.5 animate-spin" />
               {l.thinking}
             </p>
           )}

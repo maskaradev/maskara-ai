@@ -1,6 +1,6 @@
 "use client"
 
-import { Bot, Cloud, Database, Laptop } from "lucide-react"
+import { Cloud, DataBase, Laptop } from "@carbon/icons-react"
 import { useEffect, useRef, useState } from "react"
 
 import { StatusBadge, formatDuration } from "@/components/status-badge"
@@ -20,7 +20,7 @@ const x = (col: number) => col * (W + GAP_X)
 const y = (lane: number) => PAD + lane * ROW
 
 const LOCATION_ICON: Record<StageLocation, typeof Laptop> = {
-  "local-db": Database,
+  "local-db": DataBase,
   browser: Laptop,
   "external-api": Cloud,
   "gpu-repaint": Cloud,
@@ -153,7 +153,7 @@ export function PipelineGraph({
                     <span className="text-[11px] text-muted-foreground tabular-nums">{stageDuration(s, now)}</span>
                   </div>
                   <div className="flex items-center gap-1.5 truncate text-[13px] leading-tight font-semibold">
-                    {def.agent && <Bot className="size-3.5 shrink-0 text-violet-600 dark:text-violet-400" />}
+                    {def.agent && <span className="shrink-0 font-mono text-[10px] font-normal text-violet-600 dark:text-violet-400">agent</span>}
                     <span className="truncate">{m.stages[def.id].label}</span>
                   </div>
                   <div className="flex items-center gap-2">

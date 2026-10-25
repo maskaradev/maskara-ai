@@ -1,6 +1,6 @@
 "use client"
 
-import { Hospital, Loader2, Play, Sparkles } from "lucide-react"
+import { CircleDash, Hospital, Play } from "@carbon/icons-react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useRef, useState } from "react"
 import { cn } from "@/lib/utils"
@@ -209,7 +209,7 @@ export function NewJobForm() {
                     data-tour="auto-detect"
                     className="min-w-44 disabled:opacity-90"
                   >
-                    {busy ? <Loader2 className="animate-spin" /> : <Sparkles />}
+                    {busy && <CircleDash className="animate-spin" />}
                     {auto.phase === "thinking" ? t.analyzing : auto.phase === "applying" ? t.applying(auto.done, auto.total) : t.autoDetect}
                   </Button>
                 </div>
@@ -250,7 +250,6 @@ export function NewJobForm() {
                             </div>
                             {reason ? (
                               <div className="flex items-center gap-1 truncate text-[11px] text-foreground/70" title={sample}>
-                                <Sparkles className="size-3 shrink-0" />
                                 <span className="truncate">{reason}</span>
                               </div>
                             ) : (
@@ -259,7 +258,6 @@ export function NewJobForm() {
                           </div>
                           {pending.has(key) ? (
                             <div className="relative flex h-7 items-center gap-1.5 overflow-hidden rounded-md border border-dashed border-foreground/30 bg-muted/50 px-2.5 text-[12px] text-muted-foreground">
-                              <Sparkles className="size-3.5 animate-pulse" />
                               {t.analyzingCell}
                               <span
                                 className="absolute inset-0 -translate-x-full animate-[shimmer_1.4s_ease-in-out_infinite] bg-linear-to-r from-transparent via-foreground/10 to-transparent"

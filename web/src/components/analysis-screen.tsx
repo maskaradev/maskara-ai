@@ -1,6 +1,6 @@
 "use client"
 
-import { Download, Plus, X } from "lucide-react"
+import { Add, Close, Download } from "@carbon/icons-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useMemo, useState } from "react"
@@ -93,7 +93,7 @@ function Row({ label, children, onAdd }: { label: string; children: React.ReactN
       <div className="flex flex-col gap-1.5">
         {children}
         <Button variant="ghost" size="sm" className="h-7 self-start px-2 text-xs text-muted-foreground" onClick={onAdd}>
-          <Plus />
+          <Add />
           {a.add}
         </Button>
       </div>
@@ -105,7 +105,7 @@ function RemoveButton({ onClick }: { onClick: () => void }) {
   const a = useMessages().analysis
   return (
     <Button variant="ghost" size="icon" className="size-7" aria-label={a.remove} onClick={onClick}>
-      <X />
+      <Close />
     </Button>
   )
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { AlertTriangle, Database, DatabaseZap, Eye, FilePlus2, Trash2, Upload } from "lucide-react"
+import { DataBase, DocumentAdd, TrashCan, Upload, View, WarningAlt } from "@carbon/icons-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -61,7 +61,7 @@ function UploadPanel({ onDone }: { onDone: (d: Dataset) => void }) {
   return (
     <section className="flex flex-col gap-4 rounded-xl border p-5">
       <div className="flex gap-3 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-amber-900 dark:text-amber-200">
-        <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+        <WarningAlt className="mt-0.5 size-4 shrink-0" />
         <div>
           <p className="font-medium">{t.uploadWarnTitle}</p>
           <p className="text-[13px]">{t.uploadWarnBody}</p>
@@ -134,7 +134,7 @@ function DatasetViewer({ dataset }: { dataset: Dataset }) {
           onBlur={() => setPeek(false)}
           onContextMenu={(e) => e.preventDefault()}
         >
-          <Eye />
+          <View />
           {t.peek}
         </Button>
       </div>
@@ -211,7 +211,7 @@ export default function DatasetsPage() {
       <main className="flex flex-1 flex-col gap-6 px-6 py-8">
         <div className="flex flex-wrap justify-end gap-2">
           <Button onClick={loadSamples} disabled={loading} data-tour="load-samples">
-            <DatabaseZap />
+            <DataBase />
             {hasSamples ? t.reloadAll : t.loadAll}
           </Button>
           <Button variant={uploading ? "secondary" : "outline"} onClick={() => setUploading(!uploading)} disabled>
@@ -235,10 +235,10 @@ export default function DatasetsPage() {
           <Skeleton className="h-64 w-full" />
         ) : datasets.length === 0 ? (
           <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed p-12 text-center">
-            <Database className="size-6 text-muted-foreground" />
+            <DataBase className="size-6 text-muted-foreground" />
             <p className="text-sm text-muted-foreground">{t.empty}</p>
             <Button onClick={loadSamples} disabled={loading}>
-              <DatabaseZap />
+              <DataBase />
               {t.loadAll}
             </Button>
           </div>
@@ -274,7 +274,7 @@ export default function DatasetsPage() {
                           removeDataset(d.id)
                         }}
                       >
-                        <Trash2 />
+                        <TrashCan />
                       </Button>
                     </div>
                     {d.spanKey && (
@@ -297,7 +297,7 @@ export default function DatasetsPage() {
                     </ul>
                     <Button size="sm" variant="outline" className="self-start" asChild onClick={(e) => e.stopPropagation()}>
                       <Link href={`/jobs/new?dataset=${d.id}`} data-tour={`new-job-${d.id}`}>
-                        <FilePlus2 />
+                        <DocumentAdd />
                         {t.newJob}
                       </Link>
                     </Button>

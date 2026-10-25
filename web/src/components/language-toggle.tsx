@@ -1,6 +1,6 @@
 "use client"
 
-import { Languages } from "lucide-react"
+import { Language } from "@carbon/icons-react"
 import { useEffect } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -23,7 +23,7 @@ export function LanguageToggle() {
       onClick={() => setLocale(locale === "en" ? "ko" : "en")}
       className="gap-1 px-1.5 text-[11px] font-semibold"
     >
-      <Languages />
+      <Language />
       <span className="group-data-[collapsible=icon]:hidden">{m.language.current}</span>
     </Button>
   )

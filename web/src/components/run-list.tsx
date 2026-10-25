@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronDown, Plus } from "lucide-react"
+import { Add, ChevronDown } from "@carbon/icons-react"
 import Link from "next/link"
 import { Collapsible } from "radix-ui"
 import { useMemo } from "react"
@@ -87,7 +87,7 @@ export function RunList({ runs, selectedId }: { runs: Run[]; selectedId?: string
         <h2 className="text-sm font-semibold">{m.jobs.recentRuns}</h2>
         <Button size="sm" variant="outline" asChild>
           <Link href="/jobs/new">
-            <Plus />
+            <Add />
             {m.jobs.newRun}
           </Link>
         </Button>
