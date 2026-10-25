@@ -122,18 +122,148 @@ def svg(data: dict) -> str:
     parts.append("</svg>")
     return "\n".join(parts) + "\n"
 
-
-
 def _pct(v: float | None) -> str:
     return "n/a" if v is None else f"{v:.1%}"
+
+
+# The public chart: the external corpora only (no Entity QA there, so distinctness stands in for
+# utility, and is labelled as the proxy it is). System -> label; missing runs are skipped.
+EXTERNAL = ("abcd", "nemotron-pii", "tab")
+EXTERNAL_SYSTEMS = {
+    "oracle-redact": "perfect detection + redact",
+    "presidio-redact": "Presidio",
+    "gliner2-redact": "GLiNER2-PII",
+    "opf-redact": "OpenAI Privacy Filter",
+    "presidio-fake-consistent": "Presidio + Faker",
+    "maskara-gliner2": "maskara",
+    "maskara-gliner2+echr": "maskara + echr pack",
+}
+EXTERNAL_TITLES = {"abcd": "ABCD: human-written support chats", "nemotron-pii": "Nemotron-PII: synthetic",
+                   "tab": "TAB: real court cases"}
+PANEL_W, PANEL_H, GAP = 300, 340, 56
+XMIN = 0.4  # every system hides at least 49% on every corpus; from 0 the points pile into one corner
+
+
+def external_points(runs: Path, corpus: str) -> dict:
+    out = []
+    for system, label in EXTERNAL_SYSTEMS.items():
+        path = runs / f"{corpus}--{system}.json"
+        if not path.exists() or (system.endswith("+echr") and corpus != "tab"):
+            continue
+        row = json.loads(path.read_text())
+        direct, fid = row["scores"]["privacy"]["direct"], row["scores"]["fidelity"]
+        out.append({"system": system, "label": label, "documents": row["documents"],
+                    "private": round(1 - direct["leak_full"], 4), "direct_leak": direct["leak_full"],
+                    "distinctness": fid["distinctness"], "consistency": fid["consistency"]})
+    if len({p["documents"] for p in out}) > 1:
+        raise SystemExit(f"runs for {corpus} cover different documents; rerun them with the same --limit")
+    return {"corpus": corpus, "realism": corpora.CORPORA[corpus].INFO["realism"],
+            "documents": out[0]["documents"], "points": out}
+
+
+def svg_external(panels: list[dict]) -> str:
+    w = LEFT + len(panels) * PANEL_W + (len(panels) - 1) * GAP + RIGHT
+    h = TOP + 22 + PANEL_H + BOTTOM
+    title = "Hide the identifiers, keep people apart"
+    subtitle = ("Direct identifiers hidden (x) against distinctness (y): different people stay different "
+                "after masking. Up and right is better. echr pack: the opt-in legal-echr pattern pack "
+                "for case numbers.")
+    parts = [
+        (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}" role="img" '
+         f'aria-label="{escape(title)}">'),
+        f"<style>{STYLE}</style>",
+        f'<rect class="bg" width="{w}" height="{h}"/>',
+        _text(LEFT, 28, title, "ink title"),
+        _text(LEFT, 48, subtitle),
+        _text(0, 0, "Distinctness (a proxy for utility)",
+              extra=f' transform="translate(18 {TOP + 22 + PANEL_H / 2}) rotate(-90)" text-anchor="middle"'),
+        _text(w / 2, h - 14, f"Direct identifiers hidden (1 - direct leak rate; axis starts at {XMIN:.0%})",
+              extra=' text-anchor="middle"'),
+    ]
+    top = TOP + 22
+    for i, data in enumerate(panels):
+        x_left = LEFT + i * (PANEL_W + GAP)
+        px = lambda v, x_left=x_left: x_left + (v - XMIN) / (1 - XMIN) * PANEL_W
+        py = lambda v: top + (1 - v) * PANEL_H
+        parts.append(_text(x_left, top - 10, f"{EXTERNAL_TITLES[data['corpus']]} ({data['documents']:,})",
+                           "ink label"))
+        for t in (XMIN, (1 + XMIN) / 2, 1):
+            parts += [f'<line class="grid" x1="{px(t)}" x2="{px(t)}" y1="{top}" y2="{top + PANEL_H}"/>',
+                      _text(px(t), top + PANEL_H + 18, f"{t:.0%}", extra=' text-anchor="middle"')]
+        for t in (0, 0.5, 1):
+            parts.append(f'<line class="grid" x1="{x_left}" x2="{x_left + PANEL_W}" y1="{py(t)}" y2="{py(t)}"/>')
+            if i == 0:
+                parts.append(_text(x_left - 8, py(t) + 4, f"{t:.0%}", extra=' text-anchor="end"'))
+        parts.append(f'<line class="axis" x1="{x_left}" x2="{x_left + PANEL_W}" y1="{top + PANEL_H}" '
+                     f'y2="{top + PANEL_H}"/>')
+        pts = [(px(p["private"]), py(p["distinctness"] or 0), p) for p in data["points"]]
+        # Points that coincide share one label, ours first.
+        groups: list[list] = []
+        for x, y, p in sorted(pts, key=lambda t: not t[2]["system"].startswith("maskara")):
+            near = next((g for g in groups if abs(g[0][0] - x) < 8 and abs(g[0][1] - y) < 8), None)
+            near.append((x, y, p)) if near else groups.append([(x, y, p)])
+        boxes = [(x - 7, y - 7, x + 7, y + 7) for x, y, _ in pts]
+        bounds = (x_left - (GAP - 8 if i else LEFT - 30), top - 2, x_left + PANEL_W + GAP / 2 - 4, top + PANEL_H - 2)
+        for g in sorted(groups, key=lambda g: g[0][1]):
+            x, y = g[0][0], g[0][1]
+            label = " · ".join(p["label"] for _, _, p in g)
+            parts.append(_place_label(x, y, label, boxes, bounds))
+        for x, y, p in sorted(pts, key=lambda t: t[2]["system"].startswith("maskara")):  # ours on top
+            tip = (f"{p['label']}: {p['direct_leak']:.1%} of direct identifiers leaked, "
+                   f"distinctness {_pct(p['distinctness'])}, consistency {_pct(p['consistency'])}")
+            kind = "ours" if p["system"].startswith("maskara") else "base"
+            parts.append(f'<circle class="{kind} ring" cx="{x}" cy="{y}" r="5" stroke-width="2">'
+                         f"<title>{escape(tip)}</title></circle>")
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n"
+
+
+def _place_label(x: float, y: float, label: str, boxes: list, bounds: tuple) -> str:
+    """The label beside or under its point, else nudged up or down with a leader line, clear of `boxes`."""
+    w = 6.6 * len(label)
+
+    def fits(b):
+        return (bounds[0] <= b[0] and b[2] <= bounds[2] and bounds[1] <= b[1] and b[3] <= bounds[3]
+                and not any(b[0] < o[2] and o[0] < b[2] and b[1] < o[3] and o[1] < b[3] for o in boxes))
+
+    for b in ((x + 10, y - 6, x + 10 + w, y + 6), (x - 10 - w, y - 6, x - 10, y + 6),
+              (x + 2 - w, y + 9, x + 2, y + 21), (x - 2, y + 9, x - 2 + w, y + 21)):  # beside, then under
+        if fits(b):
+            boxes.append(b)
+            return _text(b[0], b[3] - 2, label, "ink label")
+    for d in (-14, 14, -28, 28, -42, 42, -56, 56):
+        for b in ((x + 10, y - 6 + d, x + 10 + w, y + 6 + d), (x - 10 - w, y - 6 + d, x - 10, y + 6 + d)):
+            if fits(b):
+                boxes.append(b)
+                text = _text(b[0], b[3] - 2, label, "ink label")
+                end = b[0] - 2 if b[0] > x else b[2] + 2
+                return f'<line class="lead" x1="{x}" y1="{y}" x2="{end}" y2="{y + d}"/>{text}'
+    return _text(x + 10, y + 4, label, "ink label")
+
+
+def external_main(runs: Path, out: Path) -> int:
+    panels = [external_points(runs, c) for c in EXTERNAL]
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(svg_external(panels))
+    out.with_suffix(".json").write_text(json.dumps(panels, indent=2))
+    for data in panels:
+        for p in data["points"]:
+            print(f'{data["corpus"]:<13} {p["label"]:<28} leak {p["direct_leak"]:6.1%}   '
+                  f'distinct {_pct(p["distinctness"]):>6}')
+    print(f"wrote {out} and {out.with_suffix('.json')}")
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m maskara.bench.hero")
     parser.add_argument("--corpus", default="linked")
     parser.add_argument("--runs", default="runs")
+    parser.add_argument("--external", metavar="SVG", help="draw the public chart over TAB, ABCD and Nemotron-PII "
+                        "into this file instead")
     args = parser.parse_args(argv)
     runs = Path(args.runs)
+    if args.external:
+        return external_main(runs, Path(args.external))
     data = points(runs, args.corpus)
     stem = runs / f"hero-{args.corpus}"
     stem.with_suffix(".json").write_text(json.dumps(data, indent=2))
