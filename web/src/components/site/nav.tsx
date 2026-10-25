@@ -6,9 +6,17 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react"
 
 import { LogoMark } from "@/components/logo"
 import { GithubMark } from "@/components/site/github-mark"
-import { DEMO_URL, DOCS_URL, REPO_URL, ROADMAP_URL } from "@/components/site/links"
+import { DOCS_URL, REPO_URL } from "@/components/site/links"
 
 type Theme = "light" | "dark"
+
+/** The landing page's sections, in page order. */
+const SECTIONS = [
+  ["#demo", "Demo"],
+  ["#why", "Why"],
+  ["#local", "Local"],
+  ["#how", "How it works"],
+] as const
 
 // The layout's inline script sets data-theme before paint; this keeps React in step with it.
 const THEME_EVENT = "maskara-theme"
@@ -107,11 +115,12 @@ export function Nav() {
           <b>maskara</b>
         </Link>
         <div className="nav-links">
-          <a href="#local">Local</a>
-          <a href="#how">How it works</a>
-          <a href={DEMO_URL}>Demo</a>
+          {SECTIONS.map(([href, label]) => (
+            <a key={href} href={href}>
+              {label}
+            </a>
+          ))}
           <a href={DOCS_URL}>Docs</a>
-          <a href={ROADMAP_URL}>Roadmap</a>
         </div>
         <div className="nav-end">
           <a className="gh" href={REPO_URL} aria-label="maskara on GitHub">
@@ -139,15 +148,15 @@ export function Nav() {
         </div>
       </nav>
       <div className={open ? "sheet open" : "sheet"} id="nav-sheet" ref={sheet}>
-        <a href="#local" onClick={() => setOpen(false)}>
-          Local
+        {SECTIONS.map(([href, label]) => (
+          <a key={href} href={href} onClick={() => setOpen(false)}>
+            {label}
+          </a>
+        ))}
+        <a href="#waitlist" onClick={() => setOpen(false)}>
+          Waitlist
         </a>
-        <a href="#how" onClick={() => setOpen(false)}>
-          How it works
-        </a>
-        <a href={DEMO_URL}>Demo</a>
         <a href={DOCS_URL}>Docs</a>
-        <a href={ROADMAP_URL}>Roadmap</a>
         <a href={REPO_URL}>GitHub</a>
       </div>
     </header>

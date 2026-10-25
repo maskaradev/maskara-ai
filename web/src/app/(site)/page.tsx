@@ -1,30 +1,43 @@
 import { ArrowRight } from "@carbon/icons-react"
-import { Database, Eye, FileText, Gpu, Key } from "pixelarticons/react"
+import { Cpu, FileText, Grid3x3, Key, Search } from "pixelarticons/react"
 
 import { LogoMark } from "@/components/logo"
 import { Brush } from "@/components/site/brush"
 import { CopyCommand } from "@/components/site/copy-command"
 import { GithubMark } from "@/components/site/github-mark"
 import { DEMO_URL, DOCS_URL, INSTALL_COMMAND, QUICK_START_URL, REPO_URL, ROADMAP_URL } from "@/components/site/links"
-import { MaskMock } from "@/components/site/mask-mock"
 import { Nav } from "@/components/site/nav"
+import { EVIDENCE, EXCERPT, REPORT, SUBJECT, type Redactable } from "@/components/site/sample-data"
+import { SampleMock } from "@/components/site/sample-mock"
 import { Tape } from "@/components/site/tape"
 import { WaitlistForm } from "@/components/site/waitlist-form"
 
-const SAMPLE_DATASETS = 4
-// Column roles and treatments of the web prototype this page was written for (removed; see web/src/lib/roles.ts
-// in git history).
-const COLUMN_ROLES = 18
-const COLUMN_TREATMENTS = 6
+const pct = (share: number) => `${Math.round(share * 1000) / 10}%`
 
-const POLICY_LINES = [
-  "full_name      → persona",
-  "mrn            → pseudonymize",
-  "date_of_birth  → date shift",
-  "icd10_code     → keep",
-  "note_text      → find & replace PII",
-  "phone          → synthesize",
+/** Mirrors `maskara mask --help` and the summary `maskara demo` prints for the sample store. */
+const MASK_LINES = [
+  "--preset balanced",
+  "→ rules + known values",
+  `→ replaced ${REPORT.replaced} values`,
+  "--detector gliner2",
+  "--pattern legal-echr",
 ]
+
+/** The same lines three ways: as written, as a typical redaction leaves them, and as maskara leaves them. */
+const WHY_PANES = [
+  { kind: "original", label: "original" },
+  { kind: "redacted", label: "typical redaction" },
+  { kind: "masked", label: "maskara" },
+] as const
+
+function Excerpt({ kind }: { kind: (typeof WHY_PANES)[number]["kind"] }) {
+  const span = (s: Exclude<Redactable, string>) => (kind === "original" ? s[1] : kind === "redacted" ? s[3] : s[2])
+  return EXCERPT.map((line, i) => (
+    <span className="why-line" key={i}>
+      {line.map((s, j) => (typeof s === "string" ? s : <mark key={j}>{span(s)}</mark>))}
+    </span>
+  ))
+}
 
 export default function Landing() {
   return (
@@ -36,7 +49,7 @@ export default function Landing() {
           <div className="wrap">
             <a className="pill" href="#local">
               <span className="pill-dot" />
-              Local-first · open source
+              Open source · runs on your machine
               <ArrowRight aria-hidden="true" />
             </a>
             <h1>
@@ -45,8 +58,8 @@ export default function Landing() {
               <span>Uncompromised data.</span>
             </h1>
             <p className="lede">
-              maskara replaces every person with a consistent synthetic persona, across tables, documents and images, so
-              the data stays fit for AI training.
+              maskara swaps every person in your tables and text for a consistent synthetic persona instead of
+              [REDACTED], then shows you what leaked and what still works.
             </p>
             <div className="go">
               <a className="btn btn-primary" href={DEMO_URL}>
@@ -63,20 +76,20 @@ export default function Landing() {
         <section className="stats" aria-label="maskara in numbers">
           <div className="wrap">
             <div className="stat">
+              <b>150k</b>
+              <span>personas to draw from, bundled</span>
+            </div>
+            <div className="stat">
+              <b>0</b>
+              <span>runtime dependencies</span>
+            </div>
+            <div className="stat">
               <b>3</b>
-              <span>input lanes in one run</span>
+              <span>presets, strict to max utility</span>
             </div>
             <div className="stat">
-              <b>{COLUMN_ROLES}</b>
-              <span>column roles detected</span>
-            </div>
-            <div className="stat">
-              <b>{COLUMN_TREATMENTS}</b>
-              <span>column treatments</span>
-            </div>
-            <div className="stat">
-              <b>{SAMPLE_DATASETS}</b>
-              <span>sample datasets built in</span>
+              <b>4</b>
+              <span>benchmark corpora</span>
             </div>
           </div>
         </section>
@@ -85,10 +98,11 @@ export default function Landing() {
           <div className="wrap">
             <div className="head">
               <p className="kicker">Before and after</p>
-              <h2>One patient, every format.</h2>
+              <h2>One customer, every table and text.</h2>
               <p>
-                Her notes, a scanned form, a photo and a voicemail, masked into one persona. Each tab plays a lane;
-                hover to pause, and every name, number and face here is synthetic on both sides.
+                Their row, their orders, a support transcript and an agent&apos;s note, masked into one persona. Each
+                tab is a different input; hover to pause. It&apos;s the sample store bundled with maskara, so every
+                value here is synthetic on both sides.
               </p>
             </div>
             <div className="window">
@@ -99,9 +113,40 @@ export default function Landing() {
                 <span>maskara · synthetic sample</span>
               </div>
               <div className="plate">
-                <MaskMock />
+                <SampleMock />
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="section why-section" id="why">
+          <div className="wrap">
+            <div className="head">
+              <p className="kicker">Why not redact</p>
+              <h2>Redaction keeps data safe and makes it useless.</h2>
+            </div>
+            <div className="why">
+              {WHY_PANES.map(({ kind, label }) => (
+                <figure className={`why-pane ${kind}`} key={kind}>
+                  <figcaption>
+                    <b>{label}</b>
+                    <span>tickets.csv</span>
+                  </figcaption>
+                  <p>
+                    <Excerpt kind={kind} />
+                  </p>
+                </figure>
+              ))}
+            </div>
+            <p className="why-note">
+              Once every name is [PERSON], nobody can tell who did what. A model can&apos;t learn the pattern, and an
+              analyst can&apos;t join the tables or count the days between two tickets. A persona keeps those links,
+              so the data still answers the same questions. maskara bench measures both sides, leaks and usefulness,
+              with one scorer.{" "}
+              <a href={`${REPO_URL}#benchmarks`}>
+                How we measure <ArrowRight aria-hidden="true" />
+              </a>
+            </p>
           </div>
         </section>
 
@@ -111,9 +156,9 @@ export default function Landing() {
               <p className="kicker">Local by design</p>
               <h2>The data stays where it lives.</h2>
               <p>
-                Regulated institutions like hospitals and banks can&apos;t send their records to an outside cloud to be
-                cleaned. maskara goes to the data instead: it reads your database without writing to it, masks inside
-                your network, and only the masked copy ever leaves.
+                Sensitive records can&apos;t go to an outside cloud to be cleaned. maskara is a Python package that
+                runs where the data already is, on a laptop or inside your network, and makes no network calls. Only
+                the masked copy leaves.
               </p>
             </div>
 
@@ -122,9 +167,9 @@ export default function Landing() {
                 <span className="zone-label">your network</span>
                 <div className="flow">
                   <div className="node">
-                    <Database className="px" aria-hidden="true" />
-                    <b>Source DB</b>
-                    <small>read-only</small>
+                    <Grid3x3 className="px" aria-hidden="true" />
+                    <b>Your data</b>
+                    <small>CSV, JSONL, DataFrames</small>
                   </div>
                   <span className="arrow" aria-hidden="true" />
                   <div className="node core">
@@ -136,21 +181,21 @@ export default function Landing() {
                   <div className="node">
                     <FileText className="px" aria-hidden="true" />
                     <b>Masked copy</b>
-                    <small>ready to export</small>
+                    <small>plus a report</small>
                   </div>
                 </div>
                 <div className="deps">
                   <span>
-                    <Gpu className="px" aria-hidden="true" />
-                    Local LLM on your GPUs
+                    <Search className="px" aria-hidden="true" />
+                    Rules and your tables&apos; own values
                   </span>
                   <span>
-                    <Eye className="px" aria-hidden="true" />
-                    Vision models on your GPUs
+                    <Cpu className="px" aria-hidden="true" />
+                    Optional GLiNER2 model, on CPU
                   </span>
                   <span>
                     <Key className="px" aria-hidden="true" />
-                    Persona map, encrypted with your key
+                    Vault of keyed hashes, no originals
                   </span>
                 </div>
               </div>
@@ -164,8 +209,8 @@ export default function Landing() {
             </div>
 
             <p className="footnote">
-              The <a href={DEMO_URL}>public demo</a> shows results precomputed on synthetic sample data, so nothing is
-              uploaded; on your own data, maskara runs on your machine. A supported on-prem build is on the way.{" "}
+              The <a href={DEMO_URL}>public demo</a> is precomputed on synthetic sample data, so nothing is uploaded. A
+              supported on-prem build for teams is on the way.{" "}
               <a href={ROADMAP_URL}>
                 See the roadmap <ArrowRight aria-hidden="true" />
               </a>
@@ -184,18 +229,22 @@ export default function Landing() {
               <article className="card wide">
                 <h3>Same person, same persona. Everywhere.</h3>
                 <p>
-                  Each person key gets exactly one persona, and that person becomes the same persona in the patient
-                  table, the notes, the PDFs and the photos. A model trained on the output still sees one patient with
-                  one history.
+                  Each person gets exactly one persona, in every table and every text that mentions them. With a vault,
+                  they get the same one on the next run too.
                 </p>
                 <div className="ev" aria-hidden="true">
                   <div className="ev-head">
-                    MRN-100627 <ArrowRight /> <b>Renee Coleman</b>
+                    {SUBJECT.id} <ArrowRight /> <b>{SUBJECT.persona}</b>
                   </div>
-                  {["patients.csv", "clinical_notes.csv", "lab_requisition.pdf", "clinical_photo.png"].map((file) => (
+                  {[
+                    ["customers.csv", SUBJECT.persona],
+                    ["orders.csv", SUBJECT.maskedId],
+                    ["tickets.csv", SUBJECT.persona],
+                    ["notes.jsonl", SUBJECT.persona],
+                  ].map(([file, value]) => (
                     <div className="ev-row" key={file}>
                       <span>{file}</span>
-                      <b>Renee Coleman</b>
+                      <b>{value}</b>
                     </div>
                   ))}
                 </div>
@@ -203,67 +252,87 @@ export default function Landing() {
 
               <article className="card">
                 <h3>Dates move. Intervals don&apos;t.</h3>
-                <p>Each patient&apos;s dates shift by one offset, so gaps, order and ages survive.</p>
+                <p>Each person&apos;s dates shift by one offset, so gaps and order survive.</p>
                 <div className="ev" aria-hidden="true">
                   <div className="ev-row">
-                    <span>visit 1</span>
+                    <span>order</span>
                     <b>
-                      <s>2026-01-08</s> 2026-02-17
+                      <s>{EVIDENCE.placed[0]}</s> {EVIDENCE.placed[1]}
                     </b>
                   </div>
                   <div className="ev-row">
-                    <span>visit 2</span>
+                    <span>ticket</span>
                     <b>
-                      <s>2026-02-19</s> 2026-03-31
+                      <s>{EVIDENCE.opened[0]}</s> {EVIDENCE.opened[1]}
                     </b>
                   </div>
                   <div className="ev-row total">
                     <span>gap</span>
-                    <b>42 days → 42 days</b>
+                    <b>
+                      {EVIDENCE.gap[0]} days → {EVIDENCE.gap[1]} days
+                    </b>
                   </div>
                 </div>
               </article>
 
               <article className="card">
-                <h3>Tables, documents and photos.</h3>
-                <p>Columns by policy, text and PDF pages by PII detection, faces repainted as the persona.</p>
-                <div className="ev chips" aria-hidden="true">
-                  <span>Columns</span>
-                  <span>Free text</span>
-                  <span>PDF (OCR)</span>
-                  <span>Faces</span>
-                  <span>Text in images</span>
-                  <span className="soon">Audio, next</span>
+                <h3>Joins keep working.</h3>
+                <p>An id gets the same replacement in every table and text, and its prefix stays.</p>
+                <div className="ev" aria-hidden="true">
+                  <div className="ev-row">
+                    <span>customer</span>
+                    <b>
+                      <s>{EVIDENCE.customer[0]}</s> {EVIDENCE.customer[1]}
+                    </b>
+                  </div>
+                  <div className="ev-row">
+                    <span>order</span>
+                    <b>
+                      <s>{EVIDENCE.order[0]}</s> {EVIDENCE.order[1]}
+                    </b>
+                  </div>
+                  <div className="ev-row total">
+                    <span>joins broken</span>
+                    <b>
+                      {REPORT.brokenJoins} of {REPORT.joinsChecked}
+                    </b>
+                  </div>
                 </div>
               </article>
 
               <article className="card">
-                <h3>AI proposes. A person signs off.</h3>
-                <p>Each column gets a suggested treatment. Nothing runs until someone confirms the policy.</p>
+                <h3>Rules, your tables, and a model.</h3>
+                <p>
+                  Rules catch the formats, values your tables already know are found again in free text, and GLiNER2 is
+                  one extra away. Domain ids come as opt-in packs.
+                </p>
                 <div className="ev">
-                  <Tape prompt="suggest" lines={POLICY_LINES} />
+                  <Tape prompt="maskara mask" lines={MASK_LINES} />
                 </div>
               </article>
 
               <article className="card">
                 <h3>Proof, not promises.</h3>
-                <p>The report searches the output for anything left behind and checks what had to survive.</p>
+                <p>
+                  Every run comes with a report: what it searched for, what it found, and what it couldn&apos;t
+                  measure.
+                </p>
                 <div className="ev" aria-hidden="true">
                   <div className="ev-row">
                     <span>originals left in output</span>
-                    <b className="big">0</b>
+                    <b className="big">{REPORT.originalsFound}</b>
                   </div>
                   <div className="ev-row">
-                    <span>visit gaps</span>
-                    <b>preserved</b>
+                    <span>joins broken</span>
+                    <b>{REPORT.brokenJoins}</b>
                   </div>
                   <div className="ev-row">
-                    <span>table joins</span>
-                    <b>preserved</b>
+                    <span>date gaps exact</span>
+                    <b>{pct(REPORT.dateGapsExact)}</b>
                   </div>
                   <div className="ev-row">
-                    <span>same query</span>
-                    <b>same answer</b>
+                    <span>linkage attack re-identified</span>
+                    <b>{pct(REPORT.reidentified / REPORT.linkageAttempted)}</b>
                   </div>
                 </div>
               </article>
@@ -275,7 +344,7 @@ export default function Landing() {
           <div className="wrap">
             <div className="head">
               <p className="kicker">Teams and on-prem</p>
-              <h2>Running it inside a hospital or bank?</h2>
+              <h2>Running it inside a bank or a hospital?</h2>
               <p>
                 We&apos;re preparing a supported on-prem build for teams. Join the waitlist and we&apos;ll reach out
                 when it&apos;s ready.
@@ -292,7 +361,10 @@ export default function Landing() {
               <LogoMark />
             </div>
             <h2>Give your data a new face.</h2>
-            <p>Install it and run it on your own machine; the quick start walks you through the first run.</p>
+            <p>
+              Install it and mask the sample store in a couple of seconds; the quick start walks you through your own
+              data.
+            </p>
             <div className="go">
               <CopyCommand command={INSTALL_COMMAND} />
               <a className="btn btn-secondary" href={QUICK_START_URL}>

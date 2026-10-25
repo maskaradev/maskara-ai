@@ -8,7 +8,7 @@ const mono = Geist_Mono({ variable: "--font-mono", subsets: ["latin"] })
 
 const TITLE = "maskara: precise masking, uncompromised data"
 const DESCRIPTION =
-  "maskara swaps the people in sensitive data for consistent synthetic personas across tables, notes, PDFs and photos, so the data stays usable for AI training. Built to run where the data lives."
+  "maskara swaps the people in tables and free text for consistent synthetic personas instead of redacting them, and reports what leaked and what still works. Open source, runs on your machine."
 const IMAGE = {
   url: "/landing/og.png",
   width: 1200,

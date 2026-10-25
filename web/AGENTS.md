@@ -14,7 +14,7 @@ The website for maskara, one Next.js deployment (Vercel Root Directory `web`). T
 
 - `src/app/(site)/` is the landing page at maskara.dev, built from `src/components/site/`. It is the only page.
 - `src/app/api/waitlist/` takes the landing page's team/on-prem waitlist signups and forwards each to `WAITLIST_WEBHOOK_URL`. It stores nothing, and it is the only thing the site collects.
-- `public/demo/` is the showroom served at app.maskara.dev: static files written by `maskara ui --export web/public/demo` from the bundled synthetic sample data. Regenerate it with that command; don't edit it by hand.
+- `public/demo/` is the showroom served at app.maskara.dev: static files written by `maskara ui --export web/public/demo` from the bundled synthetic sample data. Regenerate it with that command; don't edit it by hand. The landing page's sample values (`src/components/site/sample-data.ts`) come from that bundle too: rerun `node scripts/landing-sample.mjs` after re-exporting.
 - `src/proxy.ts` splits the hosts: the apex, www and any other host serve `/` and `/api/waitlist` and redirect the rest to `/`; `app.<domain>` (`app.localhost` in `pnpm dev`) serves the showroom at `/` and redirects the rest to the landing page.
 - Settings are in `.env.example`.
 

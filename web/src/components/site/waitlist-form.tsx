@@ -42,7 +42,7 @@ export function WaitlistForm() {
     <form className="waitlist" onSubmit={submit}>
       <label>
         <span>Work email</span>
-        <input name="email" type="email" required maxLength={WAITLIST_LIMITS.email} autoComplete="email" placeholder="you@hospital.org" />
+        <input name="email" type="email" required maxLength={WAITLIST_LIMITS.email} autoComplete="email" placeholder="you@company.com" />
       </label>
       <label>
         <span>
@@ -54,7 +54,7 @@ export function WaitlistForm() {
         <span>
           What would you use it for? <small>optional</small>
         </span>
-        <textarea name="useCase" rows={3} maxLength={WAITLIST_LIMITS.useCase} placeholder="Masking clinical notes for model training, …" />
+        <textarea name="useCase" rows={3} maxLength={WAITLIST_LIMITS.useCase} placeholder="Masking support tickets for model training, …" />
       </label>
       <label className="hp" aria-hidden="true">
         Website
