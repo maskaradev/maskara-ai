@@ -141,7 +141,8 @@ def _qa(args: argparse.Namespace, out_dir: Path, rows: list[dict]) -> int:
 def hero_command(args: argparse.Namespace) -> int:
     from .bench import hero
 
-    return hero.main(["--corpus", args.corpus, "--runs", args.runs])
+    extra = ["--external", args.external] if args.external else []
+    return hero.main(["--corpus", args.corpus, "--runs", args.runs, *extra])
 
 
 def report_command(args: argparse.Namespace) -> int:
@@ -347,6 +348,8 @@ def main(argv: list[str] | None = None) -> int:
     hp = sub.add_parser("hero", help="draw the privacy/utility hero chart from saved runs")
     hp.add_argument("--corpus", default="linked", choices=sorted(CORPORA))
     hp.add_argument("--runs", default="runs", help="directory `maskara bench` wrote to")
+    hp.add_argument("--external", metavar="SVG", help="draw the public chart over TAB, ABCD and Nemotron-PII "
+                    "into this file instead")
     args = parser.parse_args(argv)
     commands = {"mask": mask_command, "demo": demo_command, "bench": bench, "report": report_command,
                 "ui": ui_command, "hero": hero_command}
