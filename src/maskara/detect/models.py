@@ -22,7 +22,7 @@ from ..bench.types import Category
 from . import rules
 from .base import Detection
 
-# The model `auto` picks when it is installed (see runs/detectors-table.md for the comparison).
+# The model `auto` picks when it is installed (see docs/research/bench-results.md for the comparison).
 DEFAULT = "gliner2"
 PACKAGES = {"gliner2": "gliner2", "opf": "opf"}
 
