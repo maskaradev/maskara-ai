@@ -1,0 +1,61 @@
+customer_id,first_name,last_name,gender,birth_date,email,phone,street,city,state,zip,customer_since
+CUS-711097,Jeffrey,Stansbury,Male,1942-07-19,jstansbury@proton.me,(629) 271-3943,2472 Valley Avenue # 7A,Cherokee Village,AR,72529,2020
+CUS-711316,Jennifer,Ameir,Female,2005-05-28,jennifer.ameir57@outlook.com,(497) 629-2363,969 Hill Dr,Sylmar,CA,91342,2023
+CUS-769949,James,Jared,Male,1996-03-14,james.jared@yahoo.com,(778) 261-3374,5055 Highland Ave,Streamwood,IL,60107,2024
+CUS-575198,Richard,Kline,Male,1971-04-03,rkline@icloud.com,(284) 788-4919,7006 Lincoln Way,Westland,MI,48185,2019
+CUS-223800,Laura,Dubois,Female,1956-07-09,ldubois@outlook.com,(701) 631-0642,7354 Franklin Street,Seattle,WA,98125,2024
+CUS-723241,Patresia,Muhammad,Female,1985-03-21,patresia.muhammad977@hotmail.com,(686) 913-1064,9389 Lincoln Ct,White Plains,MD,20695,2023
+CUS-801133,Anibal,Cruz,Male,1965-01-06,cruz.anibal@yahoo.com,(706) 260-3575,5073 Oak Ridge Ln,Denver,CO,80216,2014
+CUS-391335,Veenaben,Saleh,Female,1934-08-27,v.saleh7@proton.me,(568) 899-6233,6520 Valley Way Unit 26B,Oklahoma City,OK,73110,2014
+CUS-112649,Johnny,Floyd,Male,1981-11-19,johnnyfloyd81@outlook.com,(630) 747-6049,2888 Sunset Dr,Fairfield,CA,94533,2021
+CUS-917857,Adrian,Orozco,Male,1979-07-21,orozco.adrian@proton.me,(307) 693-6560,2057 Pine Way,Sauk City,WI,53583,2015
+CUS-100244,Victoria,Nora,Female,1973-11-27,victoria_nora@aol.com,(829) 226-1152,3421 Oak Ridge Rd # 4,Pittsburgh,PA,15228,2021
+CUS-597183,Idalia,Martinez,Female,1988-06-22,i.martinez2@comcast.net,(692) 695-5109,2434 Willow Ct,Denver,CO,80236,2014
+CUS-269280,Angela,Whigham,Female,1975-11-09,awhigham550@aol.com,(351) 906-8899,5614 Willow Way,Mcalester,OK,74501,2024
+CUS-643578,Tyler,Lewis,Male,1952-04-05,tylerlewis52@aol.com,(852) 428-3197,4884 Washington Road,Johnstown,PA,15905,2018
+CUS-129294,Judy,Morrison,Female,1995-09-06,judymorrison95@aol.com,(658) 940-5726,3276 Stone Gate Ct,Spencer,IN,47460,2014
+CUS-739906,Miguel,Medina,Male,1990-09-10,miguelm1@yahoo.com,(877) 322-6365,1674 River Way Apt 31B,Ridgewood,NY,11385,2019
+CUS-856888,Andrew,Trosclair,Male,1977-10-01,trosclair.andrew@yahoo.com,(943) 362-2785,7110 Chestnut Ave,Wilmington,DE,19808,2012
+CUS-741281,Ji,Y,Male,1987-10-15,jiy77169@outlook.com,(222) 214-1683,9680 Briar Creek Drive,Oakland,CA,94607,2023
+CUS-352223,Ron,Woods,Male,1947-10-21,ronwoods47@outlook.com,(263) 957-5796,7108 Mill Dr Apt 19B,Syracuse,NY,13205,2022
+CUS-119613,Kathy,Wilson,Female,1993-03-08,kathy_wilson@outlook.com,(377) 344-7757,8467 Prospect Pl Apt 34B,Streetsboro,OH,44241,2020
+CUS-687513,Carmen,Sanes,Female,1976-11-30,csanes@yahoo.com,(720) 663-9203,5341 Fox Hollow Drive,Los Angeles,CA,90057,2024
+CUS-735581,Melanie,Alexander,Female,1993-11-29,melaniea66@comcast.net,(720) 453-8572,7263 Lincoln Street,Durham,NC,27703,2020
+CUS-803757,Lucelia,Felicianorivera,Female,1971-09-19,lucelia.felicianorivera@hotmail.com,(326) 995-2530,7333 Park Blvd Unit 21,Pacifica,CA,94044,2014
+CUS-198697,Jerissa,Darnell,Female,1938-08-24,jdarnell862@icloud.com,(366) 923-7070,2249 Briar Creek Dr,Nashville,TN,37206,2018
+CUS-857230,Marc,Harris,Male,2007-07-11,marcharris07@comcast.net,(921) 218-6297,6903 Mill Ct,Rock Hill,SC,29732,2024
+CUS-209869,Samantha,Valdivia,Female,2003-04-13,samanthavaldivia03@outlook.com,(477) 973-2122,1054 Hill Drive,West Wareham,MA,2576,2023
+CUS-392618,Leneta,Nicholson,Female,1996-06-07,nicholson.leneta285@gmail.com,(850) 290-4268,2448 Stone Gate Road,Lees Summit,MO,64064,2023
+CUS-455626,Leonard,Pritt,Male,1957-09-09,leonardpritt57@gmail.com,(740) 926-3906,1092 Willow Ave,Warren,OH,44485,2014
+CUS-759209,Xavier,Rocha,Male,1981-08-19,x.rocha9@comcast.net,(713) 888-2914,826 Highland Dr,Napa,CA,94559,2017
+CUS-639214,Steven,Galan,Male,1977-12-22,galan.steven@proton.me,(873) 706-8944,4104 Cedar St # 36,Wewahitchka,FL,32465,2020
+CUS-464434,Christopher,Patra,Male,1990-07-27,christopher.patra@hotmail.com,(642) 367-0907,3526 River Ct # 9A,Nutley,NJ,7110,2022
+CUS-407294,Sergio,Agosto,Male,1938-06-19,sagosto@comcast.net,(204) 469-5966,8290 Franklin Street,Pahrump,NV,89048,2020
+CUS-291845,Theresa,Burnett,Female,1969-07-19,burnett.theresa@hotmail.com,(715) 871-3292,4006 Cedar Ln,Chandler,TX,75758,2020
+CUS-123586,Esperanza,Castrosanchez,Female,1990-12-29,esperanzac39@outlook.com,(874) 933-9774,1489 Willow Ave # 3A,New Braunfels,TX,78132,2024
+CUS-774464,Terence,Austin,Male,1982-07-18,t.austin1923@proton.me,(952) 917-8282,8097 Sunset Ln,Baton Rouge,LA,70805,2020
+CUS-845732,Jung,Chen,Male,1994-04-17,jung.chen@outlook.com,(853) 569-1718,9314 Maple Avenue,Baltimore,MD,21212,2019
+CUS-356439,Norman,Short,Male,1966-03-21,norman.short@yahoo.com,(967) 715-8768,832 Maple Avenue,Rathdrum,ID,83858,2022
+CUS-987235,Jason,McAllister,Male,1968-04-06,jasonm34@icloud.com,(958) 865-7542,1083 Fox Hollow Ln,Decatur,AL,35601,2018
+CUS-728836,Vera,Reese,Female,1995-11-22,verareese95@hotmail.com,(837) 781-2186,7849 Franklin Drive # 13,Nanuet,NY,10954,2020
+CUS-843305,Leon,Howard,Male,2005-11-30,howard.leon@yahoo.com,(763) 404-5106,7960 Main Avenue Apt 32A,North Port,FL,34287,2024
+CUS-571283,Grace,Jefferis,Female,1964-12-23,gjefferis962@icloud.com,(277) 795-1479,4745 Briar Creek Ave,Conyers,GA,30094,2023
+CUS-762352,Lanhuong,Oneil,Female,1973-04-07,lanhuong.oneil@icloud.com,(710) 697-6456,4290 Meadow Rd,Kent,WA,98031,2014
+CUS-247542,Vanessa,Mathews,Female,1955-12-30,mathews.vanessa@aol.com,(202) 532-5542,8056 Oak Ridge Blvd,Rockville,MD,20852,2013
+CUS-511984,Karen,Tso,Female,1993-09-22,karentso93783@hotmail.com,(250) 487-1666,193 Franklin Ln,San Francisco,CA,94114,2022
+CUS-430932,Vickie,Hernandez,Female,1955-08-07,v.hernandez6915@gmail.com,(980) 846-6554,2440 Spring Ln,Frisco,TX,75034,2020
+CUS-744784,Tishana,Johnson,Female,1972-09-18,tishanaj97507@gmail.com,(764) 330-2797,1321 Pine Road,Antioch,TN,37013,2018
+CUS-784529,Angel,Hernandezsantos,Female,1995-07-09,angelh34@comcast.net,(771) 884-6461,4617 Jefferson Ln,Lawrence,MA,1841,2015
+CUS-951261,Gianna,Matos,Female,1973-02-05,gmatos@aol.com,(978) 660-7002,2649 Elm Dr,Knoxville,TN,37931,2020
+CUS-195519,David,Lincoln,Male,1980-09-24,davidlincoln80@icloud.com,(221) 967-6763,4000 Washington Rd,Lakeland,FL,33813,2018
+CUS-165074,Nicholas,Wunder,Male,1964-04-07,nicholas_wunder138@icloud.com,(295) 477-4070,3441 Forest Ln,Clearwater,FL,33764,2018
+CUS-122869,Sam,Wright,Male,1965-02-04,wright.sam@comcast.net,(802) 701-0002,7305 Union Ln,Opelika,AL,36801,2018
+CUS-334671,John,Cade,Male,1987-04-05,john_cade121@comcast.net,(288) 764-0647,7671 Oak Ridge Dr,Santa Monica,CA,90404,2024
+CUS-234182,Steven,Lee,Male,1954-10-28,steven_lee@yahoo.com,(302) 272-4920,3811 Cedar Avenue,Orleans,MA,2653,2021
+CUS-101207,Victoria,White,Female,1970-09-24,victoriawhite70295@aol.com,(861) 448-7787,6359 Willow Dr,Hampton,FL,32044,2015
+CUS-422329,Ila,Christensen,Female,1953-03-26,ichristensen@proton.me,(284) 463-3732,4048 Maple Blvd,Marlette,MI,48453,2017
+CUS-540985,Karan,Shratter,Male,1976-09-06,kshratter@hotmail.com,(957) 716-1104,8077 Cedar Road,Colorado Springs,CO,80911,2019
+CUS-377895,Amit,Goel,Male,1973-09-20,amit.goel517@outlook.com,(429) 696-6832,5108 Mill Dr,Bellevue,WA,98004,2021
+CUS-154358,Evelyn,Carr,Female,1990-10-18,ecarr@aol.com,(951) 315-1300,6447 Pine Dr # 10A,Carrollton,GA,30117,2017
+CUS-860613,Zachary,Chavarria,Male,1948-09-25,zacharychavarria48@yahoo.com,(203) 280-4584,3040 Briar Creek St,Leesburg,FL,34748,2017
+CUS-961482,Yahya,Yanes,Male,1969-05-30,yahya.yanes@comcast.net,(401) 581-8872,2027 Church Blvd,East Elmhurst,NY,11369,2015
