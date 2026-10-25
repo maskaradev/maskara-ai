@@ -78,6 +78,8 @@ print(result.report.summary())
 
 Tabellen können Listen von Dicts, CSV- oder JSONL-Pfade oder pandas-DataFrames sein; zurück kommt derselbe Typ. Texte können Listen von Strings, `.txt`- oder `.jsonl`-Pfade oder eine pandas-Series sein. Deine Personas werden sich von den obigen unterscheiden: Sie stammen aus dem Schlüssel deines Vaults.
 
+Bekannte Einschränkung in v0: In Text ohne zugehörige Tabelle können ein Name und eine E-Mail-Adresse oder Telefonnummer im selben Satz verschiedene Personas bekommen. Übergibst du die Personen als Tabelle, werden sie verknüpft; ein Fix ist für das nächste Release geplant.
+
 ### CLI
 
 ```bash
@@ -90,7 +92,35 @@ In `masked/` landet jede Eingabe unter demselben Namen, dazu `report.json`, `rep
 
 ## Benchmarks
 
-`maskara bench` bewertet maskara und Vergleichssysteme (Redaction, Presidio, GLiNER2, OpenAI Privacy Filter) mit einem einzigen Scorer danach, was durchgesickert und was nützlich geblieben ist, auf vier Korpora: [TAB](https://github.com/NorskRegnesentral/text-anonymization-benchmark) (echte Gerichtsurteile), [ABCD](https://github.com/asappresearch/abcd) (von Menschen geschriebene Support-Chats), [Nemotron-PII](https://huggingface.co/datasets/nvidia/Nemotron-PII) (synthetisch) und `linked` (verknüpfte Tabellen und Texte, die wir erzeugen, sodass bekannt ist, wer wer ist). Öffentliche Zahlen kommen aus den ersten drei; `linked` wird separat berichtet, weil wir es selbst gebaut haben. Das Design und sein Entscheidungsprotokoll stehen in [`docs/research/v0-design.md`](../research/v0-design.md) (auf Koreanisch).
+<p align="center">
+  <img src="../assets/hero-external.png" alt="Verborgene direkte Identifikatoren gegen Unterscheidbarkeit auf ABCD, Nemotron-PII und TAB: maskara liegt bei allen dreien oben rechts, Redaction fällt bei Gerichtsurteilen auf 20% Unterscheidbarkeit" width="880" />
+</p>
+
+`maskara bench` bewertet maskara und die üblichen Ansätze mit einem einzigen Scorer, auf drei Korpora, die nicht von uns stammen: [ABCD](https://github.com/asappresearch/abcd) (von Menschen geschriebene Support-Chats), [Nemotron-PII](https://huggingface.co/datasets/nvidia/Nemotron-PII) (synthetisch) und [TAB](https://github.com/NorskRegnesentral/text-anonymization-benchmark) (echte Gerichtsurteile, von Menschen annotiert). Jede Zelle zeigt **durchgesickerte direkte Identifikatoren** (niedriger ist besser) / **unterscheidbar gebliebene Personen** (höher ist besser: Zwei verschiedene Personen bekommen nicht denselben Ersatz).
+
+| | ABCD (1,004 Chats) | Nemotron-PII (1,000 Dokumente) | TAB (127 Fälle) |
+|---|---|---|---|
+| perfekte Erkennung, dann `[TYPE]`-Platzhalter | 0% / 71% | 0% / 66% | 0% / 20% |
+| presidio | 18% / 85% | 22% / 75% | 38% / 23% |
+| gliner2-pii | 8.2% / 94% | 19% / 89% | 41% / 41% |
+| openai privacy filter | 6.5% / 64% | 18% / 68% | 51% / 22% |
+| presidio + faker, ein Fake pro Wert und Dokument | 18% / 99.8% | 22% / 93% | 38% / 99.6% |
+| **maskara** (Regeln + gliner2) | **2.4% / 97%** | **4.9% / 93%** | 37% / 99.8% |
+| **maskara** + Musterpaket `legal-echr` | | | **2.5% / 99.8%** |
+
+- Die direkten Identifikatoren in TAB sind 228 Namen und 134 Aktenzeichen (`no. 36110/97`). Jeder Allzweck-Detektor, auch der von maskara, übersieht fast alle Aktenzeichen; bei Namen lässt maskara 0.4% durch. Das optionale Paket `legal-echr` (`--pattern legal-echr`) erkennt sie und ändert an den anderen beiden Korpora nichts.
+- Unterscheidbarkeit ist ein Stellvertreter für Nützlichkeit. Sie zeigt, dass keine Personen zusammengelegt wurden, nicht aber, dass eine Analyse auf den maskierten Daten dieselben Antworten liefert; das haben wir auf diesen Korpora noch nicht gemessen.
+- Das Standard-Preset `balanced` behält die meisten Quasi-Identifikatoren (Organisationen, demografische Angaben) und verschiebt Datumsangaben, viele davon bleiben also bewusst im Text.
+- Jedes Korpus hat seine Schwachstelle: Der Goldstandard von ABCD stammt aus den Szenariokarten hinter den Chats, Nemotron-PII ist generierter Text, und TAB ist eine einzige Domäne mit 127 Dokumenten.
+
+Wir lassen außerdem ein viertes Korpus laufen, `linked`: Tabellen und Texte, die wir so erzeugen, dass genau bekannt ist, wer wer ist. Damit kann `bench --qa` prüfen, ob dokumentübergreifende Fragen noch dieselben Antworten haben. Weil wir es selbst gebaut haben, wird es separat berichtet. Alle Zahlen, Versionen und Einschränkungen stehen in [`docs/research/bench-results.md`](../research/bench-results.md), das Design und sein Entscheidungsprotokoll in [`docs/research/v0-design.md`](../research/v0-design.md) (beide auf Koreanisch). Zum Reproduzieren:
+
+```bash
+uv sync --all-extras --all-groups
+uv run maskara bench --corpus abcd nemotron-pii tab \
+  --system oracle-redact presidio-redact gliner2-redact opf-redact presidio-fake-consistent maskara-gliner2 maskara-gliner2+echr
+uv run python -m maskara.bench.hero --external docs/assets/hero-external.svg
+```
 
 Das ist v0 und nur auf Englisch. Die Personas stammen aus [NVIDIA Nemotron-Personas-USA](https://huggingface.co/datasets/nvidia/Nemotron-Personas-USA) (CC BY 4.0) und die Vornamen aus den [SSA-Babynamen](https://www.ssa.gov/oact/babynames/limits.html), sie sind also amerikanisch.
 

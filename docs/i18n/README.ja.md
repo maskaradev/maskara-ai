@@ -78,6 +78,8 @@ print(result.report.summary())
 
 テーブルは dict のリスト、CSV・JSONL のパス、pandas DataFrame を受け取り、入力と同じ型で返します。テキストは文字列のリスト、`.txt`・`.jsonl` のパス、pandas Series を受け取ります。ペルソナは vault の鍵から決まるので、上の例とは違う結果になります。
 
+v0 の既知の制限: 対応するテーブルがないテキストでは、同じ文の名前とメールアドレス・電話番号が別のペルソナになることがあります。人物をテーブルとして一緒に渡せば結び付きます。次のリリースで修正する予定です。
+
 ### CLI
 
 ```bash
@@ -90,7 +92,35 @@ maskara mask --table customers=customers.csv --table orders=orders.csv --text ti
 
 ## ベンチマーク
 
-`maskara bench` は maskara と比較対象（redaction、Presidio、GLiNER2、OpenAI Privacy Filter）を同じ採点器で、何が漏れたか・何が使えるまま残ったかの両面から、4 つのコーパスで採点します：[TAB](https://github.com/NorskRegnesentral/text-anonymization-benchmark)（実際の判決文）、[ABCD](https://github.com/asappresearch/abcd)（人が書いたサポート対話）、[Nemotron-PII](https://huggingface.co/datasets/nvidia/Nemotron-PII)（合成）、`linked`（誰が誰かが分かっている、私たちが生成した連結テーブルとテキスト）。公開する数値は最初の 3 つを基準にし、`linked` は自作のデータなので別に報告します。設計と決定の記録は [`docs/research/v0-design.md`](../research/v0-design.md)（韓国語）にあります。
+<p align="center">
+  <img src="../assets/hero-external.png" alt="ABCD・Nemotron-PII・TAB における直接識別子の秘匿率と区別性：maskara は 3 つすべてで右上にあり、redaction は判決文で区別性が 20% まで下がる" width="880" />
+</p>
+
+`maskara bench` は maskara とよく使われる手法を、同じ採点器で、私たちが作ったものではない 3 つのコーパスで採点します：[ABCD](https://github.com/asappresearch/abcd)（人が書いたサポート対話）、[Nemotron-PII](https://huggingface.co/datasets/nvidia/Nemotron-PII)（合成）、[TAB](https://github.com/NorskRegnesentral/text-anonymization-benchmark)（実際の判決文、人手でアノテーション）。各セルは **漏れた直接識別子**（低いほど良い）/ **区別が保たれた人**（高いほど良い：別々の二人が同じ置換値にならない）です。
+
+| | ABCD（対話 1,004 件） | Nemotron-PII（文書 1,000 件） | TAB（判決 127 件） |
+|---|---|---|---|
+| 完璧に検出したうえで `[TYPE]` プレースホルダーに置換 | 0% / 71% | 0% / 66% | 0% / 20% |
+| presidio | 18% / 85% | 22% / 75% | 38% / 23% |
+| gliner2-pii | 8.2% / 94% | 19% / 89% | 41% / 41% |
+| openai privacy filter | 6.5% / 64% | 18% / 68% | 51% / 22% |
+| presidio + faker、文書ごとに値 1 つにつき偽の値 1 つ | 18% / 99.8% | 22% / 93% | 38% / 99.6% |
+| **maskara**（ルール + gliner2） | **2.4% / 97%** | **4.9% / 93%** | 37% / 99.8% |
+| **maskara** + `legal-echr` パターンパック | | | **2.5% / 99.8%** |
+
+- TAB の直接識別子は、名前 228 件と事件番号 134 件（`no. 36110/97`）です。maskara を含むすべての汎用検出器が事件番号をほぼすべて見逃します。名前については、maskara の漏れは 0.4% です。オプトインの `legal-echr` パック（`--pattern legal-echr`）は事件番号を捕まえ、他の 2 つのコーパスの結果は何も変えません。
+- 区別性は有用性の代理指標です。人が統合されなかったことは示しますが、マスキング後のデータで分析しても同じ答えが出ることまでは示しません。これらのコーパスではまだそこを測っていません。
+- 既定の `balanced` プリセットは準識別子（組織、属性情報）の大半を残し、日付はずらすので、それらの多くは意図的にテキストに残ります。
+- どのコーパスにも弱点があります：ABCD の正解データは対話の背後にあるシナリオカードから来ており、Nemotron-PII は生成テキストで、TAB は 127 文書からなる単一分野です。
+
+4 つ目のコーパス `linked` も実行しています。誰が誰かが正確に分かるように私たちが生成したテーブルとテキストで、`bench --qa` によって、文書をまたぐ質問の答えが変わらないかを検証できます。自作のデータなので別に報告します。全数値・バージョン・注意点は [`docs/research/bench-results.md`](../research/bench-results.md)、設計と決定の記録は [`docs/research/v0-design.md`](../research/v0-design.md) にあります（どちらも韓国語）。再現するには：
+
+```bash
+uv sync --all-extras --all-groups
+uv run maskara bench --corpus abcd nemotron-pii tab \
+  --system oracle-redact presidio-redact gliner2-redact opf-redact presidio-fake-consistent maskara-gliner2 maskara-gliner2+echr
+uv run python -m maskara.bench.hero --external docs/assets/hero-external.svg
+```
 
 現在は v0 で、英語のみ対応です。ペルソナは [NVIDIA Nemotron-Personas-USA](https://huggingface.co/datasets/nvidia/Nemotron-Personas-USA)（CC BY 4.0）から、名前は [SSA の出生名統計](https://www.ssa.gov/oact/babynames/limits.html)から取るため、アメリカ人のペルソナになります。
 

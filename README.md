@@ -78,6 +78,8 @@ print(result.report.summary())
 
 tables can be lists of dicts, csv or jsonl paths, or pandas dataframes; you get back the same type. texts can be lists of strings, `.txt` or `.jsonl` paths, or a pandas series. your personas will differ from the ones above: they come from your vault's key.
 
+known limit in v0: in text with no table behind it, a name and an email or phone in the same sentence can get different personas. passing the people as a table links them; a fix is planned for the next release.
+
 ### cli
 
 ```bash
