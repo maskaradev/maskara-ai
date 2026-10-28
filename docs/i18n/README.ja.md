@@ -16,7 +16,7 @@
 <p align="center">
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-666666?labelColor=333333" alt="Apache 2.0 license" /></a>
   <img src="https://img.shields.io/badge/status-v0-666666?labelColor=333333" alt="status: v0" />
-  <a href="https://github.com/maskaradev/maskara/stargazers"><img src="https://img.shields.io/github/stars/maskaradev/maskara?labelColor=333333&color=666666&logo=github" alt="GitHub stars" /></a>
+  <a href="https://github.com/maskaradev/maskara-ai/stargazers"><img src="https://img.shields.io/github/stars/maskaradev/maskara-ai?labelColor=333333&color=666666&logo=github" alt="GitHub stars" /></a>
 </p>
 
 ---
@@ -41,7 +41,7 @@
 ## クイックスタート
 
 ```bash
-pip install git+https://github.com/maskaradev/maskara   # python 3.11+
+pip install git+https://github.com/maskaradev/maskara-ai   # python 3.11+
 maskara demo        # mask the bundled sample store and print the report
 maskara ui --demo   # see it side by side in the browser
 ```
@@ -49,7 +49,7 @@ maskara ui --demo   # see it side by side in the browser
 PyPI に公開されたら `pip install maskara-ai` になります。PyPI の `maskara` は別のプロジェクトです。GLiNER2 モデルも入れる場合：
 
 ```bash
-pip install "maskara-ai[gliner] @ git+https://github.com/maskaradev/maskara"
+pip install "maskara-ai[gliner] @ git+https://github.com/maskaradev/maskara-ai"
 ```
 
 ### Python
@@ -126,7 +126,7 @@ uv run python -m maskara.bench.hero --external docs/assets/hero-external.svg
 
 ## セキュリティ
 
-maskara は手元のマシンで動き、何も外部に送りません。ネットワークを使うのは明示的に選んだときだけです：オプションのモデルは初回に一度だけダウンロードされ、`maskara bench` はコーパスをダウンロードし、`bench --qa llm` は設定したモデルのエンドポイントを呼び出します。v0 はセキュリティ監査を受けていないので、出力を共有する前にレポートを確認してください。セキュリティの問題は[非公開の advisory](https://github.com/maskaradev/maskara/security/advisories/new) で報告してください。
+maskara は手元のマシンで動き、何も外部に送りません。ネットワークを使うのは明示的に選んだときだけです：オプションのモデルは初回に一度だけダウンロードされ、`maskara bench` はコーパスをダウンロードし、`bench --qa llm` は設定したモデルのエンドポイントを呼び出します。v0 はセキュリティ監査を受けていないので、出力を共有する前にレポートを確認してください。セキュリティの問題は[非公開の advisory](https://github.com/maskaradev/maskara-ai/security/advisories/new) で報告してください。
 
 ## 謝辞
 

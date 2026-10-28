@@ -16,7 +16,7 @@
 <p align="center">
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-666666?labelColor=333333" alt="Apache 2.0 license" /></a>
   <img src="https://img.shields.io/badge/status-v0-666666?labelColor=333333" alt="status: v0" />
-  <a href="https://github.com/maskaradev/maskara/stargazers"><img src="https://img.shields.io/github/stars/maskaradev/maskara?labelColor=333333&color=666666&logo=github" alt="GitHub stars" /></a>
+  <a href="https://github.com/maskaradev/maskara-ai/stargazers"><img src="https://img.shields.io/github/stars/maskaradev/maskara-ai?labelColor=333333&color=666666&logo=github" alt="GitHub stars" /></a>
 </p>
 
 ---
@@ -41,7 +41,7 @@
 ## Schnellstart
 
 ```bash
-pip install git+https://github.com/maskaradev/maskara   # python 3.11+
+pip install git+https://github.com/maskaradev/maskara-ai   # python 3.11+
 maskara demo        # mask the bundled sample store and print the report
 maskara ui --demo   # see it side by side in the browser
 ```
@@ -49,7 +49,7 @@ maskara ui --demo   # see it side by side in the browser
 Sobald es auf PyPI ist, heißt es `pip install maskara-ai`. Das Paket `maskara` auf PyPI ist ein anderes Projekt. Für das GLiNER2-Modell:
 
 ```bash
-pip install "maskara-ai[gliner] @ git+https://github.com/maskaradev/maskara"
+pip install "maskara-ai[gliner] @ git+https://github.com/maskaradev/maskara-ai"
 ```
 
 ### Python
@@ -126,7 +126,7 @@ Das ist v0 und nur auf Englisch. Die Personas stammen aus [NVIDIA Nemotron-Perso
 
 ## Sicherheit
 
-maskara läuft auf deinem Rechner und sendet nichts irgendwohin. Netzwerkzugriff gibt es nur, wenn du ihn wählst: Ein optionales Modell wird beim ersten Einsatz einmal heruntergeladen, `maskara bench` lädt seine Korpora herunter, und `bench --qa llm` ruft den Modell-Endpunkt auf, den du einstellst. v0 ist nicht auditiert, lies also den Bericht, bevor du einen Output teilst. Sicherheitsprobleme bitte über ein [privates Advisory](https://github.com/maskaradev/maskara/security/advisories/new) melden.
+maskara läuft auf deinem Rechner und sendet nichts irgendwohin. Netzwerkzugriff gibt es nur, wenn du ihn wählst: Ein optionales Modell wird beim ersten Einsatz einmal heruntergeladen, `maskara bench` lädt seine Korpora herunter, und `bench --qa llm` ruft den Modell-Endpunkt auf, den du einstellst. v0 ist nicht auditiert, lies also den Bericht, bevor du einen Output teilst. Sicherheitsprobleme bitte über ein [privates Advisory](https://github.com/maskaradev/maskara-ai/security/advisories/new) melden.
 
 ## Danke
 

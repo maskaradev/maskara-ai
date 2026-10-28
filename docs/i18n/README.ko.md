@@ -16,7 +16,7 @@
 <p align="center">
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-666666?labelColor=333333" alt="Apache 2.0 license" /></a>
   <img src="https://img.shields.io/badge/status-v0-666666?labelColor=333333" alt="status: v0" />
-  <a href="https://github.com/maskaradev/maskara/stargazers"><img src="https://img.shields.io/github/stars/maskaradev/maskara?labelColor=333333&color=666666&logo=github" alt="GitHub stars" /></a>
+  <a href="https://github.com/maskaradev/maskara-ai/stargazers"><img src="https://img.shields.io/github/stars/maskaradev/maskara-ai?labelColor=333333&color=666666&logo=github" alt="GitHub stars" /></a>
 </p>
 
 ---
@@ -41,7 +41,7 @@
 ## 빠른 시작
 
 ```bash
-pip install git+https://github.com/maskaradev/maskara   # python 3.11+
+pip install git+https://github.com/maskaradev/maskara-ai   # python 3.11+
 maskara demo        # mask the bundled sample store and print the report
 maskara ui --demo   # see it side by side in the browser
 ```
@@ -49,7 +49,7 @@ maskara ui --demo   # see it side by side in the browser
 PyPI에 올라가면 `pip install maskara-ai`가 됩니다. PyPI의 `maskara`는 다른 프로젝트입니다. GLiNER2 모델까지 설치하려면:
 
 ```bash
-pip install "maskara-ai[gliner] @ git+https://github.com/maskaradev/maskara"
+pip install "maskara-ai[gliner] @ git+https://github.com/maskaradev/maskara-ai"
 ```
 
 ### Python
@@ -126,7 +126,7 @@ uv run python -m maskara.bench.hero --external docs/assets/hero-external.svg
 
 ## 보안
 
-maskara는 내 컴퓨터에서 돌아가며 아무것도 밖으로 보내지 않습니다. 네트워크는 직접 켤 때만 씁니다: 선택 모델은 처음 쓸 때 한 번 내려받고, `maskara bench`는 코퍼스를 내려받으며, `bench --qa llm`은 지정한 모델 엔드포인트를 호출합니다. v0은 보안 감사를 받지 않았으니 결과물을 공유하기 전에 리포트를 확인하세요. 보안 문제는 [비공개 advisory](https://github.com/maskaradev/maskara/security/advisories/new)로 알려 주세요.
+maskara는 내 컴퓨터에서 돌아가며 아무것도 밖으로 보내지 않습니다. 네트워크는 직접 켤 때만 씁니다: 선택 모델은 처음 쓸 때 한 번 내려받고, `maskara bench`는 코퍼스를 내려받으며, `bench --qa llm`은 지정한 모델 엔드포인트를 호출합니다. v0은 보안 감사를 받지 않았으니 결과물을 공유하기 전에 리포트를 확인하세요. 보안 문제는 [비공개 advisory](https://github.com/maskaradev/maskara-ai/security/advisories/new)로 알려 주세요.
 
 ## 감사
 

@@ -2,21 +2,21 @@
 
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maskaradev/maskara/main/web/public/brand/logo.png" alt="maskara" width="100" />
+  <img src="https://raw.githubusercontent.com/maskaradev/maskara-ai/main/web/public/brand/logo.png" alt="maskara" width="100" />
 </p>
 
 <p align="center">
-  <a href="https://maskara.dev">maskara.dev</a> · <a href="https://app.maskara.dev">demo</a> · <a href="#quick-start">quick start</a> · <a href="https://github.com/maskaradev/maskara/blob/main/intents.md">intents</a>
+  <a href="https://maskara.dev">maskara.dev</a> · <a href="https://app.maskara.dev">demo</a> · <a href="#quick-start">quick start</a> · <a href="https://github.com/maskaradev/maskara-ai/blob/main/intents.md">intents</a>
 </p>
 
 <p align="center">
-  English · <a href="https://github.com/maskaradev/maskara/blob/main/docs/i18n/README.ko.md">한국어</a> · <a href="https://github.com/maskaradev/maskara/blob/main/docs/i18n/README.zh-CN.md">简体中文</a> · <a href="https://github.com/maskaradev/maskara/blob/main/docs/i18n/README.ja.md">日本語</a> · <a href="https://github.com/maskaradev/maskara/blob/main/docs/i18n/README.es.md">Español</a> · <a href="https://github.com/maskaradev/maskara/blob/main/docs/i18n/README.fr.md">Français</a> · <a href="https://github.com/maskaradev/maskara/blob/main/docs/i18n/README.de.md">Deutsch</a>
+  English · <a href="https://github.com/maskaradev/maskara-ai/blob/main/docs/i18n/README.ko.md">한국어</a> · <a href="https://github.com/maskaradev/maskara-ai/blob/main/docs/i18n/README.zh-CN.md">简体中文</a> · <a href="https://github.com/maskaradev/maskara-ai/blob/main/docs/i18n/README.ja.md">日本語</a> · <a href="https://github.com/maskaradev/maskara-ai/blob/main/docs/i18n/README.es.md">Español</a> · <a href="https://github.com/maskaradev/maskara-ai/blob/main/docs/i18n/README.fr.md">Français</a> · <a href="https://github.com/maskaradev/maskara-ai/blob/main/docs/i18n/README.de.md">Deutsch</a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/maskaradev/maskara/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-666666?labelColor=333333" alt="Apache 2.0 license" /></a>
+  <a href="https://github.com/maskaradev/maskara-ai/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-666666?labelColor=333333" alt="Apache 2.0 license" /></a>
   <img src="https://img.shields.io/badge/status-v0-666666?labelColor=333333" alt="status: v0" />
-  <a href="https://github.com/maskaradev/maskara/stargazers"><img src="https://img.shields.io/github/stars/maskaradev/maskara?labelColor=333333&color=666666&logo=github" alt="GitHub stars" /></a>
+  <a href="https://github.com/maskaradev/maskara-ai/stargazers"><img src="https://img.shields.io/github/stars/maskaradev/maskara-ai?labelColor=333333&color=666666&logo=github" alt="GitHub stars" /></a>
 </p>
 
 ---
@@ -24,7 +24,7 @@
 **swap personal data for consistent synthetic personas instead of redacting it, then prove the data stayed useful and didn't leak.**
 
 <p align="center">
-  <a href="https://app.maskara.dev"><img src="https://raw.githubusercontent.com/maskaradev/maskara/main/docs/assets/showroom.png" alt="the maskara showroom: a sample run's numbers, and a support ticket before and after masking" width="880" /></a>
+  <a href="https://app.maskara.dev"><img src="https://raw.githubusercontent.com/maskaradev/maskara-ai/main/docs/assets/showroom.png" alt="the maskara showroom: a sample run's numbers, and a support ticket before and after masking" width="880" /></a>
 </p>
 
 - **swap, don't redact** — names, emails, phones, addresses, dates, and ids become a synthetic persona's, not `[REDACTED]`. the rest of the text stays as it is.
@@ -41,7 +41,7 @@
 ## quick start
 
 ```bash
-pip install git+https://github.com/maskaradev/maskara   # python 3.11+
+pip install git+https://github.com/maskaradev/maskara-ai   # python 3.11+
 maskara demo        # mask the bundled sample store and print the report
 maskara ui --demo   # see it side by side in the browser
 ```
@@ -49,7 +49,7 @@ maskara ui --demo   # see it side by side in the browser
 once it's on pypi this becomes `pip install maskara-ai`. the `maskara` package on pypi is a different project. for the gliner2 model:
 
 ```bash
-pip install "maskara-ai[gliner] @ git+https://github.com/maskaradev/maskara"
+pip install "maskara-ai[gliner] @ git+https://github.com/maskaradev/maskara-ai"
 ```
 
 ### python
@@ -93,7 +93,7 @@ maskara mask --table customers=customers.csv --table orders=orders.csv --text ti
 ## benchmarks
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/maskaradev/maskara/main/docs/assets/hero-external.png" alt="direct identifiers hidden against distinctness on ABCD, Nemotron-PII and TAB: maskara is top right on all three, redaction drops to 20% distinctness on court cases" width="880" />
+  <img src="https://raw.githubusercontent.com/maskaradev/maskara-ai/main/docs/assets/hero-external.png" alt="direct identifiers hidden against distinctness on ABCD, Nemotron-PII and TAB: maskara is top right on all three, redaction drops to 20% distinctness on court cases" width="880" />
 </p>
 
 `maskara bench` scores maskara and the usual approaches with one scorer, on three corpora we didn't make: [ABCD](https://github.com/asappresearch/abcd) (human-written support chats), [Nemotron-PII](https://huggingface.co/datasets/nvidia/Nemotron-PII) (synthetic), and [TAB](https://github.com/NorskRegnesentral/text-anonymization-benchmark) (real court cases, human-annotated). each cell is **direct identifiers leaked** (lower is better) / **people kept distinct** (higher is better: two different people don't end up with the same replacement).
@@ -113,7 +113,7 @@ maskara mask --table customers=customers.csv --table orders=orders.csv --text ti
 - the default `balanced` preset keeps most quasi-identifiers (organisations, demographics) and shifts dates, so many of those stay in the text by design.
 - each corpus has its weak spot: ABCD's gold comes from the scenario cards behind the chats, Nemotron-PII is generated text, and TAB is one domain with 127 documents.
 
-we also run a fourth corpus, `linked`: tables and texts we generate so that who is who is known exactly, which lets `bench --qa` test whether cross-document questions still have the same answers. we built it, so it is reported separately. full numbers, versions and caveats are in [`docs/research/bench-results.md`](https://github.com/maskaradev/maskara/blob/main/docs/research/bench-results.md), and the design and its decision log in [`docs/research/v0-design.md`](https://github.com/maskaradev/maskara/blob/main/docs/research/v0-design.md) (both korean). to reproduce:
+we also run a fourth corpus, `linked`: tables and texts we generate so that who is who is known exactly, which lets `bench --qa` test whether cross-document questions still have the same answers. we built it, so it is reported separately. full numbers, versions and caveats are in [`docs/research/bench-results.md`](https://github.com/maskaradev/maskara-ai/blob/main/docs/research/bench-results.md), and the design and its decision log in [`docs/research/v0-design.md`](https://github.com/maskaradev/maskara-ai/blob/main/docs/research/v0-design.md) (both korean). to reproduce:
 
 ```bash
 uv sync --all-extras --all-groups
@@ -126,7 +126,7 @@ this is v0, and english only. personas come from [NVIDIA Nemotron-Personas-USA](
 
 ## security
 
-maskara runs on your machine and sends nothing anywhere. network use is opt-in: an optional model downloads once on first use, `maskara bench` downloads its corpora, and `bench --qa llm` calls the model endpoint you set. v0 hasn't been audited, so read the report before you share an output. report security issues through a [private advisory](https://github.com/maskaradev/maskara/security/advisories/new).
+maskara runs on your machine and sends nothing anywhere. network use is opt-in: an optional model downloads once on first use, `maskara bench` downloads its corpora, and `bench --qa llm` calls the model endpoint you set. v0 hasn't been audited, so read the report before you share an output. report security issues through a [private advisory](https://github.com/maskaradev/maskara-ai/security/advisories/new).
 
 ## thanks
 
@@ -150,8 +150,8 @@ pnpm lint     # eslint
 pnpm build    # production build
 ```
 
-`maskara ui --export web/public/demo` rebuilds the hosted demo. if you are an ai agent working on `web/`, read [`web/AGENTS.md`](https://github.com/maskaradev/maskara/blob/main/web/AGENTS.md) first. this readme is the source for the translations in `docs/i18n/`.
+`maskara ui --export web/public/demo` rebuilds the hosted demo. if you are an ai agent working on `web/`, read [`web/AGENTS.md`](https://github.com/maskaradev/maskara-ai/blob/main/web/AGENTS.md) first. this readme is the source for the translations in `docs/i18n/`.
 
 ## license
 
-maskara is licensed under the [Apache License 2.0](https://github.com/maskaradev/maskara/blob/main/LICENSE). the bundled persona and sample data is derived from CC BY 4.0 and public-domain sources; see [`src/maskara/data/NOTICE`](https://github.com/maskaradev/maskara/blob/main/src/maskara/data/NOTICE).
+maskara is licensed under the [Apache License 2.0](https://github.com/maskaradev/maskara-ai/blob/main/LICENSE). the bundled persona and sample data is derived from CC BY 4.0 and public-domain sources; see [`src/maskara/data/NOTICE`](https://github.com/maskaradev/maskara-ai/blob/main/src/maskara/data/NOTICE).

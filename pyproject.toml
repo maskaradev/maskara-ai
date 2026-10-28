@@ -20,8 +20,8 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://maskara.dev"
-Repository = "https://github.com/maskaradev/maskara"
-Issues = "https://github.com/maskaradev/maskara/issues"
+Repository = "https://github.com/maskaradev/maskara-ai"
+Issues = "https://github.com/maskaradev/maskara-ai/issues"
 
 [project.optional-dependencies]
 # The default PII model of `detector="auto"`. gliner2 2.1.0 imports transformers without declaring it.
