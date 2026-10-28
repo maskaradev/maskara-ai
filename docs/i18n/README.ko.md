@@ -21,7 +21,7 @@
 
 ---
 
-**개인정보를 지우지 않고 일관된 가상 페르소나로 바꾼 뒤, 데이터가 여전히 쓸모 있고 새지 않았다는 것을 수치로 보여줍니다.**
+**개인정보를 일관된 가상 페르소나로 바꾸고, 데이터의 유용성과 남은 노출을 측정합니다.**
 
 <p align="center">
   <a href="https://app.maskara.dev"><img src="../assets/showroom.png" alt="maskara 쇼룸: 샘플 실행의 수치와 마스킹 전후의 고객 문의" width="880" /></a>
@@ -78,7 +78,12 @@ print(result.report.summary())
 
 테이블은 dict 리스트, CSV·JSONL 경로, pandas DataFrame을 받고, 넣은 것과 같은 타입으로 돌려줍니다. 텍스트는 문자열 리스트, `.txt`·`.jsonl` 경로, pandas Series를 받습니다. 페르소나는 vault 키에서 나오므로 위 예시와 다르게 나옵니다.
 
-v0의 알려진 제한: 뒤에 테이블이 없는 텍스트에서는 같은 문장의 이름과 이메일·전화번호가 서로 다른 페르소나로 바뀔 수 있습니다. 사람들을 테이블로 함께 넘기면 연결됩니다. 다음 릴리스에서 고칠 예정입니다.
+소유자가 모호한 값은 연결을 보류하고 치환은 계속합니다. `result.review`에서 위치·사유를 확인하고,
+각 mention의 `resolution`, `evidence`, `candidate_count`로 판단 근거를 확인할 수 있습니다.
+표에 없는 이름은 문서 안에서만 임시로 묶습니다. 문서·실행 간 인물을 안정적으로 연결하려면 명시적인 subject 키를 제공하세요.
+
+v0의 알려진 제한: 표 근거 없이 같은 문장에 나온 이름과 이메일·전화번호는 서로 다른 페르소나로 바뀔 수 있습니다.
+공동 사건과 일반적인 공지시 해석은 아직 구현하지 않았습니다. [인물 연결 문서](../research/identity-resolution.md)에 동작과 한계를 정리했습니다.
 
 ### CLI
 
@@ -88,7 +93,13 @@ maskara mask --table customers=customers.csv --table orders=orders.csv --text ti
   --out masked/
 ```
 
-`masked/`에는 입력마다 같은 이름의 파일과 `report.json`, `report.html`, `mentions.jsonl`(무엇을 어디서 바꿨는지, 원본 값 없이)이 생깁니다. `maskara report masked/`는 리포트를 다시 출력하고, 나머지 옵션(`--preset`, `--detector`, `--pattern`, TOML 설정)은 `maskara mask --help`에 있습니다.
+`masked/`에는 입력마다 같은 이름의 파일과 `report.json`, `report.html`, `mentions.jsonl`, `review.json`이 생깁니다.
+검토 파일에는 원본 값 없이 위치·상태·사유·후보 수를 기록하며, 입력 이름과 열 이름은 유지합니다.
+검토 항목이 없다는 사실이 개인정보 보호나 연결 정확도를 보장하지는 않습니다.
+`maskara report masked/`는 리포트를 다시 출력하고, 나머지 옵션은 `maskara mask --help`에 있습니다.
+
+`maskara bench-identity --out runs/identity`는 정답 span을 이용해 연결 정밀도·재현율·보류율을 측정합니다.
+기본 32개 사례는 직접 작성한 진단용 자료이며 독립 고객 평가가 아닙니다. `--cases 경로.json`으로 같은 형식의 별도 정답셋을 넣을 수 있습니다.
 
 ## 벤치마크
 

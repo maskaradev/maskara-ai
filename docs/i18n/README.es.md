@@ -21,7 +21,7 @@
 
 ---
 
-**cambia los datos personales por personas sintéticas consistentes en lugar de tacharlos, y demuestra que los datos siguen siendo útiles y no se filtraron.**
+**sustituye los datos personales por identidades sintéticas consistentes y mide la utilidad de los datos y la exposición residual.**
 
 <p align="center">
   <a href="https://app.maskara.dev"><img src="../assets/showroom.png" alt="la vitrina de maskara: las cifras de una ejecución de ejemplo y un ticket de soporte antes y después del enmascaramiento" width="880" /></a>

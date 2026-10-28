@@ -45,6 +45,12 @@ this repository is the python package: `maskara.mask()` and the `maskara` cli, r
 - [x] detection: rules and known table values, plus gliner2 when installed
 - [x] privacy and fidelity report (text, json, html) and `maskara bench` on four corpora
 - [x] offline, with a stdlib-only core
+- [x] controlled name/contact replacement study with shared detection, resolution, dates and IDs
+- [x] external downstream task runner: train on transformed ABCD chats, test on original held-out chats
+- [x] abstain on competing identity evidence, surface review reasons, and score authored gold-span diagnostics
+- [ ] validate identity resolution on independent annotations; resolve shared events and general coreference
+- [ ] measure text/table and cross-release attacks, then select transformations against task and risk constraints
+- [ ] validate one customer-support workflow on an independently held-out customer dataset
 - [ ] publish to pypi as `maskara-ai`
 - [ ] parquet input and an encrypted vault (sqlcipher)
 - [ ] read-only connectors to the customer's database

@@ -21,7 +21,7 @@
 
 ---
 
-**swap personal data for consistent synthetic personas instead of redacting it, then prove the data stayed useful and didn't leak.**
+**swap personal data for consistent synthetic personas, then measure utility and remaining exposure.**
 
 <p align="center">
   <a href="https://app.maskara.dev"><img src="https://raw.githubusercontent.com/maskaradev/maskara-ai/main/docs/assets/showroom.png" alt="the maskara showroom: a sample run's numbers, and a support ticket before and after masking" width="880" /></a>
@@ -78,7 +78,14 @@ print(result.report.summary())
 
 tables can be lists of dicts, csv or jsonl paths, or pandas dataframes; you get back the same type. texts can be lists of strings, `.txt` or `.jsonl` paths, or a pandas series. your personas will differ from the ones above: they come from your vault's key.
 
-known limit in v0: in text with no table behind it, a name and an email or phone in the same sentence can get different personas. passing the people as a table links them; a fix is planned for the next release.
+ambiguous owners are left unresolved and still receive replacements. `result.review` lists their locations
+and reasons; each mention records `resolution`, `evidence`, and `candidate_count`. names with no known
+identity are grouped provisionally within a document, so equal names across documents no longer imply
+one person. supply explicit subject keys for stable identity across documents and runs.
+
+known limit in v0: a name and an email or phone in the same sentence can get different personas without
+table evidence. shared events and general coreference remain unimplemented. see the
+[identity resolution notes](docs/research/identity-resolution.md) for the rules and tradeoffs.
 
 ### cli
 
@@ -88,7 +95,15 @@ maskara mask --table customers=customers.csv --table orders=orders.csv --text ti
   --out masked/
 ```
 
-`masked/` gets each input under the same name, `report.json`, `report.html`, and `mentions.jsonl` (what was replaced where, without the originals). `maskara report masked/` prints the report again, and `maskara mask --help` lists the rest (`--preset`, `--detector`, `--pattern`, a toml config).
+`masked/` gets each input under the same name, `report.json`, `report.html`, `mentions.jsonl` (what was
+replaced where), and `review.json` (pending identity decisions). audit fields contain no original values;
+source and column names are retained. an empty review queue does not establish privacy or identity accuracy.
+`maskara report masked/` prints the report again, and `maskara mask --help` lists the rest
+(`--preset`, `--detector`, `--pattern`, a toml config).
+
+`maskara bench-identity --out runs/identity` measures ownership precision, recall and abstention with
+gold mention spans. the bundled 32 cases are authored diagnostics, not independent customer evidence.
+use `--cases path/to/cases.json` for a separately annotated set in the same format.
 
 ## benchmarks
 
@@ -109,7 +124,7 @@ maskara mask --table customers=customers.csv --table orders=orders.csv --text ti
 | **maskara** + `legal-echr` pattern pack | | | **2.5% / 99.8%** |
 
 - TAB's direct identifiers are 228 names and 134 case numbers (`no. 36110/97`). every general-purpose detector, maskara's included, misses nearly all the case numbers; on names maskara leaks 0.4%. the opt-in `legal-echr` pack (`--pattern legal-echr`) catches them, and changes nothing on the other two corpora.
-- distinctness is a proxy for utility. it shows people weren't merged, not that an analysis on the masked data gives the same answers; we haven't measured that on these corpora yet.
+- distinctness is a proxy for utility. it shows people weren't merged, not that an analysis on the masked data gives the same answers. a separate, initial ABCD classification experiment is described below; other downstream tasks remain unmeasured.
 - the default `balanced` preset keeps most quasi-identifiers (organisations, demographics) and shifts dates, so many of those stay in the text by design.
 - each corpus has its weak spot: ABCD's gold comes from the scenario cards behind the chats, Nemotron-PII is generated text, and TAB is one domain with 127 documents.
 
@@ -121,6 +136,29 @@ uv run maskara bench --corpus abcd nemotron-pii tab \
   --system oracle-redact presidio-redact gliner2-redact opf-redact presidio-fake-consistent maskara-gliner2 maskara-gliner2+echr
 uv run python -m maskara.bench.hero --external docs/assets/hero-external.svg
 ```
+
+to separate replacement quality from detection, `maskara bench-replacements` runs detection and resolution
+once and gives all variants the same dates, IDs, addresses and policy decisions. only names and contacts
+change: globally consistent Faker, entity tokens, entity-linked Faker, or maskara personas. in the initial
+rules-based linked experiment, **all four scored 250/250 on deterministic linking QA**. realistic identities
+therefore have no demonstrated extra benefit on that task. these are component ablations with shared
+maskara machinery, not independent product comparisons or re-identification tests.
+
+```bash
+uv run maskara bench-replacements --corpus linked abcd nemotron-pii tab --detector rules --out runs/replacements/rules
+uv run maskara bench --corpus linked --system presidio-fake-global --qa linking --out runs/replacements/presidio-global
+uv run maskara bench-utility --detector rules --out runs/utility/rules
+```
+
+`bench-utility` trains a fixed word unigram/bigram classifier on each transformed version of ABCD's official
+training split and evaluates every model on the same untouched test split. it measures whole-conversation
+flow classification, not LLM fine-tuning or entity reasoning. see the full results and limits in
+[`bench-results.md`](docs/research/bench-results.md).
+
+in the first rules-based run (8,034 training chats; 1,004 held-out test chats), accuracy was 92.63% for
+original training, 93.13% for the token/Faker controls and 93.23% for maskara: just one test example
+separates maskara from the stronger controls. this does not establish a persona advantage or privacy
+safety; high-recall training-data transformation and attack-based risk evaluation remain to be done.
 
 this is v0, and english only. personas come from [NVIDIA Nemotron-Personas-USA](https://huggingface.co/datasets/nvidia/Nemotron-Personas-USA) (CC BY 4.0) and first names from [SSA baby names](https://www.ssa.gov/oact/babynames/limits.html), so they're american.
 

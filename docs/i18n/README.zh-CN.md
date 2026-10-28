@@ -21,7 +21,7 @@
 
 ---
 
-**不删除个人信息，而是把它替换成一致的合成人物（persona），再用数据证明：数据依然可用，也没有泄露。**
+**将个人信息替换成一致的合成人物（persona），并衡量数据的实用性和残余信息暴露。**
 
 <p align="center">
   <a href="https://app.maskara.dev"><img src="../assets/showroom.png" alt="maskara 展示页：一次示例运行的指标，以及一条客服工单脱敏前后的对比" width="880" /></a>

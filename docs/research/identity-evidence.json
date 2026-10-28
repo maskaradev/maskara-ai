@@ -1,0 +1,1817 @@
+{
+  "schema": "maskara.identity-evidence/1",
+  "date": "2026-10-28",
+  "base_revision": "71230d9075502d5ea00ce8ae003051425cfe9727",
+  "baseline_resolver_sha256": "53c222e97c1df12bc0ddf2a362e48dd7b863780721d337efe6b1c7d771e58567",
+  "source_sha256": {
+    "src/maskara/resolve/__init__.py": "7b58913dc29c71e4d59f009656d8b63f8d3606f66020d82721e63f42e94d6f8b",
+    "src/maskara/api.py": "bcc588f8762c4b81db8c2d187727365c94e56507a549d395c4621fcf01c66262",
+    "src/maskara/transform/__init__.py": "25451f0d2909b1ba79d3c1da2ff4e0223d69e97cfe2e2619a04ffa217a1d0f57",
+    "src/maskara/bench/identity.py": "07ac42cad24ff782f84c4231a003a89899a5315e1399dbe4b12d68525e8abfdc"
+  },
+  "fixture_sha256": "a05cb2bff1c9659e4b21ec9f9b87249676e220b84ded2d4c4eb19473251420d6",
+  "before": {
+    "schema": "maskara.identity-study/1",
+    "cases": 32,
+    "fixture_sha256": "a05cb2bff1c9659e4b21ec9f9b87249676e220b84ded2d4c4eb19473251420d6",
+    "provenance": "Repository-authored synthetic diagnostic cases, 2026-10-28. Not independent or held-out customer evidence. Null owner means insufficient evidence for one owner; supplied row context is evidence, not ground truth for every mention.",
+    "protocol": "Oracle mention spans; resolver sees text, known values, row context and birth dates. Gold owners are read only by the scorer. Provisional identities count as abstentions.",
+    "not_measured": [
+      "Detection recall, replacement quality, re-identification risk",
+      "Independent customer data, natural prevalence, calibrated confidence",
+      "Shared-event identity, general coreference and pairwise clustering recall"
+    ],
+    "scores": {
+      "mentions": 48,
+      "answerable": 26,
+      "accepted": 46,
+      "correct": 26,
+      "wrong": 20,
+      "abstained": 2,
+      "precision": 0.5652173913043478,
+      "recall": 1.0,
+      "coverage": 0.9583333333333334,
+      "abstention_rate": 0.041666666666666664,
+      "unanswerable_accepted": 20,
+      "unanswerable_abstention_rate": 0.09090909090909091,
+      "by_resolution": {
+        "resolved": 46,
+        "unresolved": 2
+      }
+    },
+    "groups": {
+      "alias": {
+        "mentions": 6,
+        "answerable": 6,
+        "accepted": 6,
+        "correct": 6,
+        "wrong": 0,
+        "abstained": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "coverage": 1.0,
+        "abstention_rate": 0.0,
+        "unanswerable_accepted": 0,
+        "unanswerable_abstention_rate": null,
+        "by_resolution": {
+          "resolved": 6
+        }
+      },
+      "context": {
+        "mentions": 3,
+        "answerable": 3,
+        "accepted": 3,
+        "correct": 3,
+        "wrong": 0,
+        "abstained": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "coverage": 1.0,
+        "abstention_rate": 0.0,
+        "unanswerable_accepted": 0,
+        "unanswerable_abstention_rate": null,
+        "by_resolution": {
+          "resolved": 3
+        }
+      },
+      "date": {
+        "mentions": 11,
+        "answerable": 8,
+        "accepted": 10,
+        "correct": 8,
+        "wrong": 2,
+        "abstained": 1,
+        "precision": 0.8,
+        "recall": 1.0,
+        "coverage": 0.9090909090909091,
+        "abstention_rate": 0.09090909090909091,
+        "unanswerable_accepted": 2,
+        "unanswerable_abstention_rate": 0.3333333333333333,
+        "by_resolution": {
+          "resolved": 10,
+          "unresolved": 1
+        }
+      },
+      "homonym": {
+        "mentions": 8,
+        "answerable": 3,
+        "accepted": 8,
+        "correct": 3,
+        "wrong": 5,
+        "abstained": 0,
+        "precision": 0.375,
+        "recall": 1.0,
+        "coverage": 1.0,
+        "abstention_rate": 0.0,
+        "unanswerable_accepted": 5,
+        "unanswerable_abstention_rate": 0.0,
+        "by_resolution": {
+          "resolved": 8
+        }
+      },
+      "no_table": {
+        "mentions": 8,
+        "answerable": 0,
+        "accepted": 7,
+        "correct": 0,
+        "wrong": 7,
+        "abstained": 1,
+        "precision": 0.0,
+        "recall": null,
+        "coverage": 0.875,
+        "abstention_rate": 0.125,
+        "unanswerable_accepted": 7,
+        "unanswerable_abstention_rate": 0.125,
+        "by_resolution": {
+          "resolved": 7,
+          "unresolved": 1
+        }
+      },
+      "role_collision": {
+        "mentions": 1,
+        "answerable": 0,
+        "accepted": 1,
+        "correct": 0,
+        "wrong": 1,
+        "abstained": 0,
+        "precision": 0.0,
+        "recall": null,
+        "coverage": 1.0,
+        "abstention_rate": 0.0,
+        "unanswerable_accepted": 1,
+        "unanswerable_abstention_rate": 0.0,
+        "by_resolution": {
+          "resolved": 1
+        }
+      },
+      "shared_contact": {
+        "mentions": 8,
+        "answerable": 3,
+        "accepted": 8,
+        "correct": 3,
+        "wrong": 5,
+        "abstained": 0,
+        "precision": 0.375,
+        "recall": 1.0,
+        "coverage": 1.0,
+        "abstention_rate": 0.0,
+        "unanswerable_accepted": 5,
+        "unanswerable_abstention_rate": 0.0,
+        "by_resolution": {
+          "resolved": 8
+        }
+      },
+      "unique": {
+        "mentions": 3,
+        "answerable": 3,
+        "accepted": 3,
+        "correct": 3,
+        "wrong": 0,
+        "abstained": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "coverage": 1.0,
+        "abstention_rate": 0.0,
+        "unanswerable_accepted": 0,
+        "unanswerable_abstention_rate": null,
+        "by_resolution": {
+          "resolved": 3
+        }
+      }
+    },
+    "decisions": [
+      {
+        "case": "unique-full",
+        "group": "unique",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "unique-email",
+        "group": "unique",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "phone-format",
+        "group": "unique",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "row-first",
+        "group": "context",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "row"
+        ]
+      },
+      {
+        "case": "unique-anchor",
+        "group": "context",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "unique-anchor",
+        "group": "context",
+        "document": 0,
+        "mention": 1,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "titled-last",
+        "group": "alias",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "middle-initial",
+        "group": "alias",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "possessive",
+        "group": "alias",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "inverted",
+        "group": "alias",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "repeated-last",
+        "group": "alias",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "repeated-last",
+        "group": "alias",
+        "document": 0,
+        "mention": 1,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "homonym-no-context",
+        "group": "homonym",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "homonym-row",
+        "group": "homonym",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "row"
+        ]
+      },
+      {
+        "case": "homonym-two-anchors",
+        "group": "homonym",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "homonym-two-anchors",
+        "group": "homonym",
+        "document": 0,
+        "mention": 1,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "homonym-two-anchors",
+        "group": "homonym",
+        "document": 0,
+        "mention": 2,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "homonym-row-and-agent",
+        "group": "homonym",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "row"
+        ]
+      },
+      {
+        "case": "homonym-reversed-keys",
+        "group": "homonym",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "shared-email",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "shared-phone",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "shared-not-an-anchor",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "shared-not-an-anchor",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 1,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "shared-row-and-guardian",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "row"
+        ]
+      },
+      {
+        "case": "shared-row-and-guardian",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 1,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "row"
+        ]
+      },
+      {
+        "case": "shared-row-and-guardian",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 2,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "shared-row-only",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "row"
+        ]
+      },
+      {
+        "case": "ambiguous-first",
+        "group": "homonym",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "name"
+        ]
+      },
+      {
+        "case": "two-people-date",
+        "group": "date",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "row"
+        ]
+      },
+      {
+        "case": "two-people-date",
+        "group": "date",
+        "document": 0,
+        "mention": 1,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "two-people-date",
+        "group": "date",
+        "document": 0,
+        "mention": 2,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "row"
+        ]
+      },
+      {
+        "case": "single-person-date",
+        "group": "date",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "single-person-date",
+        "group": "date",
+        "document": 0,
+        "mention": 1,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "context"
+        ]
+      },
+      {
+        "case": "row-date",
+        "group": "date",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "row"
+        ]
+      },
+      {
+        "case": "unknown-date",
+        "group": "date",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "unresolved",
+        "evidence": [
+          "value"
+        ]
+      },
+      {
+        "case": "known-birth",
+        "group": "date",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "shared-birth",
+        "group": "date",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "row"
+        ]
+      },
+      {
+        "case": "shared-birth",
+        "group": "date",
+        "document": 0,
+        "mention": 1,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "shared-birth",
+        "group": "date",
+        "document": 0,
+        "mention": 2,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "known"
+        ]
+      },
+      {
+        "case": "unknown-full-across-docs",
+        "group": "no_table",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "name"
+        ]
+      },
+      {
+        "case": "unknown-full-across-docs",
+        "group": "no_table",
+        "document": 1,
+        "mention": 0,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "name"
+        ]
+      },
+      {
+        "case": "unknown-local-alias",
+        "group": "no_table",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "name"
+        ]
+      },
+      {
+        "case": "unknown-local-alias",
+        "group": "no_table",
+        "document": 0,
+        "mention": 1,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "name"
+        ]
+      },
+      {
+        "case": "unknown-two-surnames",
+        "group": "no_table",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "name"
+        ]
+      },
+      {
+        "case": "unknown-two-surnames",
+        "group": "no_table",
+        "document": 0,
+        "mention": 1,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "name"
+        ]
+      },
+      {
+        "case": "unknown-two-surnames",
+        "group": "no_table",
+        "document": 0,
+        "mention": 2,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "name"
+        ]
+      },
+      {
+        "case": "unknown-contact",
+        "group": "no_table",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "unresolved",
+        "evidence": [
+          "value"
+        ]
+      },
+      {
+        "case": "cross-category-collision",
+        "group": "role_collision",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": true,
+        "correct": false,
+        "resolution": "resolved",
+        "evidence": [
+          "name"
+        ]
+      }
+    ]
+  },
+  "after": {
+    "schema": "maskara.identity-study/1",
+    "cases": 32,
+    "fixture_sha256": "a05cb2bff1c9659e4b21ec9f9b87249676e220b84ded2d4c4eb19473251420d6",
+    "provenance": "Repository-authored synthetic diagnostic cases, 2026-10-28. Not independent or held-out customer evidence. Null owner means insufficient evidence for one owner; supplied row context is evidence, not ground truth for every mention.",
+    "protocol": "Oracle mention spans; resolver sees text, known values, row context and birth dates. Gold owners are read only by the scorer. Provisional identities count as abstentions.",
+    "not_measured": [
+      "Detection recall, replacement quality, re-identification risk",
+      "Independent customer data, natural prevalence, calibrated confidence",
+      "Shared-event identity, general coreference and pairwise clustering recall"
+    ],
+    "scores": {
+      "mentions": 48,
+      "answerable": 26,
+      "accepted": 26,
+      "correct": 26,
+      "wrong": 0,
+      "abstained": 22,
+      "precision": 1.0,
+      "recall": 1.0,
+      "coverage": 0.5416666666666666,
+      "abstention_rate": 0.4583333333333333,
+      "unanswerable_accepted": 0,
+      "unanswerable_abstention_rate": 1.0,
+      "by_resolution": {
+        "ambiguous": 13,
+        "provisional": 7,
+        "resolved": 26,
+        "unresolved": 2
+      }
+    },
+    "groups": {
+      "alias": {
+        "mentions": 6,
+        "answerable": 6,
+        "accepted": 6,
+        "correct": 6,
+        "wrong": 0,
+        "abstained": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "coverage": 1.0,
+        "abstention_rate": 0.0,
+        "unanswerable_accepted": 0,
+        "unanswerable_abstention_rate": null,
+        "by_resolution": {
+          "resolved": 6
+        }
+      },
+      "context": {
+        "mentions": 3,
+        "answerable": 3,
+        "accepted": 3,
+        "correct": 3,
+        "wrong": 0,
+        "abstained": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "coverage": 1.0,
+        "abstention_rate": 0.0,
+        "unanswerable_accepted": 0,
+        "unanswerable_abstention_rate": null,
+        "by_resolution": {
+          "resolved": 3
+        }
+      },
+      "date": {
+        "mentions": 11,
+        "answerable": 8,
+        "accepted": 8,
+        "correct": 8,
+        "wrong": 0,
+        "abstained": 3,
+        "precision": 1.0,
+        "recall": 1.0,
+        "coverage": 0.7272727272727273,
+        "abstention_rate": 0.2727272727272727,
+        "unanswerable_accepted": 0,
+        "unanswerable_abstention_rate": 1.0,
+        "by_resolution": {
+          "ambiguous": 2,
+          "resolved": 8,
+          "unresolved": 1
+        }
+      },
+      "homonym": {
+        "mentions": 8,
+        "answerable": 3,
+        "accepted": 3,
+        "correct": 3,
+        "wrong": 0,
+        "abstained": 5,
+        "precision": 1.0,
+        "recall": 1.0,
+        "coverage": 0.375,
+        "abstention_rate": 0.625,
+        "unanswerable_accepted": 0,
+        "unanswerable_abstention_rate": 1.0,
+        "by_resolution": {
+          "ambiguous": 5,
+          "resolved": 3
+        }
+      },
+      "no_table": {
+        "mentions": 8,
+        "answerable": 0,
+        "accepted": 0,
+        "correct": 0,
+        "wrong": 0,
+        "abstained": 8,
+        "precision": null,
+        "recall": null,
+        "coverage": 0.0,
+        "abstention_rate": 1.0,
+        "unanswerable_accepted": 0,
+        "unanswerable_abstention_rate": 1.0,
+        "by_resolution": {
+          "ambiguous": 1,
+          "provisional": 6,
+          "unresolved": 1
+        }
+      },
+      "role_collision": {
+        "mentions": 1,
+        "answerable": 0,
+        "accepted": 0,
+        "correct": 0,
+        "wrong": 0,
+        "abstained": 1,
+        "precision": null,
+        "recall": null,
+        "coverage": 0.0,
+        "abstention_rate": 1.0,
+        "unanswerable_accepted": 0,
+        "unanswerable_abstention_rate": 1.0,
+        "by_resolution": {
+          "provisional": 1
+        }
+      },
+      "shared_contact": {
+        "mentions": 8,
+        "answerable": 3,
+        "accepted": 3,
+        "correct": 3,
+        "wrong": 0,
+        "abstained": 5,
+        "precision": 1.0,
+        "recall": 1.0,
+        "coverage": 0.375,
+        "abstention_rate": 0.625,
+        "unanswerable_accepted": 0,
+        "unanswerable_abstention_rate": 1.0,
+        "by_resolution": {
+          "ambiguous": 5,
+          "resolved": 3
+        }
+      },
+      "unique": {
+        "mentions": 3,
+        "answerable": 3,
+        "accepted": 3,
+        "correct": 3,
+        "wrong": 0,
+        "abstained": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "coverage": 1.0,
+        "abstention_rate": 0.0,
+        "unanswerable_accepted": 0,
+        "unanswerable_abstention_rate": null,
+        "by_resolution": {
+          "resolved": 3
+        }
+      }
+    },
+    "decisions": [
+      {
+        "case": "unique-full",
+        "group": "unique",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "unique-email",
+        "group": "unique",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "phone-format",
+        "group": "unique",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "row-first",
+        "group": "context",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_context"
+        ]
+      },
+      {
+        "case": "unique-anchor",
+        "group": "context",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "unique-anchor",
+        "group": "context",
+        "document": 0,
+        "mention": 1,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_context"
+        ]
+      },
+      {
+        "case": "titled-last",
+        "group": "alias",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "middle-initial",
+        "group": "alias",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "possessive",
+        "group": "alias",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "inverted",
+        "group": "alias",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "repeated-last",
+        "group": "alias",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "repeated-last",
+        "group": "alias",
+        "document": 0,
+        "mention": 1,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "homonym-no-context",
+        "group": "homonym",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "ambiguous",
+        "evidence": [
+          "known_value",
+          "multiple_candidates"
+        ]
+      },
+      {
+        "case": "homonym-row",
+        "group": "homonym",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_context"
+        ]
+      },
+      {
+        "case": "homonym-two-anchors",
+        "group": "homonym",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "homonym-two-anchors",
+        "group": "homonym",
+        "document": 0,
+        "mention": 1,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "homonym-two-anchors",
+        "group": "homonym",
+        "document": 0,
+        "mention": 2,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "ambiguous",
+        "evidence": [
+          "known_value",
+          "multiple_candidates"
+        ]
+      },
+      {
+        "case": "homonym-row-and-agent",
+        "group": "homonym",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "ambiguous",
+        "evidence": [
+          "known_value",
+          "multiple_candidates"
+        ]
+      },
+      {
+        "case": "homonym-reversed-keys",
+        "group": "homonym",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "ambiguous",
+        "evidence": [
+          "known_value",
+          "multiple_candidates"
+        ]
+      },
+      {
+        "case": "shared-email",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "ambiguous",
+        "evidence": [
+          "known_value",
+          "multiple_candidates"
+        ]
+      },
+      {
+        "case": "shared-phone",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "ambiguous",
+        "evidence": [
+          "known_value",
+          "multiple_candidates"
+        ]
+      },
+      {
+        "case": "shared-not-an-anchor",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "ambiguous",
+        "evidence": [
+          "known_value",
+          "multiple_candidates"
+        ]
+      },
+      {
+        "case": "shared-not-an-anchor",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 1,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "ambiguous",
+        "evidence": [
+          "known_value",
+          "multiple_candidates"
+        ]
+      },
+      {
+        "case": "shared-row-and-guardian",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "ambiguous",
+        "evidence": [
+          "known_value",
+          "multiple_candidates"
+        ]
+      },
+      {
+        "case": "shared-row-and-guardian",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 1,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "shared-row-and-guardian",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 2,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "shared-row-only",
+        "group": "shared_contact",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_context"
+        ]
+      },
+      {
+        "case": "ambiguous-first",
+        "group": "homonym",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "ambiguous",
+        "evidence": [
+          "known_value",
+          "multiple_candidates"
+        ]
+      },
+      {
+        "case": "two-people-date",
+        "group": "date",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "two-people-date",
+        "group": "date",
+        "document": 0,
+        "mention": 1,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "two-people-date",
+        "group": "date",
+        "document": 0,
+        "mention": 2,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "ambiguous",
+        "evidence": [
+          "document_owner",
+          "multiple_candidates"
+        ]
+      },
+      {
+        "case": "single-person-date",
+        "group": "date",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "single-person-date",
+        "group": "date",
+        "document": 0,
+        "mention": 1,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "document_owner",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "row-date",
+        "group": "date",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "document_owner",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "unknown-date",
+        "group": "date",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "unresolved",
+        "evidence": [
+          "document_owner",
+          "insufficient_context"
+        ]
+      },
+      {
+        "case": "known-birth",
+        "group": "date",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_birth_date",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "shared-birth",
+        "group": "date",
+        "document": 0,
+        "mention": 0,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "shared-birth",
+        "group": "date",
+        "document": 0,
+        "mention": 1,
+        "answerable": true,
+        "accepted": true,
+        "correct": true,
+        "resolution": "resolved",
+        "evidence": [
+          "known_value",
+          "unique_candidate"
+        ]
+      },
+      {
+        "case": "shared-birth",
+        "group": "date",
+        "document": 0,
+        "mention": 2,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "ambiguous",
+        "evidence": [
+          "known_birth_date",
+          "multiple_candidates"
+        ]
+      },
+      {
+        "case": "unknown-full-across-docs",
+        "group": "no_table",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "provisional",
+        "evidence": [
+          "name_only"
+        ]
+      },
+      {
+        "case": "unknown-full-across-docs",
+        "group": "no_table",
+        "document": 1,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "provisional",
+        "evidence": [
+          "name_only"
+        ]
+      },
+      {
+        "case": "unknown-local-alias",
+        "group": "no_table",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "provisional",
+        "evidence": [
+          "name_only"
+        ]
+      },
+      {
+        "case": "unknown-local-alias",
+        "group": "no_table",
+        "document": 0,
+        "mention": 1,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "provisional",
+        "evidence": [
+          "name_only",
+          "local_alias"
+        ]
+      },
+      {
+        "case": "unknown-two-surnames",
+        "group": "no_table",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "provisional",
+        "evidence": [
+          "name_only"
+        ]
+      },
+      {
+        "case": "unknown-two-surnames",
+        "group": "no_table",
+        "document": 0,
+        "mention": 1,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "provisional",
+        "evidence": [
+          "name_only"
+        ]
+      },
+      {
+        "case": "unknown-two-surnames",
+        "group": "no_table",
+        "document": 0,
+        "mention": 2,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "ambiguous",
+        "evidence": [
+          "name_only",
+          "multiple_local_names"
+        ]
+      },
+      {
+        "case": "unknown-contact",
+        "group": "no_table",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "unresolved",
+        "evidence": [
+          "no_known_owner"
+        ]
+      },
+      {
+        "case": "cross-category-collision",
+        "group": "role_collision",
+        "document": 0,
+        "mention": 0,
+        "answerable": false,
+        "accepted": false,
+        "correct": false,
+        "resolution": "provisional",
+        "evidence": [
+          "name_only"
+        ]
+      }
+    ],
+    "versions": {
+      "maskara": "0.0.1",
+      "python": "3.12.14",
+      "presidio-analyzer": "2.2.364",
+      "spacy": "3.8.16",
+      "en-core-web-lg": "3.8.0",
+      "faker": "40.43.0",
+      "opf": "0.1.0",
+      "gliner2": "2.1.0",
+      "torch": "2.14.1"
+    }
+  },
+  "linked_regression": {
+    "documents": 441,
+    "before_scores": {
+      "documents": 441,
+      "privacy": {
+        "direct": {
+          "mentions": 3553.0,
+          "leak_full": 0.0003,
+          "leak_partial": 0.0006,
+          "residual": 0.0004,
+          "entity_leak": 0.0014
+        },
+        "quasi": {
+          "mentions": 789.0,
+          "leak_full": 0.1077,
+          "leak_partial": 0.6312,
+          "residual": 0.4814,
+          "entity_leak": 0.0726
+        }
+      },
+      "fidelity": {
+        "consistency": 0.9945,
+        "distinctness": 0.9689,
+        "placeholder": 0.0,
+        "over_masking": 0.0,
+        "keep_spans_changed": 0.0
+      },
+      "leak_by_category": {
+        "direct:ADDRESS": {
+          "mentions": 82.0,
+          "leak_full": 0.0
+        },
+        "direct:CONTACT": {
+          "mentions": 440.0,
+          "leak_full": 0.0
+        },
+        "direct:FINANCIAL": {
+          "mentions": 72.0,
+          "leak_full": 0.0
+        },
+        "direct:ID": {
+          "mentions": 530.0,
+          "leak_full": 0.0
+        },
+        "direct:PERSON": {
+          "mentions": 2429.0,
+          "leak_full": 0.0004
+        },
+        "quasi:ADDRESS": {
+          "mentions": 82.0,
+          "leak_full": 0.061
+        },
+        "quasi:DATE": {
+          "mentions": 545.0,
+          "leak_full": 0.0037
+        },
+        "quasi:DEMOGRAPHIC": {
+          "mentions": 15.0,
+          "leak_full": 0.4667
+        },
+        "quasi:LOCATION": {
+          "mentions": 147.0,
+          "leak_full": 0.483
+        }
+      }
+    },
+    "before_qa": {
+      "correct": 250,
+      "questions": 250
+    },
+    "before_source": "2026-10-27 matched-persona, rules/known, same seed and input adapter",
+    "after_scores": {
+      "documents": 441,
+      "privacy": {
+        "direct": {
+          "mentions": 3553.0,
+          "leak_full": 0.0003,
+          "leak_partial": 0.0006,
+          "residual": 0.0004,
+          "entity_leak": 0.0014
+        },
+        "quasi": {
+          "mentions": 789.0,
+          "leak_full": 0.1001,
+          "leak_partial": 0.6324,
+          "residual": 0.4957,
+          "entity_leak": 0.0615
+        }
+      },
+      "fidelity": {
+        "consistency": 0.9915,
+        "distinctness": 0.9658,
+        "placeholder": 0.0,
+        "over_masking": 0.0,
+        "keep_spans_changed": 0.0
+      },
+      "leak_by_category": {
+        "direct:ADDRESS": {
+          "mentions": 82.0,
+          "leak_full": 0.0
+        },
+        "direct:CONTACT": {
+          "mentions": 440.0,
+          "leak_full": 0.0
+        },
+        "direct:FINANCIAL": {
+          "mentions": 72.0,
+          "leak_full": 0.0
+        },
+        "direct:ID": {
+          "mentions": 530.0,
+          "leak_full": 0.0
+        },
+        "direct:PERSON": {
+          "mentions": 2429.0,
+          "leak_full": 0.0004
+        },
+        "quasi:ADDRESS": {
+          "mentions": 82.0,
+          "leak_full": 0.061
+        },
+        "quasi:DATE": {
+          "mentions": 545.0,
+          "leak_full": 0.0055
+        },
+        "quasi:DEMOGRAPHIC": {
+          "mentions": 15.0,
+          "leak_full": 0.0
+        },
+        "quasi:LOCATION": {
+          "mentions": 147.0,
+          "leak_full": 0.483
+        }
+      }
+    },
+    "after_qa": {
+      "correct": 250,
+      "questions": 250,
+      "accuracy": 1.0
+    },
+    "versions": {
+      "maskara": "0.0.1",
+      "python": "3.12.14",
+      "presidio-analyzer": "2.2.364",
+      "spacy": "3.8.16",
+      "en-core-web-lg": "3.8.0",
+      "faker": "40.43.0",
+      "opf": "0.1.0",
+      "gliner2": "2.1.0",
+      "torch": "2.14.1"
+    },
+    "outputs_sha256": "9d0429360c432a49165caafc1744951f26f4c5158ca813261bae8e05d058e389"
+  },
+  "baseline_acceptance": "The legacy resolver had no uncertainty state; every non-null subject was treated as an accepted identity, including run-wide name clusters."
+}

@@ -21,7 +21,7 @@
 
 ---
 
-**remplacez les données personnelles par des personas synthétiques cohérents au lieu de les caviarder, puis prouvez que les données restent utiles et n'ont pas fuité.**
+**remplacez les données personnelles par des personas synthétiques cohérents, puis mesurez l'utilité des données et l'exposition résiduelle.**
 
 <p align="center">
   <a href="https://app.maskara.dev"><img src="../assets/showroom.png" alt="la vitrine de maskara : les chiffres d'une exécution d'exemple, et un ticket de support avant et après masquage" width="880" /></a>

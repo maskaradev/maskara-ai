@@ -21,7 +21,7 @@
 
 ---
 
-**Personenbezogene Daten durch konsistente synthetische Personas ersetzen statt schwärzen — und belegen, dass die Daten nützlich geblieben und nicht durchgesickert sind.**
+**Personenbezogene Daten durch konsistente synthetische Personas ersetzen und den Nutzen sowie die verbleibende Offenlegung messen.**
 
 <p align="center">
   <a href="https://app.maskara.dev"><img src="../assets/showroom.png" alt="der maskara-Showroom: die Kennzahlen eines Beispiellaufs und ein Support-Ticket vor und nach der Maskierung" width="880" /></a>

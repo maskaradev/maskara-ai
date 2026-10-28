@@ -1,0 +1,3465 @@
+{
+  "schema": "maskara.bench-evidence/1",
+  "date": "2026-10-27",
+  "scope": "Name/contact rendering ablation and one downstream classification task; not a privacy guarantee",
+  "replacement_studies": [
+    {
+      "detector": "rules",
+      "corpus": "linked",
+      "documents": 441,
+      "corpus_info": {
+        "name": "linked",
+        "source": "generated from https://huggingface.co/datasets/nvidia/Nemotron-Personas-USA @ 5b4cd35",
+        "license": "CC BY 4.0 (people from Nemotron-Personas-USA)",
+        "realism": "synthetic: template-written support tickets about real-looking US people; gold is exact by construction",
+        "caveats": "templates, not human or model writing, so phrasing repeats and detectors may find it easy; US adults only, one store, English; contact details and ids are random; names are two words with distinct surnames; entity ids hold across documents, and the scorer pairs mentions across documents",
+        "entity_scope": "corpus"
+      },
+      "versions": {
+        "maskara": "0.0.1",
+        "python": "3.12.14",
+        "presidio-analyzer": "2.2.364",
+        "spacy": "3.8.16",
+        "en-core-web-lg": "3.8.0",
+        "faker": "40.43.0",
+        "opf": "0.1.0",
+        "gliner2": "2.1.0",
+        "torch": "2.14.1"
+      },
+      "comparison": {
+        "schema": "maskara.replacement-study/1",
+        "seed": "maskara-bench",
+        "preset": "balanced",
+        "detectors": [
+          "rules",
+          "known"
+        ],
+        "patterns": null,
+        "with_tables": true,
+        "input_sha256": "1647cfcd6fc9f9a09edefb4aae5de1ed70c17c4d0bf42433f0d248fe55a3ed84",
+        "plan_sha256": "b797c3452c310272a95c2a066dc04b7ba5db2a6ed79a3768bc7cf6efdd436b5f",
+        "shared_preparation_seconds": 2.795,
+        "spans": 4230,
+        "identity_spans": 2869,
+        "varied": "changed PERSON and CONTACT rendering only",
+        "shared": "input tables, detected spans, resolved owners, keep decisions, dates, IDs, addresses, locations, demographics and all other output",
+        "gold_used_for_replacement": false,
+        "not_measured": [
+          "re-identification and attribute inference",
+          "cross-release linkage",
+          "independent entity-resolution quality",
+          "training utility or external-corpus QA",
+          "address/geography/demographic rendering benefit"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "value-faker",
+          "scores": {
+            "documents": 441,
+            "privacy": {
+              "direct": {
+                "mentions": 3553.0,
+                "leak_full": 0.0003,
+                "leak_partial": 0.0014,
+                "residual": 0.0011,
+                "entity_leak": 0.0014
+              },
+              "quasi": {
+                "mentions": 789.0,
+                "leak_full": 0.1077,
+                "leak_partial": 0.6312,
+                "residual": 0.4814,
+                "entity_leak": 0.0726
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9945,
+              "distinctness": 0.9693,
+              "placeholder": 0.0,
+              "over_masking": 0.0001,
+              "keep_spans_changed": 0.0
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 440.0,
+                "leak_full": 0.0
+              },
+              "direct:FINANCIAL": {
+                "mentions": 72.0,
+                "leak_full": 0.0
+              },
+              "direct:ID": {
+                "mentions": 530.0,
+                "leak_full": 0.0
+              },
+              "direct:PERSON": {
+                "mentions": 2429.0,
+                "leak_full": 0.0004
+              },
+              "quasi:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.061
+              },
+              "quasi:DATE": {
+                "mentions": 545.0,
+                "leak_full": 0.0037
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 15.0,
+                "leak_full": 0.4667
+              },
+              "quasi:LOCATION": {
+                "mentions": 147.0,
+                "leak_full": 0.483
+              }
+            }
+          },
+          "output_sha256": "2627452b5c2867d4229a591cc49aefb54dc8063f3452a6619b0d303b6f48d434",
+          "qa": {
+            "reader": "linking",
+            "questions": 250,
+            "correct": 250,
+            "accuracy": 1.0,
+            "by_kind": {
+              "ticket_count": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "ticket_gap": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "earlier_issue": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "last_product": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "same_person": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              }
+            }
+          }
+        },
+        {
+          "variant": "entity-token",
+          "scores": {
+            "documents": 441,
+            "privacy": {
+              "direct": {
+                "mentions": 3553.0,
+                "leak_full": 0.0003,
+                "leak_partial": 0.0003,
+                "residual": 0.0003,
+                "entity_leak": 0.0014
+              },
+              "quasi": {
+                "mentions": 789.0,
+                "leak_full": 0.1077,
+                "leak_partial": 0.6312,
+                "residual": 0.4814,
+                "entity_leak": 0.0726
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9945,
+              "distinctness": 0.9733,
+              "placeholder": 0.6739,
+              "over_masking": 0.0001,
+              "keep_spans_changed": 0.0
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 440.0,
+                "leak_full": 0.0
+              },
+              "direct:FINANCIAL": {
+                "mentions": 72.0,
+                "leak_full": 0.0
+              },
+              "direct:ID": {
+                "mentions": 530.0,
+                "leak_full": 0.0
+              },
+              "direct:PERSON": {
+                "mentions": 2429.0,
+                "leak_full": 0.0004
+              },
+              "quasi:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.061
+              },
+              "quasi:DATE": {
+                "mentions": 545.0,
+                "leak_full": 0.0037
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 15.0,
+                "leak_full": 0.4667
+              },
+              "quasi:LOCATION": {
+                "mentions": 147.0,
+                "leak_full": 0.483
+              }
+            }
+          },
+          "output_sha256": "3d5ea900f4bbe734fb20cdad5bee5f07cc18425a50922fc428ab0877b7fe404c",
+          "qa": {
+            "reader": "linking",
+            "questions": 250,
+            "correct": 250,
+            "accuracy": 1.0,
+            "by_kind": {
+              "ticket_count": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "ticket_gap": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "earlier_issue": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "last_product": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "same_person": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              }
+            }
+          }
+        },
+        {
+          "variant": "entity-faker",
+          "scores": {
+            "documents": 441,
+            "privacy": {
+              "direct": {
+                "mentions": 3553.0,
+                "leak_full": 0.0003,
+                "leak_partial": 0.0003,
+                "residual": 0.0003,
+                "entity_leak": 0.0014
+              },
+              "quasi": {
+                "mentions": 789.0,
+                "leak_full": 0.1077,
+                "leak_partial": 0.6312,
+                "residual": 0.4814,
+                "entity_leak": 0.0726
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9945,
+              "distinctness": 0.9295,
+              "placeholder": 0.0,
+              "over_masking": 0.0001,
+              "keep_spans_changed": 0.0
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 440.0,
+                "leak_full": 0.0
+              },
+              "direct:FINANCIAL": {
+                "mentions": 72.0,
+                "leak_full": 0.0
+              },
+              "direct:ID": {
+                "mentions": 530.0,
+                "leak_full": 0.0
+              },
+              "direct:PERSON": {
+                "mentions": 2429.0,
+                "leak_full": 0.0004
+              },
+              "quasi:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.061
+              },
+              "quasi:DATE": {
+                "mentions": 545.0,
+                "leak_full": 0.0037
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 15.0,
+                "leak_full": 0.4667
+              },
+              "quasi:LOCATION": {
+                "mentions": 147.0,
+                "leak_full": 0.483
+              }
+            }
+          },
+          "output_sha256": "476b65eff938482b97146c73f6b5a63e9556c24eff9a8d6d50dbe06cba2f924d",
+          "qa": {
+            "reader": "linking",
+            "questions": 250,
+            "correct": 250,
+            "accuracy": 1.0,
+            "by_kind": {
+              "ticket_count": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "ticket_gap": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "earlier_issue": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "last_product": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "same_person": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              }
+            }
+          }
+        },
+        {
+          "variant": "persona",
+          "scores": {
+            "documents": 441,
+            "privacy": {
+              "direct": {
+                "mentions": 3553.0,
+                "leak_full": 0.0003,
+                "leak_partial": 0.0006,
+                "residual": 0.0004,
+                "entity_leak": 0.0014
+              },
+              "quasi": {
+                "mentions": 789.0,
+                "leak_full": 0.1077,
+                "leak_partial": 0.6312,
+                "residual": 0.4814,
+                "entity_leak": 0.0726
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9945,
+              "distinctness": 0.9689,
+              "placeholder": 0.0,
+              "over_masking": 0.0,
+              "keep_spans_changed": 0.0
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 440.0,
+                "leak_full": 0.0
+              },
+              "direct:FINANCIAL": {
+                "mentions": 72.0,
+                "leak_full": 0.0
+              },
+              "direct:ID": {
+                "mentions": 530.0,
+                "leak_full": 0.0
+              },
+              "direct:PERSON": {
+                "mentions": 2429.0,
+                "leak_full": 0.0004
+              },
+              "quasi:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.061
+              },
+              "quasi:DATE": {
+                "mentions": 545.0,
+                "leak_full": 0.0037
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 15.0,
+                "leak_full": 0.4667
+              },
+              "quasi:LOCATION": {
+                "mentions": 147.0,
+                "leak_full": 0.483
+              }
+            }
+          },
+          "output_sha256": "1388d9b5a902603132d5920767f4dbe1f57983e044dc182913178c4079090f39",
+          "qa": {
+            "reader": "linking",
+            "questions": 250,
+            "correct": 250,
+            "accuracy": 1.0,
+            "by_kind": {
+              "ticket_count": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "ticket_gap": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "earlier_issue": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "last_product": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "same_person": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "detector": "rules",
+      "corpus": "abcd",
+      "documents": 1004,
+      "corpus_info": {
+        "name": "abcd",
+        "source": "https://github.com/asappresearch/abcd",
+        "license": "MIT",
+        "realism": "human-written role-play chats; identities come from scenario cards",
+        "caveats": "gold spans are derived by searching for scenario values; PII not on the card is missing"
+      },
+      "versions": {
+        "maskara": "0.0.1",
+        "python": "3.12.14",
+        "presidio-analyzer": "2.2.364",
+        "spacy": "3.8.16",
+        "en-core-web-lg": "3.8.0",
+        "faker": "40.43.0",
+        "opf": "0.1.0",
+        "gliner2": "2.1.0",
+        "torch": "2.14.1"
+      },
+      "comparison": {
+        "schema": "maskara.replacement-study/1",
+        "seed": "maskara-bench",
+        "preset": "balanced",
+        "detectors": [
+          "rules",
+          "known"
+        ],
+        "patterns": null,
+        "with_tables": false,
+        "input_sha256": "3315efbcbb8decec5cbf5ad7d0d2ce5fed0002570ec32825caa1ca10e1edb4d4",
+        "plan_sha256": "216b60e9140d9e97b766655a59d83b63aaa661e667e46bb1d7558c81a1968bf5",
+        "shared_preparation_seconds": 3.927,
+        "spans": 3120,
+        "identity_spans": 1802,
+        "varied": "changed PERSON and CONTACT rendering only",
+        "shared": "input tables, detected spans, resolved owners, keep decisions, dates, IDs, addresses, locations, demographics and all other output",
+        "gold_used_for_replacement": false,
+        "not_measured": [
+          "re-identification and attribute inference",
+          "cross-release linkage",
+          "independent entity-resolution quality",
+          "training utility or external-corpus QA",
+          "address/geography/demographic rendering benefit"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "value-faker",
+          "scores": {
+            "documents": 1004,
+            "privacy": {
+              "direct": {
+                "mentions": 3480.0,
+                "leak_full": 0.2736,
+                "leak_partial": 0.0014,
+                "residual": 0.2901,
+                "entity_leak": 0.2447
+              },
+              "quasi": {
+                "mentions": 466.0,
+                "leak_full": 0.4313,
+                "leak_partial": 0.0,
+                "residual": 0.4248,
+                "entity_leak": 0.5884
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9875,
+              "distinctness": 0.9692,
+              "placeholder": 0.0,
+              "over_masking": 0.0054,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 198.0,
+                "leak_full": 0.0051
+              },
+              "direct:CONTACT": {
+                "mentions": 325.0,
+                "leak_full": 0.0369
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 54.0,
+                "leak_full": 0.5926
+              },
+              "direct:ID": {
+                "mentions": 1028.0,
+                "leak_full": 0.1274
+              },
+              "direct:PERSON": {
+                "mentions": 1875.0,
+                "leak_full": 0.4139
+              },
+              "quasi:ADDRESS": {
+                "mentions": 255.0,
+                "leak_full": 0.4471
+              },
+              "quasi:LOCATION": {
+                "mentions": 211.0,
+                "leak_full": 0.4123
+              }
+            }
+          },
+          "output_sha256": "a8a4dae9e8b92179020880f972d1748ff217d47e8f81559a9f3d80d5f32e42d9"
+        },
+        {
+          "variant": "entity-token",
+          "scores": {
+            "documents": 1004,
+            "privacy": {
+              "direct": {
+                "mentions": 3480.0,
+                "leak_full": 0.2736,
+                "leak_partial": 0.0014,
+                "residual": 0.2901,
+                "entity_leak": 0.2447
+              },
+              "quasi": {
+                "mentions": 466.0,
+                "leak_full": 0.4313,
+                "leak_partial": 0.0,
+                "residual": 0.4248,
+                "entity_leak": 0.5884
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9875,
+              "distinctness": 0.9692,
+              "placeholder": 0.5761,
+              "over_masking": 0.0055,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 198.0,
+                "leak_full": 0.0051
+              },
+              "direct:CONTACT": {
+                "mentions": 325.0,
+                "leak_full": 0.0369
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 54.0,
+                "leak_full": 0.5926
+              },
+              "direct:ID": {
+                "mentions": 1028.0,
+                "leak_full": 0.1274
+              },
+              "direct:PERSON": {
+                "mentions": 1875.0,
+                "leak_full": 0.4139
+              },
+              "quasi:ADDRESS": {
+                "mentions": 255.0,
+                "leak_full": 0.4471
+              },
+              "quasi:LOCATION": {
+                "mentions": 211.0,
+                "leak_full": 0.4123
+              }
+            }
+          },
+          "output_sha256": "7e0fe287e7f1f21c6fb02625ba50c1b715d70102a17be53fab0b68404973e899"
+        },
+        {
+          "variant": "entity-faker",
+          "scores": {
+            "documents": 1004,
+            "privacy": {
+              "direct": {
+                "mentions": 3480.0,
+                "leak_full": 0.2736,
+                "leak_partial": 0.0014,
+                "residual": 0.2901,
+                "entity_leak": 0.2447
+              },
+              "quasi": {
+                "mentions": 466.0,
+                "leak_full": 0.4313,
+                "leak_partial": 0.0,
+                "residual": 0.4248,
+                "entity_leak": 0.5884
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9875,
+              "distinctness": 0.9692,
+              "placeholder": 0.0,
+              "over_masking": 0.0054,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 198.0,
+                "leak_full": 0.0051
+              },
+              "direct:CONTACT": {
+                "mentions": 325.0,
+                "leak_full": 0.0369
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 54.0,
+                "leak_full": 0.5926
+              },
+              "direct:ID": {
+                "mentions": 1028.0,
+                "leak_full": 0.1274
+              },
+              "direct:PERSON": {
+                "mentions": 1875.0,
+                "leak_full": 0.4139
+              },
+              "quasi:ADDRESS": {
+                "mentions": 255.0,
+                "leak_full": 0.4471
+              },
+              "quasi:LOCATION": {
+                "mentions": 211.0,
+                "leak_full": 0.4123
+              }
+            }
+          },
+          "output_sha256": "988602801b7a5b86e45fa277ae915d60a71243701d9a5ea0f305bec11523ac95"
+        },
+        {
+          "variant": "persona",
+          "scores": {
+            "documents": 1004,
+            "privacy": {
+              "direct": {
+                "mentions": 3480.0,
+                "leak_full": 0.2736,
+                "leak_partial": 0.0023,
+                "residual": 0.2903,
+                "entity_leak": 0.2447
+              },
+              "quasi": {
+                "mentions": 466.0,
+                "leak_full": 0.4313,
+                "leak_partial": 0.0,
+                "residual": 0.4248,
+                "entity_leak": 0.5884
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9875,
+              "distinctness": 0.9692,
+              "placeholder": 0.0,
+              "over_masking": 0.0054,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 198.0,
+                "leak_full": 0.0051
+              },
+              "direct:CONTACT": {
+                "mentions": 325.0,
+                "leak_full": 0.0369
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 54.0,
+                "leak_full": 0.5926
+              },
+              "direct:ID": {
+                "mentions": 1028.0,
+                "leak_full": 0.1274
+              },
+              "direct:PERSON": {
+                "mentions": 1875.0,
+                "leak_full": 0.4139
+              },
+              "quasi:ADDRESS": {
+                "mentions": 255.0,
+                "leak_full": 0.4471
+              },
+              "quasi:LOCATION": {
+                "mentions": 211.0,
+                "leak_full": 0.4123
+              }
+            }
+          },
+          "output_sha256": "c877c62a91adf7b83a2172e101124150ae9930915c753104b8998fae1252940e"
+        }
+      ]
+    },
+    {
+      "detector": "rules",
+      "corpus": "nemotron-pii",
+      "documents": 1000,
+      "corpus_info": {
+        "name": "nemotron-pii",
+        "source": "https://huggingface.co/datasets/nvidia/Nemotron-PII",
+        "license": "CC BY 4.0",
+        "realism": "synthetic documents, generated labels",
+        "caveats": "fully synthetic; entity ids are inferred from equal text within a document"
+      },
+      "versions": {
+        "maskara": "0.0.1",
+        "python": "3.12.14",
+        "presidio-analyzer": "2.2.364",
+        "spacy": "3.8.16",
+        "en-core-web-lg": "3.8.0",
+        "faker": "40.43.0",
+        "opf": "0.1.0",
+        "gliner2": "2.1.0",
+        "torch": "2.14.1"
+      },
+      "comparison": {
+        "schema": "maskara.replacement-study/1",
+        "seed": "maskara-bench",
+        "preset": "balanced",
+        "detectors": [
+          "rules",
+          "known"
+        ],
+        "patterns": null,
+        "with_tables": false,
+        "input_sha256": "85a4979ac1b5016817b5d02b77740fb0ab184dd9235689746619badd6e5761a9",
+        "plan_sha256": "d05e99de8e3889529d72cf65bb6edea94eb9bab2ccc2d4dc53d5ed3f2bb22402",
+        "shared_preparation_seconds": 4.605,
+        "spans": 4124,
+        "identity_spans": 1056,
+        "varied": "changed PERSON and CONTACT rendering only",
+        "shared": "input tables, detected spans, resolved owners, keep decisions, dates, IDs, addresses, locations, demographics and all other output",
+        "gold_used_for_replacement": false,
+        "not_measured": [
+          "re-identification and attribute inference",
+          "cross-release linkage",
+          "independent entity-resolution quality",
+          "training utility or external-corpus QA",
+          "address/geography/demographic rendering benefit"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "value-faker",
+          "scores": {
+            "documents": 1000,
+            "privacy": {
+              "direct": {
+                "mentions": 4707.0,
+                "leak_full": 0.3044,
+                "leak_partial": 0.02,
+                "residual": 0.281,
+                "entity_leak": 0.2906
+              },
+              "quasi": {
+                "mentions": 3898.0,
+                "leak_full": 0.7345,
+                "leak_partial": 0.1921,
+                "residual": 0.8905,
+                "entity_leak": 0.7111
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9975,
+              "distinctness": 0.9278,
+              "placeholder": 0.0,
+              "over_masking": 0.0008,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 196.0,
+                "leak_full": 0.1224
+              },
+              "direct:CONTACT": {
+                "mentions": 685.0,
+                "leak_full": 0.0088
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 404.0,
+                "leak_full": 0.5173
+              },
+              "direct:FINANCIAL": {
+                "mentions": 321.0,
+                "leak_full": 0.2461
+              },
+              "direct:ID": {
+                "mentions": 1047.0,
+                "leak_full": 0.2913
+              },
+              "direct:LOCATION": {
+                "mentions": 91.0,
+                "leak_full": 0.4615
+              },
+              "direct:NETWORK": {
+                "mentions": 589.0,
+                "leak_full": 0.0424
+              },
+              "direct:PERSON": {
+                "mentions": 1374.0,
+                "leak_full": 0.5408
+              },
+              "quasi:ADDRESS": {
+                "mentions": 91.0,
+                "leak_full": 0.9231
+              },
+              "quasi:DATE": {
+                "mentions": 1202.0,
+                "leak_full": 0.2903
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 1167.0,
+                "leak_full": 0.9597
+              },
+              "quasi:LOCATION": {
+                "mentions": 847.0,
+                "leak_full": 0.8489
+              },
+              "quasi:ORG": {
+                "mentions": 591.0,
+                "leak_full": 1.0
+              }
+            }
+          },
+          "output_sha256": "119b78520aba331b4cfb2344d4f7cafb846abb4585813f7c4dfea196d0c98492"
+        },
+        {
+          "variant": "entity-token",
+          "scores": {
+            "documents": 1000,
+            "privacy": {
+              "direct": {
+                "mentions": 4707.0,
+                "leak_full": 0.3042,
+                "leak_partial": 0.0193,
+                "residual": 0.2807,
+                "entity_leak": 0.2903
+              },
+              "quasi": {
+                "mentions": 3898.0,
+                "leak_full": 0.7345,
+                "leak_partial": 0.1921,
+                "residual": 0.8905,
+                "entity_leak": 0.7111
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9972,
+              "distinctness": 0.9276,
+              "placeholder": 0.3146,
+              "over_masking": 0.0008,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 196.0,
+                "leak_full": 0.1224
+              },
+              "direct:CONTACT": {
+                "mentions": 685.0,
+                "leak_full": 0.0088
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 404.0,
+                "leak_full": 0.5173
+              },
+              "direct:FINANCIAL": {
+                "mentions": 321.0,
+                "leak_full": 0.2461
+              },
+              "direct:ID": {
+                "mentions": 1047.0,
+                "leak_full": 0.2913
+              },
+              "direct:LOCATION": {
+                "mentions": 91.0,
+                "leak_full": 0.4615
+              },
+              "direct:NETWORK": {
+                "mentions": 589.0,
+                "leak_full": 0.0424
+              },
+              "direct:PERSON": {
+                "mentions": 1374.0,
+                "leak_full": 0.54
+              },
+              "quasi:ADDRESS": {
+                "mentions": 91.0,
+                "leak_full": 0.9231
+              },
+              "quasi:DATE": {
+                "mentions": 1202.0,
+                "leak_full": 0.2903
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 1167.0,
+                "leak_full": 0.9597
+              },
+              "quasi:LOCATION": {
+                "mentions": 847.0,
+                "leak_full": 0.8489
+              },
+              "quasi:ORG": {
+                "mentions": 591.0,
+                "leak_full": 1.0
+              }
+            }
+          },
+          "output_sha256": "76f31beb57908b2a288672193a8511f53e5ea1f148c5d71d1f7432fac8eafecd"
+        },
+        {
+          "variant": "entity-faker",
+          "scores": {
+            "documents": 1000,
+            "privacy": {
+              "direct": {
+                "mentions": 4707.0,
+                "leak_full": 0.3044,
+                "leak_partial": 0.02,
+                "residual": 0.281,
+                "entity_leak": 0.2906
+              },
+              "quasi": {
+                "mentions": 3898.0,
+                "leak_full": 0.7345,
+                "leak_partial": 0.1921,
+                "residual": 0.8905,
+                "entity_leak": 0.7111
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9972,
+              "distinctness": 0.9278,
+              "placeholder": 0.0,
+              "over_masking": 0.0008,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 196.0,
+                "leak_full": 0.1224
+              },
+              "direct:CONTACT": {
+                "mentions": 685.0,
+                "leak_full": 0.0088
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 404.0,
+                "leak_full": 0.5173
+              },
+              "direct:FINANCIAL": {
+                "mentions": 321.0,
+                "leak_full": 0.2461
+              },
+              "direct:ID": {
+                "mentions": 1047.0,
+                "leak_full": 0.2913
+              },
+              "direct:LOCATION": {
+                "mentions": 91.0,
+                "leak_full": 0.4615
+              },
+              "direct:NETWORK": {
+                "mentions": 589.0,
+                "leak_full": 0.0424
+              },
+              "direct:PERSON": {
+                "mentions": 1374.0,
+                "leak_full": 0.5408
+              },
+              "quasi:ADDRESS": {
+                "mentions": 91.0,
+                "leak_full": 0.9231
+              },
+              "quasi:DATE": {
+                "mentions": 1202.0,
+                "leak_full": 0.2903
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 1167.0,
+                "leak_full": 0.9597
+              },
+              "quasi:LOCATION": {
+                "mentions": 847.0,
+                "leak_full": 0.8489
+              },
+              "quasi:ORG": {
+                "mentions": 591.0,
+                "leak_full": 1.0
+              }
+            }
+          },
+          "output_sha256": "63be098b94ada5e4b81b14c08a10b7f7e43595b8c02e3e1cc4c1f55a49fab10c"
+        },
+        {
+          "variant": "persona",
+          "scores": {
+            "documents": 1000,
+            "privacy": {
+              "direct": {
+                "mentions": 4707.0,
+                "leak_full": 0.3042,
+                "leak_partial": 0.0195,
+                "residual": 0.2808,
+                "entity_leak": 0.2903
+              },
+              "quasi": {
+                "mentions": 3898.0,
+                "leak_full": 0.7345,
+                "leak_partial": 0.1921,
+                "residual": 0.8905,
+                "entity_leak": 0.7111
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9972,
+              "distinctness": 0.9276,
+              "placeholder": 0.0,
+              "over_masking": 0.0008,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 196.0,
+                "leak_full": 0.1224
+              },
+              "direct:CONTACT": {
+                "mentions": 685.0,
+                "leak_full": 0.0088
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 404.0,
+                "leak_full": 0.5173
+              },
+              "direct:FINANCIAL": {
+                "mentions": 321.0,
+                "leak_full": 0.2461
+              },
+              "direct:ID": {
+                "mentions": 1047.0,
+                "leak_full": 0.2913
+              },
+              "direct:LOCATION": {
+                "mentions": 91.0,
+                "leak_full": 0.4615
+              },
+              "direct:NETWORK": {
+                "mentions": 589.0,
+                "leak_full": 0.0424
+              },
+              "direct:PERSON": {
+                "mentions": 1374.0,
+                "leak_full": 0.54
+              },
+              "quasi:ADDRESS": {
+                "mentions": 91.0,
+                "leak_full": 0.9231
+              },
+              "quasi:DATE": {
+                "mentions": 1202.0,
+                "leak_full": 0.2903
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 1167.0,
+                "leak_full": 0.9597
+              },
+              "quasi:LOCATION": {
+                "mentions": 847.0,
+                "leak_full": 0.8489
+              },
+              "quasi:ORG": {
+                "mentions": 591.0,
+                "leak_full": 1.0
+              }
+            }
+          },
+          "output_sha256": "2dfb6c52e144fec978065873c911caa35cdd60a5fbfb632b5e12f59d7e658eed"
+        }
+      ]
+    },
+    {
+      "detector": "rules",
+      "corpus": "tab",
+      "documents": 127,
+      "corpus_info": {
+        "name": "tab",
+        "source": "https://github.com/NorskRegnesentral/text-anonymization-benchmark",
+        "license": "MIT",
+        "realism": "real text, human annotation",
+        "caveats": "legal domain only; mostly European names; annotators disagree, so scores average over them"
+      },
+      "versions": {
+        "maskara": "0.0.1",
+        "python": "3.12.14",
+        "presidio-analyzer": "2.2.364",
+        "spacy": "3.8.16",
+        "en-core-web-lg": "3.8.0",
+        "faker": "40.43.0",
+        "opf": "0.1.0",
+        "gliner2": "2.1.0",
+        "torch": "2.14.1"
+      },
+      "comparison": {
+        "schema": "maskara.replacement-study/1",
+        "seed": "maskara-bench",
+        "preset": "balanced",
+        "detectors": [
+          "rules",
+          "known"
+        ],
+        "patterns": null,
+        "with_tables": false,
+        "input_sha256": "e791ac5354d6081bc75fa81c2a4b1a650426ff06be6f427bc8de6e2fa5f451be",
+        "plan_sha256": "ac3fe7d59f3e80ad7eff203b9d59947fbf897bb17b710d1654aaff317416be3c",
+        "shared_preparation_seconds": 1.853,
+        "spans": 2639,
+        "identity_spans": 501,
+        "varied": "changed PERSON and CONTACT rendering only",
+        "shared": "input tables, detected spans, resolved owners, keep decisions, dates, IDs, addresses, locations, demographics and all other output",
+        "gold_used_for_replacement": false,
+        "not_measured": [
+          "re-identification and attribute inference",
+          "cross-release linkage",
+          "independent entity-resolution quality",
+          "training utility or external-corpus QA",
+          "address/geography/demographic rendering benefit"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "value-faker",
+          "scores": {
+            "documents": 127,
+            "privacy": {
+              "direct": {
+                "mentions": 365.0,
+                "leak_full": 0.406,
+                "leak_partial": 0.0235,
+                "residual": 0.332,
+                "entity_leak": 0.5412
+              },
+              "quasi": {
+                "mentions": 4745.5,
+                "leak_full": 0.5543,
+                "leak_partial": 0.377,
+                "residual": 0.7821,
+                "entity_leak": 0.5076
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9881,
+              "distinctness": 0.9999,
+              "placeholder": 0.0001,
+              "over_masking": 0.0002,
+              "keep_spans_changed": 0.0428
+            },
+            "leak_by_category": {
+              "direct:DATE": {
+                "mentions": 0.8,
+                "leak_full": 0.4608
+              },
+              "direct:ID": {
+                "mentions": 134.4,
+                "leak_full": 1.0
+              },
+              "direct:ORG": {
+                "mentions": 2.2,
+                "leak_full": 1.0
+              },
+              "direct:PERSON": {
+                "mentions": 227.6,
+                "leak_full": 0.0494
+              },
+              "quasi:DATE": {
+                "mentions": 2402.9,
+                "leak_full": 0.2353
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 200.1,
+                "leak_full": 0.985
+              },
+              "quasi:ID": {
+                "mentions": 194.5,
+                "leak_full": 1.0
+              },
+              "quasi:LOCATION": {
+                "mentions": 353.3,
+                "leak_full": 0.983
+              },
+              "quasi:ORG": {
+                "mentions": 597.6,
+                "leak_full": 1.0
+              },
+              "quasi:OTHER": {
+                "mentions": 129.1,
+                "leak_full": 0.9913
+              },
+              "quasi:PERSON": {
+                "mentions": 713.3,
+                "leak_full": 0.6252
+              },
+              "quasi:QUANTITY": {
+                "mentions": 154.8,
+                "leak_full": 0.9987
+              }
+            }
+          },
+          "output_sha256": "32c5e1103792e592be9415872f4bbccb1622a364483bbfd656bf05c16ff22aed"
+        },
+        {
+          "variant": "entity-token",
+          "scores": {
+            "documents": 127,
+            "privacy": {
+              "direct": {
+                "mentions": 365.0,
+                "leak_full": 0.406,
+                "leak_partial": 0.0208,
+                "residual": 0.3303,
+                "entity_leak": 0.5412
+              },
+              "quasi": {
+                "mentions": 4745.5,
+                "leak_full": 0.5543,
+                "leak_partial": 0.377,
+                "residual": 0.7821,
+                "entity_leak": 0.5076
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9881,
+              "distinctness": 0.9939,
+              "placeholder": 0.2077,
+              "over_masking": 0.0002,
+              "keep_spans_changed": 0.0428
+            },
+            "leak_by_category": {
+              "direct:DATE": {
+                "mentions": 0.8,
+                "leak_full": 0.4608
+              },
+              "direct:ID": {
+                "mentions": 134.4,
+                "leak_full": 1.0
+              },
+              "direct:ORG": {
+                "mentions": 2.2,
+                "leak_full": 1.0
+              },
+              "direct:PERSON": {
+                "mentions": 227.6,
+                "leak_full": 0.0494
+              },
+              "quasi:DATE": {
+                "mentions": 2402.9,
+                "leak_full": 0.2353
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 200.1,
+                "leak_full": 0.985
+              },
+              "quasi:ID": {
+                "mentions": 194.5,
+                "leak_full": 1.0
+              },
+              "quasi:LOCATION": {
+                "mentions": 353.3,
+                "leak_full": 0.983
+              },
+              "quasi:ORG": {
+                "mentions": 597.6,
+                "leak_full": 1.0
+              },
+              "quasi:OTHER": {
+                "mentions": 129.1,
+                "leak_full": 0.9913
+              },
+              "quasi:PERSON": {
+                "mentions": 713.3,
+                "leak_full": 0.6252
+              },
+              "quasi:QUANTITY": {
+                "mentions": 154.8,
+                "leak_full": 0.9987
+              }
+            }
+          },
+          "output_sha256": "710a92e06094d8db931dd4dec8e7013d676e01462dbd385499acd204470a6af5"
+        },
+        {
+          "variant": "entity-faker",
+          "scores": {
+            "documents": 127,
+            "privacy": {
+              "direct": {
+                "mentions": 365.0,
+                "leak_full": 0.406,
+                "leak_partial": 0.0208,
+                "residual": 0.3303,
+                "entity_leak": 0.5412
+              },
+              "quasi": {
+                "mentions": 4745.5,
+                "leak_full": 0.5544,
+                "leak_partial": 0.377,
+                "residual": 0.7823,
+                "entity_leak": 0.5077
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9881,
+              "distinctness": 0.9939,
+              "placeholder": 0.0001,
+              "over_masking": 0.0002,
+              "keep_spans_changed": 0.0428
+            },
+            "leak_by_category": {
+              "direct:DATE": {
+                "mentions": 0.8,
+                "leak_full": 0.4608
+              },
+              "direct:ID": {
+                "mentions": 134.4,
+                "leak_full": 1.0
+              },
+              "direct:ORG": {
+                "mentions": 2.2,
+                "leak_full": 1.0
+              },
+              "direct:PERSON": {
+                "mentions": 227.6,
+                "leak_full": 0.0494
+              },
+              "quasi:DATE": {
+                "mentions": 2402.9,
+                "leak_full": 0.2353
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 200.1,
+                "leak_full": 0.985
+              },
+              "quasi:ID": {
+                "mentions": 194.5,
+                "leak_full": 1.0
+              },
+              "quasi:LOCATION": {
+                "mentions": 353.3,
+                "leak_full": 0.983
+              },
+              "quasi:ORG": {
+                "mentions": 597.6,
+                "leak_full": 1.0
+              },
+              "quasi:OTHER": {
+                "mentions": 129.1,
+                "leak_full": 0.9913
+              },
+              "quasi:PERSON": {
+                "mentions": 713.3,
+                "leak_full": 0.6261
+              },
+              "quasi:QUANTITY": {
+                "mentions": 154.8,
+                "leak_full": 0.9987
+              }
+            }
+          },
+          "output_sha256": "c1a1950d3516beb15d6153453e679a4c92336cc294be264897c27061870e46a6"
+        },
+        {
+          "variant": "persona",
+          "scores": {
+            "documents": 127,
+            "privacy": {
+              "direct": {
+                "mentions": 365.0,
+                "leak_full": 0.406,
+                "leak_partial": 0.0208,
+                "residual": 0.3303,
+                "entity_leak": 0.5412
+              },
+              "quasi": {
+                "mentions": 4745.5,
+                "leak_full": 0.5543,
+                "leak_partial": 0.3783,
+                "residual": 0.7823,
+                "entity_leak": 0.5076
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9881,
+              "distinctness": 0.9993,
+              "placeholder": 0.0001,
+              "over_masking": 0.0001,
+              "keep_spans_changed": 0.0428
+            },
+            "leak_by_category": {
+              "direct:DATE": {
+                "mentions": 0.8,
+                "leak_full": 0.4608
+              },
+              "direct:ID": {
+                "mentions": 134.4,
+                "leak_full": 1.0
+              },
+              "direct:ORG": {
+                "mentions": 2.2,
+                "leak_full": 1.0
+              },
+              "direct:PERSON": {
+                "mentions": 227.6,
+                "leak_full": 0.0494
+              },
+              "quasi:DATE": {
+                "mentions": 2402.9,
+                "leak_full": 0.2353
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 200.1,
+                "leak_full": 0.985
+              },
+              "quasi:ID": {
+                "mentions": 194.5,
+                "leak_full": 1.0
+              },
+              "quasi:LOCATION": {
+                "mentions": 353.3,
+                "leak_full": 0.983
+              },
+              "quasi:ORG": {
+                "mentions": 597.6,
+                "leak_full": 1.0
+              },
+              "quasi:OTHER": {
+                "mentions": 129.1,
+                "leak_full": 0.9913
+              },
+              "quasi:PERSON": {
+                "mentions": 713.3,
+                "leak_full": 0.6252
+              },
+              "quasi:QUANTITY": {
+                "mentions": 154.8,
+                "leak_full": 0.9987
+              }
+            }
+          },
+          "output_sha256": "98cd19e81780a4800d5d2fcd0f588116e9e3da538437710fb85bfd12fd161c14"
+        }
+      ]
+    },
+    {
+      "detector": "gliner2",
+      "corpus": "linked",
+      "documents": 441,
+      "corpus_info": {
+        "name": "linked",
+        "source": "generated from https://huggingface.co/datasets/nvidia/Nemotron-Personas-USA @ 5b4cd35",
+        "license": "CC BY 4.0 (people from Nemotron-Personas-USA)",
+        "realism": "synthetic: template-written support tickets about real-looking US people; gold is exact by construction",
+        "caveats": "templates, not human or model writing, so phrasing repeats and detectors may find it easy; US adults only, one store, English; contact details and ids are random; names are two words with distinct surnames; entity ids hold across documents, and the scorer pairs mentions across documents",
+        "entity_scope": "corpus"
+      },
+      "versions": {
+        "maskara": "0.0.1",
+        "python": "3.12.14",
+        "presidio-analyzer": "2.2.364",
+        "spacy": "3.8.16",
+        "en-core-web-lg": "3.8.0",
+        "faker": "40.43.0",
+        "opf": "0.1.0",
+        "gliner2": "2.1.0",
+        "torch": "2.14.1"
+      },
+      "comparison": {
+        "schema": "maskara.replacement-study/1",
+        "seed": "maskara-bench",
+        "preset": "balanced",
+        "detectors": [
+          "rules",
+          "known",
+          "gliner2"
+        ],
+        "patterns": null,
+        "with_tables": true,
+        "input_sha256": "1647cfcd6fc9f9a09edefb4aae5de1ed70c17c4d0bf42433f0d248fe55a3ed84",
+        "plan_sha256": "8adbe648b32c2ad5fc6172d8f1f942348594a8631a94d4960253b50f056fa824",
+        "shared_preparation_seconds": 83.282,
+        "spans": 4592,
+        "identity_spans": 2991,
+        "varied": "changed PERSON and CONTACT rendering only",
+        "shared": "input tables, detected spans, resolved owners, keep decisions, dates, IDs, addresses, locations, demographics and all other output",
+        "gold_used_for_replacement": false,
+        "not_measured": [
+          "re-identification and attribute inference",
+          "cross-release linkage",
+          "independent entity-resolution quality",
+          "training utility or external-corpus QA",
+          "address/geography/demographic rendering benefit"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "value-faker",
+          "scores": {
+            "documents": 441,
+            "privacy": {
+              "direct": {
+                "mentions": 3553.0,
+                "leak_full": 0.0003,
+                "leak_partial": 0.0014,
+                "residual": 0.0011,
+                "entity_leak": 0.0014
+              },
+              "quasi": {
+                "mentions": 789.0,
+                "leak_full": 0.1077,
+                "leak_partial": 0.6312,
+                "residual": 0.4814,
+                "entity_leak": 0.0726
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9971,
+              "distinctness": 0.9791,
+              "placeholder": 0.0,
+              "over_masking": 0.019,
+              "keep_spans_changed": 1.0
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 440.0,
+                "leak_full": 0.0
+              },
+              "direct:FINANCIAL": {
+                "mentions": 72.0,
+                "leak_full": 0.0
+              },
+              "direct:ID": {
+                "mentions": 530.0,
+                "leak_full": 0.0
+              },
+              "direct:PERSON": {
+                "mentions": 2429.0,
+                "leak_full": 0.0004
+              },
+              "quasi:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.061
+              },
+              "quasi:DATE": {
+                "mentions": 545.0,
+                "leak_full": 0.0037
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 15.0,
+                "leak_full": 0.4667
+              },
+              "quasi:LOCATION": {
+                "mentions": 147.0,
+                "leak_full": 0.483
+              }
+            }
+          },
+          "output_sha256": "9b2961da67049cc2e2a6861b126709d80c40a57143c632eec181960e2292b1cc",
+          "qa": {
+            "reader": "linking",
+            "questions": 250,
+            "correct": 250,
+            "accuracy": 1.0,
+            "by_kind": {
+              "ticket_count": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "ticket_gap": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "earlier_issue": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "last_product": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "same_person": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              }
+            }
+          }
+        },
+        {
+          "variant": "entity-token",
+          "scores": {
+            "documents": 441,
+            "privacy": {
+              "direct": {
+                "mentions": 3553.0,
+                "leak_full": 0.0003,
+                "leak_partial": 0.0003,
+                "residual": 0.0003,
+                "entity_leak": 0.0014
+              },
+              "quasi": {
+                "mentions": 789.0,
+                "leak_full": 0.1077,
+                "leak_partial": 0.6312,
+                "residual": 0.4814,
+                "entity_leak": 0.0726
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9971,
+              "distinctness": 0.9822,
+              "placeholder": 0.6734,
+              "over_masking": 0.019,
+              "keep_spans_changed": 1.0
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 440.0,
+                "leak_full": 0.0
+              },
+              "direct:FINANCIAL": {
+                "mentions": 72.0,
+                "leak_full": 0.0
+              },
+              "direct:ID": {
+                "mentions": 530.0,
+                "leak_full": 0.0
+              },
+              "direct:PERSON": {
+                "mentions": 2429.0,
+                "leak_full": 0.0004
+              },
+              "quasi:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.061
+              },
+              "quasi:DATE": {
+                "mentions": 545.0,
+                "leak_full": 0.0037
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 15.0,
+                "leak_full": 0.4667
+              },
+              "quasi:LOCATION": {
+                "mentions": 147.0,
+                "leak_full": 0.483
+              }
+            }
+          },
+          "output_sha256": "925100f6587b4df7532bade0ce4e04db939978a3341562c12af3d749bece0299",
+          "qa": {
+            "reader": "linking",
+            "questions": 250,
+            "correct": 250,
+            "accuracy": 1.0,
+            "by_kind": {
+              "ticket_count": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "ticket_gap": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "earlier_issue": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "last_product": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "same_person": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              }
+            }
+          }
+        },
+        {
+          "variant": "entity-faker",
+          "scores": {
+            "documents": 441,
+            "privacy": {
+              "direct": {
+                "mentions": 3553.0,
+                "leak_full": 0.0003,
+                "leak_partial": 0.0003,
+                "residual": 0.0003,
+                "entity_leak": 0.0014
+              },
+              "quasi": {
+                "mentions": 789.0,
+                "leak_full": 0.1077,
+                "leak_partial": 0.6312,
+                "residual": 0.4814,
+                "entity_leak": 0.0726
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9971,
+              "distinctness": 0.9388,
+              "placeholder": 0.0,
+              "over_masking": 0.019,
+              "keep_spans_changed": 1.0
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 440.0,
+                "leak_full": 0.0
+              },
+              "direct:FINANCIAL": {
+                "mentions": 72.0,
+                "leak_full": 0.0
+              },
+              "direct:ID": {
+                "mentions": 530.0,
+                "leak_full": 0.0
+              },
+              "direct:PERSON": {
+                "mentions": 2429.0,
+                "leak_full": 0.0004
+              },
+              "quasi:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.061
+              },
+              "quasi:DATE": {
+                "mentions": 545.0,
+                "leak_full": 0.0037
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 15.0,
+                "leak_full": 0.4667
+              },
+              "quasi:LOCATION": {
+                "mentions": 147.0,
+                "leak_full": 0.483
+              }
+            }
+          },
+          "output_sha256": "c5316ddbb2e83c6f05ad832b0f03609f85438039fc32de77d3b2b18f0722b0f8",
+          "qa": {
+            "reader": "linking",
+            "questions": 250,
+            "correct": 250,
+            "accuracy": 1.0,
+            "by_kind": {
+              "ticket_count": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "ticket_gap": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "earlier_issue": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "last_product": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "same_person": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              }
+            }
+          }
+        },
+        {
+          "variant": "persona",
+          "scores": {
+            "documents": 441,
+            "privacy": {
+              "direct": {
+                "mentions": 3553.0,
+                "leak_full": 0.0003,
+                "leak_partial": 0.0006,
+                "residual": 0.0004,
+                "entity_leak": 0.0014
+              },
+              "quasi": {
+                "mentions": 789.0,
+                "leak_full": 0.1077,
+                "leak_partial": 0.6312,
+                "residual": 0.4814,
+                "entity_leak": 0.0726
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9971,
+              "distinctness": 0.9787,
+              "placeholder": 0.0,
+              "over_masking": 0.0189,
+              "keep_spans_changed": 1.0
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 440.0,
+                "leak_full": 0.0
+              },
+              "direct:FINANCIAL": {
+                "mentions": 72.0,
+                "leak_full": 0.0
+              },
+              "direct:ID": {
+                "mentions": 530.0,
+                "leak_full": 0.0
+              },
+              "direct:PERSON": {
+                "mentions": 2429.0,
+                "leak_full": 0.0004
+              },
+              "quasi:ADDRESS": {
+                "mentions": 82.0,
+                "leak_full": 0.061
+              },
+              "quasi:DATE": {
+                "mentions": 545.0,
+                "leak_full": 0.0037
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 15.0,
+                "leak_full": 0.4667
+              },
+              "quasi:LOCATION": {
+                "mentions": 147.0,
+                "leak_full": 0.483
+              }
+            }
+          },
+          "output_sha256": "cfeabe850a7150b0e301c355f362d354e2c6b602409a7b7ad015e2356b7cce7a",
+          "qa": {
+            "reader": "linking",
+            "questions": 250,
+            "correct": 250,
+            "accuracy": 1.0,
+            "by_kind": {
+              "ticket_count": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "ticket_gap": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "earlier_issue": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "last_product": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              },
+              "same_person": {
+                "questions": 50,
+                "correct": 50,
+                "unanswered": 0,
+                "accuracy": 1.0
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "detector": "gliner2",
+      "corpus": "abcd",
+      "documents": 1004,
+      "corpus_info": {
+        "name": "abcd",
+        "source": "https://github.com/asappresearch/abcd",
+        "license": "MIT",
+        "realism": "human-written role-play chats; identities come from scenario cards",
+        "caveats": "gold spans are derived by searching for scenario values; PII not on the card is missing"
+      },
+      "versions": {
+        "maskara": "0.0.1",
+        "python": "3.12.14",
+        "presidio-analyzer": "2.2.364",
+        "spacy": "3.8.16",
+        "en-core-web-lg": "3.8.0",
+        "faker": "40.43.0",
+        "opf": "0.1.0",
+        "gliner2": "2.1.0",
+        "torch": "2.14.1"
+      },
+      "comparison": {
+        "schema": "maskara.replacement-study/1",
+        "seed": "maskara-bench",
+        "preset": "balanced",
+        "detectors": [
+          "rules",
+          "known",
+          "gliner2"
+        ],
+        "patterns": null,
+        "with_tables": false,
+        "input_sha256": "3315efbcbb8decec5cbf5ad7d0d2ce5fed0002570ec32825caa1ca10e1edb4d4",
+        "plan_sha256": "6800463e6c78b3829588404d3c785c0dc6ef0f718ad4b0f6f65183a22193fd89",
+        "shared_preparation_seconds": 384.35,
+        "spans": 5196,
+        "identity_spans": 2967,
+        "varied": "changed PERSON and CONTACT rendering only",
+        "shared": "input tables, detected spans, resolved owners, keep decisions, dates, IDs, addresses, locations, demographics and all other output",
+        "gold_used_for_replacement": false,
+        "not_measured": [
+          "re-identification and attribute inference",
+          "cross-release linkage",
+          "independent entity-resolution quality",
+          "training utility or external-corpus QA",
+          "address/geography/demographic rendering benefit"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "value-faker",
+          "scores": {
+            "documents": 1004,
+            "privacy": {
+              "direct": {
+                "mentions": 3480.0,
+                "leak_full": 0.0244,
+                "leak_partial": 0.0144,
+                "residual": 0.0265,
+                "entity_leak": 0.0352
+              },
+              "quasi": {
+                "mentions": 466.0,
+                "leak_full": 0.1245,
+                "leak_partial": 0.0,
+                "residual": 0.1328,
+                "entity_leak": 0.1444
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9884,
+              "distinctness": 0.9698,
+              "placeholder": 0.0,
+              "over_masking": 0.0138,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 198.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 325.0,
+                "leak_full": 0.0
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 54.0,
+                "leak_full": 0.1667
+              },
+              "direct:ID": {
+                "mentions": 1028.0,
+                "leak_full": 0.037
+              },
+              "direct:PERSON": {
+                "mentions": 1875.0,
+                "leak_full": 0.0203
+              },
+              "quasi:ADDRESS": {
+                "mentions": 255.0,
+                "leak_full": 0.0902
+              },
+              "quasi:LOCATION": {
+                "mentions": 211.0,
+                "leak_full": 0.1659
+              }
+            }
+          },
+          "output_sha256": "f7bf7c455faf78eebe08361115b59d7aaa724b25ad6de8fddd7ba22ae4655459"
+        },
+        {
+          "variant": "entity-token",
+          "scores": {
+            "documents": 1004,
+            "privacy": {
+              "direct": {
+                "mentions": 3480.0,
+                "leak_full": 0.0244,
+                "leak_partial": 0.0144,
+                "residual": 0.0265,
+                "entity_leak": 0.0352
+              },
+              "quasi": {
+                "mentions": 466.0,
+                "leak_full": 0.1245,
+                "leak_partial": 0.0,
+                "residual": 0.1328,
+                "entity_leak": 0.1444
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9884,
+              "distinctness": 0.9692,
+              "placeholder": 0.5948,
+              "over_masking": 0.0139,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 198.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 325.0,
+                "leak_full": 0.0
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 54.0,
+                "leak_full": 0.1667
+              },
+              "direct:ID": {
+                "mentions": 1028.0,
+                "leak_full": 0.037
+              },
+              "direct:PERSON": {
+                "mentions": 1875.0,
+                "leak_full": 0.0203
+              },
+              "quasi:ADDRESS": {
+                "mentions": 255.0,
+                "leak_full": 0.0902
+              },
+              "quasi:LOCATION": {
+                "mentions": 211.0,
+                "leak_full": 0.1659
+              }
+            }
+          },
+          "output_sha256": "45662228a3511f8608d6009fd652147b62c4109295a29e49234cfbad07aac1bb"
+        },
+        {
+          "variant": "entity-faker",
+          "scores": {
+            "documents": 1004,
+            "privacy": {
+              "direct": {
+                "mentions": 3480.0,
+                "leak_full": 0.0244,
+                "leak_partial": 0.0144,
+                "residual": 0.0265,
+                "entity_leak": 0.0352
+              },
+              "quasi": {
+                "mentions": 466.0,
+                "leak_full": 0.1245,
+                "leak_partial": 0.0,
+                "residual": 0.1328,
+                "entity_leak": 0.1444
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9884,
+              "distinctness": 0.9692,
+              "placeholder": 0.0,
+              "over_masking": 0.0138,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 198.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 325.0,
+                "leak_full": 0.0
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 54.0,
+                "leak_full": 0.1667
+              },
+              "direct:ID": {
+                "mentions": 1028.0,
+                "leak_full": 0.037
+              },
+              "direct:PERSON": {
+                "mentions": 1875.0,
+                "leak_full": 0.0203
+              },
+              "quasi:ADDRESS": {
+                "mentions": 255.0,
+                "leak_full": 0.0902
+              },
+              "quasi:LOCATION": {
+                "mentions": 211.0,
+                "leak_full": 0.1659
+              }
+            }
+          },
+          "output_sha256": "ac6f31a27784c2098d2c14b150dca25826743e461aea0592b475c23969b1cc10"
+        },
+        {
+          "variant": "persona",
+          "scores": {
+            "documents": 1004,
+            "privacy": {
+              "direct": {
+                "mentions": 3480.0,
+                "leak_full": 0.0244,
+                "leak_partial": 0.0152,
+                "residual": 0.0267,
+                "entity_leak": 0.0352
+              },
+              "quasi": {
+                "mentions": 466.0,
+                "leak_full": 0.1245,
+                "leak_partial": 0.0,
+                "residual": 0.1328,
+                "entity_leak": 0.1444
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9884,
+              "distinctness": 0.9692,
+              "placeholder": 0.0,
+              "over_masking": 0.0138,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 198.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 325.0,
+                "leak_full": 0.0
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 54.0,
+                "leak_full": 0.1667
+              },
+              "direct:ID": {
+                "mentions": 1028.0,
+                "leak_full": 0.037
+              },
+              "direct:PERSON": {
+                "mentions": 1875.0,
+                "leak_full": 0.0203
+              },
+              "quasi:ADDRESS": {
+                "mentions": 255.0,
+                "leak_full": 0.0902
+              },
+              "quasi:LOCATION": {
+                "mentions": 211.0,
+                "leak_full": 0.1659
+              }
+            }
+          },
+          "output_sha256": "b551adf76c4ff9c49ba964217a605fca77cc57c4e6d83342c901008ed31b594b"
+        }
+      ]
+    },
+    {
+      "detector": "gliner2",
+      "corpus": "nemotron-pii",
+      "documents": 1000,
+      "corpus_info": {
+        "name": "nemotron-pii",
+        "source": "https://huggingface.co/datasets/nvidia/Nemotron-PII",
+        "license": "CC BY 4.0",
+        "realism": "synthetic documents, generated labels",
+        "caveats": "fully synthetic; entity ids are inferred from equal text within a document"
+      },
+      "versions": {
+        "maskara": "0.0.1",
+        "python": "3.12.14",
+        "presidio-analyzer": "2.2.364",
+        "spacy": "3.8.16",
+        "en-core-web-lg": "3.8.0",
+        "faker": "40.43.0",
+        "opf": "0.1.0",
+        "gliner2": "2.1.0",
+        "torch": "2.14.1"
+      },
+      "comparison": {
+        "schema": "maskara.replacement-study/1",
+        "seed": "maskara-bench",
+        "preset": "balanced",
+        "detectors": [
+          "rules",
+          "known",
+          "gliner2"
+        ],
+        "patterns": null,
+        "with_tables": false,
+        "input_sha256": "85a4979ac1b5016817b5d02b77740fb0ab184dd9235689746619badd6e5761a9",
+        "plan_sha256": "a49ac26b0f3a07094a876fce6cb2db992b55ddce75c380f1c17b05951dc3df50",
+        "shared_preparation_seconds": 278.415,
+        "spans": 6691,
+        "identity_spans": 2139,
+        "varied": "changed PERSON and CONTACT rendering only",
+        "shared": "input tables, detected spans, resolved owners, keep decisions, dates, IDs, addresses, locations, demographics and all other output",
+        "gold_used_for_replacement": false,
+        "not_measured": [
+          "re-identification and attribute inference",
+          "cross-release linkage",
+          "independent entity-resolution quality",
+          "training utility or external-corpus QA",
+          "address/geography/demographic rendering benefit"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "value-faker",
+          "scores": {
+            "documents": 1000,
+            "privacy": {
+              "direct": {
+                "mentions": 4707.0,
+                "leak_full": 0.0497,
+                "leak_partial": 0.0212,
+                "residual": 0.1087,
+                "entity_leak": 0.0539
+              },
+              "quasi": {
+                "mentions": 3898.0,
+                "leak_full": 0.5493,
+                "leak_partial": 0.2201,
+                "residual": 0.6578,
+                "entity_leak": 0.5618
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9766,
+              "distinctness": 0.9286,
+              "placeholder": 0.0,
+              "over_masking": 0.0045,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 196.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 685.0,
+                "leak_full": 0.0015
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 404.0,
+                "leak_full": 0.0396
+              },
+              "direct:FINANCIAL": {
+                "mentions": 321.0,
+                "leak_full": 0.0343
+              },
+              "direct:ID": {
+                "mentions": 1047.0,
+                "leak_full": 0.1289
+              },
+              "direct:LOCATION": {
+                "mentions": 91.0,
+                "leak_full": 0.2527
+              },
+              "direct:NETWORK": {
+                "mentions": 589.0,
+                "leak_full": 0.0424
+              },
+              "direct:PERSON": {
+                "mentions": 1374.0,
+                "leak_full": 0.0167
+              },
+              "quasi:ADDRESS": {
+                "mentions": 91.0,
+                "leak_full": 0.0
+              },
+              "quasi:DATE": {
+                "mentions": 1202.0,
+                "leak_full": 0.2754
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 1167.0,
+                "leak_full": 0.8792
+              },
+              "quasi:LOCATION": {
+                "mentions": 847.0,
+                "leak_full": 0.6222
+              },
+              "quasi:ORG": {
+                "mentions": 591.0,
+                "leak_full": 0.4349
+              }
+            }
+          },
+          "output_sha256": "328b3201d55f7f5c1c1d7589a7b0ccf306cf47743deb7ffcc112fadae70914ac"
+        },
+        {
+          "variant": "entity-token",
+          "scores": {
+            "documents": 1000,
+            "privacy": {
+              "direct": {
+                "mentions": 4707.0,
+                "leak_full": 0.0491,
+                "leak_partial": 0.0206,
+                "residual": 0.1083,
+                "entity_leak": 0.0531
+              },
+              "quasi": {
+                "mentions": 3898.0,
+                "leak_full": 0.5487,
+                "leak_partial": 0.2201,
+                "residual": 0.6575,
+                "entity_leak": 0.5612
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9762,
+              "distinctness": 0.927,
+              "placeholder": 0.4008,
+              "over_masking": 0.0045,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 196.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 685.0,
+                "leak_full": 0.0015
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 404.0,
+                "leak_full": 0.0396
+              },
+              "direct:FINANCIAL": {
+                "mentions": 321.0,
+                "leak_full": 0.0343
+              },
+              "direct:ID": {
+                "mentions": 1047.0,
+                "leak_full": 0.1289
+              },
+              "direct:LOCATION": {
+                "mentions": 91.0,
+                "leak_full": 0.2527
+              },
+              "direct:NETWORK": {
+                "mentions": 589.0,
+                "leak_full": 0.0424
+              },
+              "direct:PERSON": {
+                "mentions": 1374.0,
+                "leak_full": 0.0146
+              },
+              "quasi:ADDRESS": {
+                "mentions": 91.0,
+                "leak_full": 0.0
+              },
+              "quasi:DATE": {
+                "mentions": 1202.0,
+                "leak_full": 0.2754
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 1167.0,
+                "leak_full": 0.8775
+              },
+              "quasi:LOCATION": {
+                "mentions": 847.0,
+                "leak_full": 0.6222
+              },
+              "quasi:ORG": {
+                "mentions": 591.0,
+                "leak_full": 0.4349
+              }
+            }
+          },
+          "output_sha256": "d6eddc238d20996403efe5587df0bde5e610babcee595c77e02d485f1b82d5b2"
+        },
+        {
+          "variant": "entity-faker",
+          "scores": {
+            "documents": 1000,
+            "privacy": {
+              "direct": {
+                "mentions": 4707.0,
+                "leak_full": 0.0508,
+                "leak_partial": 0.0212,
+                "residual": 0.1092,
+                "entity_leak": 0.0544
+              },
+              "quasi": {
+                "mentions": 3898.0,
+                "leak_full": 0.5487,
+                "leak_partial": 0.2201,
+                "residual": 0.6575,
+                "entity_leak": 0.5612
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9761,
+              "distinctness": 0.9271,
+              "placeholder": 0.0,
+              "over_masking": 0.0045,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 196.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 685.0,
+                "leak_full": 0.0015
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 404.0,
+                "leak_full": 0.0396
+              },
+              "direct:FINANCIAL": {
+                "mentions": 321.0,
+                "leak_full": 0.0343
+              },
+              "direct:ID": {
+                "mentions": 1047.0,
+                "leak_full": 0.1289
+              },
+              "direct:LOCATION": {
+                "mentions": 91.0,
+                "leak_full": 0.2527
+              },
+              "direct:NETWORK": {
+                "mentions": 589.0,
+                "leak_full": 0.0424
+              },
+              "direct:PERSON": {
+                "mentions": 1374.0,
+                "leak_full": 0.0204
+              },
+              "quasi:ADDRESS": {
+                "mentions": 91.0,
+                "leak_full": 0.0
+              },
+              "quasi:DATE": {
+                "mentions": 1202.0,
+                "leak_full": 0.2754
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 1167.0,
+                "leak_full": 0.8775
+              },
+              "quasi:LOCATION": {
+                "mentions": 847.0,
+                "leak_full": 0.6222
+              },
+              "quasi:ORG": {
+                "mentions": 591.0,
+                "leak_full": 0.4349
+              }
+            }
+          },
+          "output_sha256": "0d347e3669d2aca702d4cbdc9f4c4e57769b7b83379a626045d07e6b37c73711"
+        },
+        {
+          "variant": "persona",
+          "scores": {
+            "documents": 1000,
+            "privacy": {
+              "direct": {
+                "mentions": 4707.0,
+                "leak_full": 0.0493,
+                "leak_partial": 0.0208,
+                "residual": 0.1084,
+                "entity_leak": 0.0533
+              },
+              "quasi": {
+                "mentions": 3898.0,
+                "leak_full": 0.5487,
+                "leak_partial": 0.2201,
+                "residual": 0.6575,
+                "entity_leak": 0.5612
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9762,
+              "distinctness": 0.9272,
+              "placeholder": 0.0,
+              "over_masking": 0.0045,
+              "keep_spans_changed": null
+            },
+            "leak_by_category": {
+              "direct:ADDRESS": {
+                "mentions": 196.0,
+                "leak_full": 0.0
+              },
+              "direct:CONTACT": {
+                "mentions": 685.0,
+                "leak_full": 0.0015
+              },
+              "direct:CREDENTIAL": {
+                "mentions": 404.0,
+                "leak_full": 0.0396
+              },
+              "direct:FINANCIAL": {
+                "mentions": 321.0,
+                "leak_full": 0.0343
+              },
+              "direct:ID": {
+                "mentions": 1047.0,
+                "leak_full": 0.1289
+              },
+              "direct:LOCATION": {
+                "mentions": 91.0,
+                "leak_full": 0.2527
+              },
+              "direct:NETWORK": {
+                "mentions": 589.0,
+                "leak_full": 0.0424
+              },
+              "direct:PERSON": {
+                "mentions": 1374.0,
+                "leak_full": 0.0153
+              },
+              "quasi:ADDRESS": {
+                "mentions": 91.0,
+                "leak_full": 0.0
+              },
+              "quasi:DATE": {
+                "mentions": 1202.0,
+                "leak_full": 0.2754
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 1167.0,
+                "leak_full": 0.8775
+              },
+              "quasi:LOCATION": {
+                "mentions": 847.0,
+                "leak_full": 0.6222
+              },
+              "quasi:ORG": {
+                "mentions": 591.0,
+                "leak_full": 0.4349
+              }
+            }
+          },
+          "output_sha256": "ca11cfe875ae5dd208a30c9e6893014f65202e782888667571cc52afdd431157"
+        }
+      ]
+    },
+    {
+      "detector": "gliner2",
+      "corpus": "tab",
+      "documents": 127,
+      "corpus_info": {
+        "name": "tab",
+        "source": "https://github.com/NorskRegnesentral/text-anonymization-benchmark",
+        "license": "MIT",
+        "realism": "real text, human annotation",
+        "caveats": "legal domain only; mostly European names; annotators disagree, so scores average over them"
+      },
+      "versions": {
+        "maskara": "0.0.1",
+        "python": "3.12.14",
+        "presidio-analyzer": "2.2.364",
+        "spacy": "3.8.16",
+        "en-core-web-lg": "3.8.0",
+        "faker": "40.43.0",
+        "opf": "0.1.0",
+        "gliner2": "2.1.0",
+        "torch": "2.14.1"
+      },
+      "comparison": {
+        "schema": "maskara.replacement-study/1",
+        "seed": "maskara-bench",
+        "preset": "balanced",
+        "detectors": [
+          "rules",
+          "known",
+          "gliner2"
+        ],
+        "patterns": null,
+        "with_tables": false,
+        "input_sha256": "e791ac5354d6081bc75fa81c2a4b1a650426ff06be6f427bc8de6e2fa5f451be",
+        "plan_sha256": "f1e7eec5efd227ca39a14b355ba6100daa1248b66d187fabb6f14210626aff52",
+        "shared_preparation_seconds": 158.95,
+        "spans": 5181,
+        "identity_spans": 1711,
+        "varied": "changed PERSON and CONTACT rendering only",
+        "shared": "input tables, detected spans, resolved owners, keep decisions, dates, IDs, addresses, locations, demographics and all other output",
+        "gold_used_for_replacement": false,
+        "not_measured": [
+          "re-identification and attribute inference",
+          "cross-release linkage",
+          "independent entity-resolution quality",
+          "training utility or external-corpus QA",
+          "address/geography/demographic rendering benefit"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "value-faker",
+          "scores": {
+            "documents": 127,
+            "privacy": {
+              "direct": {
+                "mentions": 365.0,
+                "leak_full": 0.3728,
+                "leak_partial": 0.0057,
+                "residual": 0.2843,
+                "entity_leak": 0.4984
+              },
+              "quasi": {
+                "mentions": 4745.5,
+                "leak_full": 0.3519,
+                "leak_partial": 0.3963,
+                "residual": 0.6219,
+                "entity_leak": 0.3364
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9973,
+              "distinctness": 0.9989,
+              "placeholder": 0.0001,
+              "over_masking": 0.013,
+              "keep_spans_changed": 0.3243
+            },
+            "leak_by_category": {
+              "direct:DATE": {
+                "mentions": 0.8,
+                "leak_full": 0.4608
+              },
+              "direct:ID": {
+                "mentions": 134.4,
+                "leak_full": 1.0
+              },
+              "direct:ORG": {
+                "mentions": 2.2,
+                "leak_full": 0.2308
+              },
+              "direct:PERSON": {
+                "mentions": 227.6,
+                "leak_full": 0.0035
+              },
+              "quasi:DATE": {
+                "mentions": 2402.9,
+                "leak_full": 0.2323
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 200.1,
+                "leak_full": 0.8911
+              },
+              "quasi:ID": {
+                "mentions": 194.5,
+                "leak_full": 0.9709
+              },
+              "quasi:LOCATION": {
+                "mentions": 353.3,
+                "leak_full": 0.0768
+              },
+              "quasi:ORG": {
+                "mentions": 597.6,
+                "leak_full": 0.7262
+              },
+              "quasi:OTHER": {
+                "mentions": 129.1,
+                "leak_full": 0.8776
+              },
+              "quasi:PERSON": {
+                "mentions": 713.3,
+                "leak_full": 0.0225
+              },
+              "quasi:QUANTITY": {
+                "mentions": 154.8,
+                "leak_full": 0.9974
+              }
+            }
+          },
+          "output_sha256": "2a01f99d3bebd2e40170ced2d6a1e83b64e9cbdd597b21e2786c75fb33d82db6"
+        },
+        {
+          "variant": "entity-token",
+          "scores": {
+            "documents": 127,
+            "privacy": {
+              "direct": {
+                "mentions": 365.0,
+                "leak_full": 0.3728,
+                "leak_partial": 0.0029,
+                "residual": 0.2825,
+                "entity_leak": 0.4984
+              },
+              "quasi": {
+                "mentions": 4745.5,
+                "leak_full": 0.3519,
+                "leak_partial": 0.3963,
+                "residual": 0.6219,
+                "entity_leak": 0.3364
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9973,
+              "distinctness": 0.9952,
+              "placeholder": 0.2937,
+              "over_masking": 0.013,
+              "keep_spans_changed": 0.3243
+            },
+            "leak_by_category": {
+              "direct:DATE": {
+                "mentions": 0.8,
+                "leak_full": 0.4608
+              },
+              "direct:ID": {
+                "mentions": 134.4,
+                "leak_full": 1.0
+              },
+              "direct:ORG": {
+                "mentions": 2.2,
+                "leak_full": 0.2308
+              },
+              "direct:PERSON": {
+                "mentions": 227.6,
+                "leak_full": 0.0035
+              },
+              "quasi:DATE": {
+                "mentions": 2402.9,
+                "leak_full": 0.2323
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 200.1,
+                "leak_full": 0.8911
+              },
+              "quasi:ID": {
+                "mentions": 194.5,
+                "leak_full": 0.9709
+              },
+              "quasi:LOCATION": {
+                "mentions": 353.3,
+                "leak_full": 0.0768
+              },
+              "quasi:ORG": {
+                "mentions": 597.6,
+                "leak_full": 0.7262
+              },
+              "quasi:OTHER": {
+                "mentions": 129.1,
+                "leak_full": 0.8776
+              },
+              "quasi:PERSON": {
+                "mentions": 713.3,
+                "leak_full": 0.0225
+              },
+              "quasi:QUANTITY": {
+                "mentions": 154.8,
+                "leak_full": 0.9974
+              }
+            }
+          },
+          "output_sha256": "1a1fe19255785033ace579b12d84702427593363766db87616f31d14836ed56b"
+        },
+        {
+          "variant": "entity-faker",
+          "scores": {
+            "documents": 127,
+            "privacy": {
+              "direct": {
+                "mentions": 365.0,
+                "leak_full": 0.3728,
+                "leak_partial": 0.0029,
+                "residual": 0.2825,
+                "entity_leak": 0.4984
+              },
+              "quasi": {
+                "mentions": 4745.5,
+                "leak_full": 0.3521,
+                "leak_partial": 0.3975,
+                "residual": 0.6229,
+                "entity_leak": 0.3366
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9973,
+              "distinctness": 0.9952,
+              "placeholder": 0.0001,
+              "over_masking": 0.013,
+              "keep_spans_changed": 0.3243
+            },
+            "leak_by_category": {
+              "direct:DATE": {
+                "mentions": 0.8,
+                "leak_full": 0.4608
+              },
+              "direct:ID": {
+                "mentions": 134.4,
+                "leak_full": 1.0
+              },
+              "direct:ORG": {
+                "mentions": 2.2,
+                "leak_full": 0.2308
+              },
+              "direct:PERSON": {
+                "mentions": 227.6,
+                "leak_full": 0.0035
+              },
+              "quasi:DATE": {
+                "mentions": 2402.9,
+                "leak_full": 0.2323
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 200.1,
+                "leak_full": 0.8911
+              },
+              "quasi:ID": {
+                "mentions": 194.5,
+                "leak_full": 0.9709
+              },
+              "quasi:LOCATION": {
+                "mentions": 353.3,
+                "leak_full": 0.0768
+              },
+              "quasi:ORG": {
+                "mentions": 597.6,
+                "leak_full": 0.7262
+              },
+              "quasi:OTHER": {
+                "mentions": 129.1,
+                "leak_full": 0.8776
+              },
+              "quasi:PERSON": {
+                "mentions": 713.3,
+                "leak_full": 0.0234
+              },
+              "quasi:QUANTITY": {
+                "mentions": 154.8,
+                "leak_full": 0.9974
+              }
+            }
+          },
+          "output_sha256": "37479d068e804af596ec11e80cbf8a4580e50fd06f6a802e0a0b534e440737f9"
+        },
+        {
+          "variant": "persona",
+          "scores": {
+            "documents": 127,
+            "privacy": {
+              "direct": {
+                "mentions": 365.0,
+                "leak_full": 0.3728,
+                "leak_partial": 0.0029,
+                "residual": 0.2825,
+                "entity_leak": 0.4984
+              },
+              "quasi": {
+                "mentions": 4745.5,
+                "leak_full": 0.3519,
+                "leak_partial": 0.4028,
+                "residual": 0.6225,
+                "entity_leak": 0.3364
+              }
+            },
+            "fidelity": {
+              "consistency": 0.9973,
+              "distinctness": 0.9982,
+              "placeholder": 0.0001,
+              "over_masking": 0.013,
+              "keep_spans_changed": 0.3243
+            },
+            "leak_by_category": {
+              "direct:DATE": {
+                "mentions": 0.8,
+                "leak_full": 0.4608
+              },
+              "direct:ID": {
+                "mentions": 134.4,
+                "leak_full": 1.0
+              },
+              "direct:ORG": {
+                "mentions": 2.2,
+                "leak_full": 0.2308
+              },
+              "direct:PERSON": {
+                "mentions": 227.6,
+                "leak_full": 0.0035
+              },
+              "quasi:DATE": {
+                "mentions": 2402.9,
+                "leak_full": 0.2323
+              },
+              "quasi:DEMOGRAPHIC": {
+                "mentions": 200.1,
+                "leak_full": 0.8911
+              },
+              "quasi:ID": {
+                "mentions": 194.5,
+                "leak_full": 0.9709
+              },
+              "quasi:LOCATION": {
+                "mentions": 353.3,
+                "leak_full": 0.0768
+              },
+              "quasi:ORG": {
+                "mentions": 597.6,
+                "leak_full": 0.7262
+              },
+              "quasi:OTHER": {
+                "mentions": 129.1,
+                "leak_full": 0.8776
+              },
+              "quasi:PERSON": {
+                "mentions": 713.3,
+                "leak_full": 0.0225
+              },
+              "quasi:QUANTITY": {
+                "mentions": 154.8,
+                "leak_full": 0.9974
+              }
+            }
+          },
+          "output_sha256": "798c2d0a045dde834cf1c5c79f611cff78ddde763a4d568358f95f3391b0a6c1"
+        }
+      ]
+    }
+  ],
+  "flow_utility": {
+    "schema": "maskara.flow-utility/1",
+    "task": "ABCD whole-conversation flow classification",
+    "training_documents": 8034,
+    "test_documents": 1004,
+    "protocol": "fit each variant on official train; evaluate all on untouched official test; no test-set tuning; vocabulary and class priors learned on train only",
+    "model": "multinomial naive Bayes, word unigrams+bigrams, alpha=1, uniform feature weights",
+    "not_measured": [
+      "LLM fine-tuning",
+      "entity-dependent QA",
+      "online next-action prediction",
+      "re-identification risk",
+      "generalization to other domains or languages"
+    ],
+    "systems": {
+      "original": {
+        "examples": 1004,
+        "correct": 930,
+        "accuracy": 0.9262948207171314,
+        "macro_f1": 0.9246145740909573,
+        "paired_with_original": {
+          "wins": 0,
+          "losses": 0,
+          "prediction_agreement": 1.0
+        }
+      },
+      "value-faker": {
+        "examples": 1004,
+        "correct": 935,
+        "accuracy": 0.9312749003984063,
+        "macro_f1": 0.9291945573659554,
+        "paired_with_original": {
+          "wins": 5,
+          "losses": 0,
+          "prediction_agreement": 0.9950199203187251
+        }
+      },
+      "entity-token": {
+        "examples": 1004,
+        "correct": 935,
+        "accuracy": 0.9312749003984063,
+        "macro_f1": 0.9286951873404558,
+        "paired_with_original": {
+          "wins": 6,
+          "losses": 1,
+          "prediction_agreement": 0.9930278884462151
+        }
+      },
+      "entity-faker": {
+        "examples": 1004,
+        "correct": 935,
+        "accuracy": 0.9312749003984063,
+        "macro_f1": 0.9291945573659554,
+        "paired_with_original": {
+          "wins": 5,
+          "losses": 0,
+          "prediction_agreement": 0.9950199203187251
+        }
+      },
+      "persona": {
+        "examples": 1004,
+        "correct": 936,
+        "accuracy": 0.9322709163346613,
+        "macro_f1": 0.930061984148875,
+        "paired_with_original": {
+          "wins": 6,
+          "losses": 0,
+          "prediction_agreement": 0.9940239043824701
+        }
+      }
+    },
+    "comparison": {
+      "schema": "maskara.replacement-study/1",
+      "seed": "maskara-bench",
+      "preset": "balanced",
+      "detectors": [
+        "rules",
+        "known"
+      ],
+      "patterns": null,
+      "with_tables": false,
+      "input_sha256": "3638d39ce6e28ae44aea0a30a9d4020be259da801c67638edbf0beac63c5969f",
+      "plan_sha256": "36be879bed18a75c2737c542cb1f3d678568f708b634a291f1bb75d5b6c34103",
+      "shared_preparation_seconds": 212.302,
+      "spans": 25076,
+      "identity_spans": 14472,
+      "varied": "changed PERSON and CONTACT rendering only",
+      "shared": "input tables, detected spans, resolved owners, keep decisions, dates, IDs, addresses, locations, demographics and all other output",
+      "gold_used_for_replacement": false,
+      "not_measured": [
+        "re-identification and attribute inference",
+        "cross-release linkage",
+        "independent entity-resolution quality",
+        "training utility or external-corpus QA",
+        "address/geography/demographic rendering benefit"
+      ]
+    },
+    "versions": {
+      "maskara": "0.0.1",
+      "python": "3.12.14",
+      "presidio-analyzer": "2.2.364",
+      "spacy": "3.8.16",
+      "en-core-web-lg": "3.8.0",
+      "faker": "40.43.0",
+      "opf": "0.1.0",
+      "gliner2": "2.1.0",
+      "torch": "2.14.1"
+    },
+    "corpus_info": {
+      "name": "abcd",
+      "source": "https://github.com/asappresearch/abcd",
+      "license": "MIT",
+      "realism": "human-written role-play chats; identities come from scenario cards",
+      "caveats": "gold spans are derived by searching for scenario values; PII not on the card is missing"
+    },
+    "test_sha256": "79ac7be95d2d18cbcbc2a1bbaa8c301a333c70fd47aaf1d75081b20ce9103984"
+  },
+  "independent_baselines": [
+    {
+      "corpus": "linked",
+      "system": "presidio-fake-global",
+      "documents": 441,
+      "seconds": 41.47,
+      "versions": {
+        "maskara": "0.0.1",
+        "python": "3.12.14",
+        "presidio-analyzer": "2.2.364",
+        "spacy": "3.8.16",
+        "en-core-web-lg": "3.8.0",
+        "faker": "40.43.0",
+        "opf": "0.1.0",
+        "gliner2": "2.1.0",
+        "torch": "2.14.1"
+      },
+      "scores": {
+        "documents": 441,
+        "privacy": {
+          "direct": {
+            "mentions": 3553.0,
+            "leak_full": 0.112,
+            "leak_partial": 0.0121,
+            "residual": 0.0906,
+            "entity_leak": 0.1816
+          },
+          "quasi": {
+            "mentions": 789.0,
+            "leak_full": 0.1673,
+            "leak_partial": 0.1255,
+            "residual": 0.1532,
+            "entity_leak": 0.1527
+          }
+        },
+        "fidelity": {
+          "consistency": 0.942,
+          "distinctness": 0.9751,
+          "placeholder": 0.0,
+          "over_masking": 0.0398,
+          "keep_spans_changed": 1.0
+        },
+        "leak_by_category": {
+          "direct:ADDRESS": {
+            "mentions": 82.0,
+            "leak_full": 0.5854
+          },
+          "direct:CONTACT": {
+            "mentions": 440.0,
+            "leak_full": 0.0432
+          },
+          "direct:FINANCIAL": {
+            "mentions": 72.0,
+            "leak_full": 0.6389
+          },
+          "direct:ID": {
+            "mentions": 530.0,
+            "leak_full": 0.0
+          },
+          "direct:PERSON": {
+            "mentions": 2429.0,
+            "leak_full": 0.1173
+          },
+          "quasi:ADDRESS": {
+            "mentions": 82.0,
+            "leak_full": 0.8171
+          },
+          "quasi:DATE": {
+            "mentions": 545.0,
+            "leak_full": 0.0257
+          },
+          "quasi:DEMOGRAPHIC": {
+            "mentions": 15.0,
+            "leak_full": 0.1333
+          },
+          "quasi:LOCATION": {
+            "mentions": 147.0,
+            "leak_full": 0.3333
+          }
+        }
+      },
+      "qa": {
+        "reader": "linking",
+        "questions": 250,
+        "correct": 119,
+        "accuracy": 0.476,
+        "by_kind": {
+          "ticket_count": {
+            "questions": 50,
+            "correct": 47,
+            "unanswered": 0,
+            "accuracy": 0.94
+          },
+          "ticket_gap": {
+            "questions": 50,
+            "correct": 0,
+            "unanswered": 24,
+            "accuracy": 0.0
+          },
+          "earlier_issue": {
+            "questions": 50,
+            "correct": 12,
+            "unanswered": 36,
+            "accuracy": 0.24
+          },
+          "last_product": {
+            "questions": 50,
+            "correct": 10,
+            "unanswered": 35,
+            "accuracy": 0.2
+          },
+          "same_person": {
+            "questions": 50,
+            "correct": 50,
+            "unanswered": 0,
+            "accuracy": 1.0
+          }
+        }
+      }
+    },
+    {
+      "corpus": "abcd",
+      "system": "presidio-fake-global",
+      "documents": 1004,
+      "seconds": 82.18,
+      "versions": {
+        "maskara": "0.0.1",
+        "python": "3.12.14",
+        "presidio-analyzer": "2.2.364",
+        "spacy": "3.8.16",
+        "en-core-web-lg": "3.8.0",
+        "faker": "40.43.0",
+        "opf": "0.1.0",
+        "gliner2": "2.1.0",
+        "torch": "2.14.1"
+      },
+      "scores": {
+        "documents": 1004,
+        "privacy": {
+          "direct": {
+            "mentions": 3480.0,
+            "leak_full": 0.1787,
+            "leak_partial": 0.0135,
+            "residual": 0.1777,
+            "entity_leak": 0.2466
+          },
+          "quasi": {
+            "mentions": 466.0,
+            "leak_full": 0.4528,
+            "leak_partial": 0.0021,
+            "residual": 0.367,
+            "entity_leak": 0.5451
+          }
+        },
+        "fidelity": {
+          "consistency": 0.9717,
+          "distinctness": 0.9981,
+          "placeholder": 0.0,
+          "over_masking": 0.0249,
+          "keep_spans_changed": null
+        },
+        "leak_by_category": {
+          "direct:ADDRESS": {
+            "mentions": 198.0,
+            "leak_full": 0.6162
+          },
+          "direct:CONTACT": {
+            "mentions": 325.0,
+            "leak_full": 0.0369
+          },
+          "direct:CREDENTIAL": {
+            "mentions": 54.0,
+            "leak_full": 0.0926
+          },
+          "direct:ID": {
+            "mentions": 1028.0,
+            "leak_full": 0.4475
+          },
+          "direct:PERSON": {
+            "mentions": 1875.0,
+            "leak_full": 0.0123
+          },
+          "quasi:ADDRESS": {
+            "mentions": 255.0,
+            "leak_full": 0.7412
+          },
+          "quasi:LOCATION": {
+            "mentions": 211.0,
+            "leak_full": 0.1043
+          }
+        }
+      }
+    },
+    {
+      "corpus": "tab",
+      "system": "presidio-fake-global",
+      "documents": 127,
+      "seconds": 39.39,
+      "versions": {
+        "maskara": "0.0.1",
+        "python": "3.12.14",
+        "presidio-analyzer": "2.2.364",
+        "spacy": "3.8.16",
+        "en-core-web-lg": "3.8.0",
+        "faker": "40.43.0",
+        "opf": "0.1.0",
+        "gliner2": "2.1.0",
+        "torch": "2.14.1"
+      },
+      "scores": {
+        "documents": 127,
+        "privacy": {
+          "direct": {
+            "mentions": 365.0,
+            "leak_full": 0.3763,
+            "leak_partial": 0.0038,
+            "residual": 0.2862,
+            "entity_leak": 0.4969
+          },
+          "quasi": {
+            "mentions": 4745.5,
+            "leak_full": 0.2418,
+            "leak_partial": 0.0522,
+            "residual": 0.3057,
+            "entity_leak": 0.2008
+          }
+        },
+        "fidelity": {
+          "consistency": 0.9885,
+          "distinctness": 0.9961,
+          "placeholder": 0.0001,
+          "over_masking": 0.0064,
+          "keep_spans_changed": 0.3513
+        },
+        "leak_by_category": {
+          "direct:DATE": {
+            "mentions": 0.8,
+            "leak_full": 0.0
+          },
+          "direct:ID": {
+            "mentions": 134.4,
+            "leak_full": 0.987
+          },
+          "direct:ORG": {
+            "mentions": 2.2,
+            "leak_full": 0.5385
+          },
+          "direct:PERSON": {
+            "mentions": 227.6,
+            "leak_full": 0.0154
+          },
+          "quasi:DATE": {
+            "mentions": 2402.9,
+            "leak_full": 0.0057
+          },
+          "quasi:DEMOGRAPHIC": {
+            "mentions": 200.1,
+            "leak_full": 0.4482
+          },
+          "quasi:ID": {
+            "mentions": 194.5,
+            "leak_full": 0.914
+          },
+          "quasi:LOCATION": {
+            "mentions": 353.3,
+            "leak_full": 0.1741
+          },
+          "quasi:ORG": {
+            "mentions": 597.6,
+            "leak_full": 0.7984
+          },
+          "quasi:OTHER": {
+            "mentions": 129.1,
+            "leak_full": 0.7875
+          },
+          "quasi:PERSON": {
+            "mentions": 713.3,
+            "leak_full": 0.1045
+          },
+          "quasi:QUANTITY": {
+            "mentions": 154.8,
+            "leak_full": 0.978
+          }
+        }
+      }
+    }
+  ]
+}
