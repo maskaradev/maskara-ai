@@ -1,25 +1,21 @@
 import type { SVGProps } from "react"
 
 /**
- * Mascara wand: a thick handle, then a stem through a pine-cone brush whose
- * bristles swell near the handle and taper to the tip.
+ * Mascara wand, the app icon's: drawn upright (a bristled spindle of a brush,
+ * the rod, the cap) and turned 45°, so the rod can be as long as a real one's.
+ * web/public/brand/mark.svg is the same drawing.
  */
-const LOGO_PATH = "M1 12h21.5M1 10.75h5v2.5H1zM9 6.5v11M12 4.5v15M15 5v14M18 6.5v11M21 9v6"
-const LOGO_STROKE = 2
+const BRUSH_PATH =
+  "M239.3 70 241.4 77.6 232.2 85.2 236.5 92.8 225.9 100.4 232.5 108 221.4 115.6 230 123.2 219.2 130.8 229.4 138.4 219.6 146 230.6 153.6 222.5 161.2 233.6 168.8 227.6 176.4 237.9 184 234.3 191.6 243 199.2 239.3 206.8 244 214.4 239.3 222 272.6 222 268 214.4 272.6 206.8 269 199.2 277.7 191.6 274.1 184 284.4 176.4 278.4 168.8 289.5 161.2 281.4 153.6 292.4 146 282.6 138.4 292.8 130.8 282 123.2 290.6 115.6 279.5 108 286.1 100.4 275.5 92.8 279.8 85.2 270.6 77.6 272.6 70Z"
 
 export function LogoMark(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={LOGO_STROKE}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      {...props}
-    >
-      <path d={LOGO_PATH} />
+    <svg viewBox="93 107 312 312" fill="currentColor" aria-hidden="true" {...props}>
+      <g transform="rotate(45 256 256)">
+        <path d={BRUSH_PATH} />
+        <rect x="248" y="210" width="16" height="112" rx="3" />
+        <rect x="220" y="316" width="72" height="126" rx="12" />
+      </g>
     </svg>
   )
 }

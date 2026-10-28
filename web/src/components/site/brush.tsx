@@ -3,9 +3,10 @@
 import { useEffect, useRef } from "react"
 
 /**
- * The logo's mascara wand, drawn large behind a section: a handle, a stem, and a brush of fine bristles
- * that the pointer sweeps as it passes and that spring back. Geometry follows LOGO_PATH in logo.tsx, in
- * its 24-unit grid: handle from 1 to 6, stem to 22.5, bristles from 9 to 21.
+ * The logo's mascara wand, drawn large behind a section: the cap, the rod, and a brush of bristles that
+ * the pointer sweeps as it passes and that spring back. Proportions follow the logo (logo.tsx), laid
+ * out along 21.5 units from the cap's end to the brush's tip: the cap to 7.3, the rod, the brush from
+ * 12.7.
  */
 
 type Props = {
@@ -27,11 +28,16 @@ const REACH = 110 // px around a bristle that the pointer touches
 const SWEEP = 22 // how hard a passing pointer pushes
 const WAVE_MS = 700 // the opening sweep runs handle to tip in this long
 
-/** Bristle length along the brush, after the logo: full just past the handle, tapering to a third at the tip. */
+const CAP = 7.3 // cap length
+const CAP_WIDTH = 4.2
+const ROD_WIDTH = 0.9
+const BRUSH = 12.7 // where the brush starts
+const BRISTLE = 2.15 // the longest bristle, from the rod
+
+/** Bristle length along the brush, after the logo's spindle: short at both ends, longest past the middle. */
 function envelope(t: number) {
-  const rise = Math.min(1, 0.72 + t * 1.6)
-  const fall = 1 - Math.pow(Math.max(0, t - 0.2) / 0.8, 1.8) * 0.62
-  return rise * fall
+  const fromTip = 1 - t
+  return 0.45 + 0.55 * Math.sin(Math.PI * Math.min(1, fromTip * 1.15))
 }
 
 export function Brush({ center = [0.5, 0.5], angle = 0, flip = false, span = 1.2 }: Props) {
@@ -67,10 +73,10 @@ export function Brush({ center = [0.5, 0.5], angle = 0, flip = false, span = 1.2
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       // On a phone the wand runs off both edges so its bristles stay as bold as on a desktop.
       unit = (width * span * (width < 640 ? 1.9 : 1)) / 21.5
-      const reach = Math.min(7.5 * unit, height * 0.3)
-      const brush = 12 * unit
-      // Few, bold bristles like the logo's, not a fur.
-      const count = Math.max(10, Math.min(24, Math.round(brush / 40)))
+      const reach = BRISTLE * unit
+      const brush = (21.5 - BRUSH) * unit
+      // Bristles close enough to read as the logo's spindle, few enough to stay bold.
+      const count = Math.max(10, Math.min(24, Math.round(brush / 18)))
       const old = halves
       halves = []
       for (let i = 0; i < count; i++) {
@@ -78,7 +84,7 @@ export function Brush({ center = [0.5, 0.5], angle = 0, flip = false, span = 1.2
         for (const side of [-1, 1] as const) {
           const prev = old[halves.length]
           halves.push({
-            x: (8 + 12 * t) * unit,
+            x: (BRUSH + (21.5 - BRUSH) * t) * unit,
             side,
             length: reach * envelope(t),
             a: prev?.a ?? 0,
@@ -115,16 +121,16 @@ export function Brush({ center = [0.5, 0.5], angle = 0, flip = false, span = 1.2
       ctx.fillStyle = color
       ctx.lineCap = "round"
 
-      ctx.lineWidth = Math.max(3, unit * 0.25)
+      ctx.lineWidth = Math.max(3, unit * ROD_WIDTH)
       ctx.beginPath()
-      ctx.moveTo(0, 0)
-      ctx.lineTo(21.5 * unit, 0)
+      ctx.moveTo(CAP * unit, 0)
+      ctx.lineTo(21.2 * unit, 0)
       ctx.stroke()
       ctx.beginPath()
-      ctx.roundRect(0, -0.32 * unit, 5 * unit, 0.64 * unit, 0.32 * unit)
+      ctx.roundRect(0, (-CAP_WIDTH / 2) * unit, CAP * unit, CAP_WIDTH * unit, 0.7 * unit)
       ctx.fill()
 
-      ctx.lineWidth = Math.max(5, unit * 0.36)
+      ctx.lineWidth = Math.max(5, unit * 0.5)
       ctx.beginPath()
       for (const h of halves) {
         // Bend as a curve: the root stays upright, the tip swings by the bristle's angle.
