@@ -5,10 +5,14 @@ presidio-fake             a fresh Faker value per mention, as in Presidio's Fake
 presidio-fake-consistent  one Faker value per (type, text) within a document, as in Presidio's
                           pseudonymization sample. Separates detection misses from replacement
                           choices.
+presidio-fake-global      one Faker value per (type, text) across the whole corpus. Values are
+                          seeded by their key, so document order and batch boundaries do not matter.
 """
 
 from __future__ import annotations
 
+import hashlib
+import json
 from functools import cache
 
 from ..types import Document, Edit, Output, make_output
@@ -77,4 +81,19 @@ def fake_consistent(docs: list[Document]) -> dict[str, Output]:
     return _run(docs, replace)
 
 
-SYSTEMS = {"presidio-redact": redact_with(detect), "presidio-fake": fake, "presidio-fake-consistent": fake_consistent}
+def fake_global(docs: list[Document]) -> dict[str, Output]:
+    f, memo = _faker(), {}
+
+    def replace(t: str, text: str, _document_memo: dict) -> str:
+        key = (t, " ".join(text.casefold().split()))
+        if key not in memo:
+            seed = hashlib.sha256(json.dumps(["presidio-global-v1", *key]).encode()).digest()
+            f.seed_instance(int.from_bytes(seed, "big"))
+            memo[key] = FAKE.get(t, lambda f: f.bothify("########"))(f)
+        return memo[key]
+
+    return _run(docs, replace)
+
+
+SYSTEMS = {"presidio-redact": redact_with(detect), "presidio-fake": fake,
+           "presidio-fake-consistent": fake_consistent, "presidio-fake-global": fake_global}

@@ -5,6 +5,7 @@
     maskara report OUT_DIR [--html]
     maskara ui [--port N] [--no-browser] | maskara ui --export DIR
     maskara bench --corpus linked --system maskara [--qa linking|llm]
+    maskara bench-replacements --corpus linked --detector rules --out runs/replacements
     maskara hero --corpus linked --runs runs
 
 Exit codes: 0 success, 2 usage error (bad flags, config, paths or roles), 3 masking failed. On a
@@ -136,6 +137,101 @@ def _qa(args: argparse.Namespace, out_dir: Path, rows: list[dict]) -> int:
         print(" | ".join([row["corpus"], row["system"], reader,
                           f"{_pct(r['accuracy'])} ({r['correct']}/{r['questions']})"]))
     return 0
+
+
+def replacement_study(args: argparse.Namespace) -> int:
+    """Freeze one detection/resolution pass before comparing identity renderers."""
+    from .bench import corpora, replacements
+    from .bench.score import score
+
+    try:
+        replacements._Identities(args.seed)  # Fail before model inference if Faker is unavailable.
+    except ImportError:
+        print('maskara: bench-replacements needs Faker; install "maskara-ai[presidio]"', file=sys.stderr)
+        return USAGE
+    if args.limit is not None and args.limit < 1:
+        print("maskara: --limit must be positive", file=sys.stderr)
+        return USAGE
+    out_dir = Path(args.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    rows = []
+    for corpus in args.corpus:
+        docs = corpora.load(corpus, args.limit)
+        print(f"{corpus}: preparing one shared detection/resolution plan for {len(docs)} documents",
+              file=sys.stderr)
+        prepared = replacements.prepare(docs, detector=args.detector, preset=args.preset, seed=args.seed,
+                                        with_tables=not args.text_only, patterns=args.pattern)
+        variants = replacements.render(docs, prepared)
+        (out_dir / f"{corpus}--replacement-plan.json").write_text(json.dumps(prepared.manifest, indent=2) + "\n")
+        for variant, outputs in variants.items():
+            name = f"matched-{variant}"
+            stem = out_dir / f"{corpus}--{name}"
+            row = {
+                "corpus": corpus, "system": name, "documents": len(docs),
+                "corpus_info": corpora.CORPORA[corpus].INFO, "versions": _versions(),
+                "comparison": prepared.manifest, "scores": score(docs, outputs),
+            }
+            _save_outputs(stem.with_suffix(".outputs.jsonl"), outputs)
+            stem.with_suffix(".json").write_text(json.dumps(row, indent=2) + "\n")
+            rows.append(row)
+        print(f"{corpus}: scored {len(variants)} variants from the same plan", file=sys.stderr)
+    print(_table(rows))
+    (out_dir / "replacement-study.json").write_text(json.dumps(rows, indent=2) + "\n")
+    if args.qa and any(hasattr(corpora.CORPORA[r["corpus"]], "questions") for r in rows):
+        return _qa(args, out_dir, rows)
+    return OK
+
+
+def utility_study(args: argparse.Namespace) -> int:
+    from .bench import replacements, utility
+    from .bench.corpora import abcd
+
+    try:
+        replacements._Identities(args.seed)
+    except ImportError:
+        print('maskara: bench-utility needs Faker; install "maskara-ai[presidio]"', file=sys.stderr)
+        return USAGE
+    if any(n is not None and n < 1 for n in (args.train_limit, args.test_limit)):
+        print("maskara: document limits must be positive", file=sys.stderr)
+        return USAGE
+    train = abcd.load(split="train", limit=args.train_limit)
+    test = abcd.load(split="test", limit=args.test_limit)
+    print(f"abcd: transforming {len(train)} training chats; holding out {len(test)} original test chats",
+          file=sys.stderr)
+    prepared = replacements.prepare(train, detector=args.detector, preset=args.preset, seed=args.seed,
+                                    with_tables=False)
+    variants = replacements.render(train, prepared)
+    result = utility.evaluate(train, test, variants)
+    result.update(comparison=prepared.manifest, versions=_versions(), corpus_info=abcd.INFO,
+                  test_sha256=replacements._digest([(d.id, d.text, d.meta["flow"]) for d in test]))
+    out_dir = Path(args.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "abcd--flow-utility.json").write_text(json.dumps(result, indent=2) + "\n")
+    for name, row in result["systems"].items():
+        print(f"{name}: accuracy {_pct(row['accuracy'])}, macro-F1 {_pct(row['macro_f1'])}; "
+              f"{row['paired_with_original']['wins']} wins / {row['paired_with_original']['losses']} losses "
+              "against original training")
+    return OK
+
+
+def identity_study(args: argparse.Namespace) -> int:
+    from .bench.identity import CASES, evaluate
+
+    try:
+        result = evaluate(args.cases or CASES)
+    except (OSError, ValueError, KeyError, TypeError) as e:
+        print(f"maskara: invalid identity cases: {e}", file=sys.stderr)
+        return USAGE
+    result["versions"] = _versions()
+    out_dir = Path(args.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "identity-study.json").write_text(json.dumps(result, indent=2) + "\n")
+    s = result["scores"]
+    print(f"Identity diagnostics: {result['cases']} cases, {s['mentions']} gold spans; "
+          f"precision {_pct(s['precision'])}, recall {_pct(s['recall'])}, "
+          f"abstained {s['abstained']}/{s['mentions']}, wrong {s['wrong']}")
+    print("Authored diagnostics; not independent customer validation or detection accuracy.")
+    return OK
 
 
 def hero_command(args: argparse.Namespace) -> int:
@@ -345,13 +441,37 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--rescore", action="store_true", help="score saved outputs again instead of running systems")
     b.add_argument("--qa", choices=("linking", "llm"), help="also run Entity QA on corpora with questions "
                    "(llm: MASKARA_QA_BASE_URL + MASKARA_QA_MODEL, or ANTHROPIC_API_KEY)")
+    br = sub.add_parser("bench-replacements", help="compare identity replacements with shared detection and policy",
+                        description="Controlled ablation: vary names/contacts only; share maskara's detection, "
+                        "resolution, dates, IDs and remaining output. Not an independent-system comparison.")
+    br.add_argument("--corpus", nargs="+", choices=sorted(CORPORA), default=["linked"])
+    br.add_argument("--detector", choices=("rules", "gliner2", "opf"), default="rules")
+    br.add_argument("--preset", choices=sorted(PRESETS), default="balanced")
+    br.add_argument("--pattern", action="append", choices=sorted(PACKS))
+    br.add_argument("--text-only", action="store_true", help="do not use linked corpus tables")
+    br.add_argument("--seed", default="maskara-bench", help="public reproducibility seed; not a production key")
+    br.add_argument("--limit", type=int, help="first N documents of each corpus")
+    br.add_argument("--out", default="runs/replacements", help="separate output directory for this study")
+    br.add_argument("--qa", choices=("linking", "llm"), default="linking",
+                    help="QA on corpora with questions (default linking); external corpora without QA are skipped")
+    bu = sub.add_parser("bench-utility", help="train on transformed ABCD chats, test on original held-out chats")
+    bu.add_argument("--detector", choices=("rules", "gliner2", "opf"), default="rules")
+    bu.add_argument("--preset", choices=sorted(PRESETS), default="balanced")
+    bu.add_argument("--seed", default="maskara-bench")
+    bu.add_argument("--train-limit", type=int, help="first N official train chats; default all")
+    bu.add_argument("--test-limit", type=int, help="first N official test chats; default all")
+    bu.add_argument("--out", default="runs/utility")
+    bi = sub.add_parser("bench-identity", help="evaluate ownership precision, recall and abstention on gold spans")
+    bi.add_argument("--cases", help="JSON fixture in maskara.identity-cases/1 format; default bundled diagnostics")
+    bi.add_argument("--out", default="runs/identity")
     hp = sub.add_parser("hero", help="draw the privacy/utility hero chart from saved runs")
     hp.add_argument("--corpus", default="linked", choices=sorted(CORPORA))
     hp.add_argument("--runs", default="runs", help="directory `maskara bench` wrote to")
     hp.add_argument("--external", metavar="SVG", help="draw the public chart over TAB, ABCD and Nemotron-PII "
                     "into this file instead")
     args = parser.parse_args(argv)
-    commands = {"mask": mask_command, "demo": demo_command, "bench": bench, "report": report_command,
+    commands = {"mask": mask_command, "demo": demo_command, "bench": bench, "bench-replacements": replacement_study,
+                "bench-utility": utility_study, "bench-identity": identity_study, "report": report_command,
                 "ui": ui_command, "hero": hero_command}
     return commands[args.command](args)
 

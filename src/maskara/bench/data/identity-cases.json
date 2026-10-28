@@ -1,0 +1,1105 @@
+{
+  "schema": "maskara.identity-cases/1",
+  "provenance": "Repository-authored synthetic diagnostic cases, 2026-10-28. Not independent or held-out customer evidence. Null owner means insufficient evidence for one owner; supplied row context is evidence, not ground truth for every mention.",
+  "cases": [
+    {
+      "id": "unique-full",
+      "group": "unique",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "Maria Lopez called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 11,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C1"
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "unique-email",
+      "group": "unique",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "maria.two@example.org wrote.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 21,
+              "category": "CONTACT",
+              "label": "email",
+              "owner": "C2"
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "phone-format",
+      "group": "unique",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "(312) 867-5309",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 14,
+              "category": "CONTACT",
+              "label": "phone",
+              "owner": "C1"
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "row-first",
+      "group": "context",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "Maria called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 5,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C2"
+            }
+          ],
+          "row": "C2",
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "unique-anchor",
+      "group": "context",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "maria.one@example.org: Maria called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 21,
+              "category": "CONTACT",
+              "label": "email",
+              "owner": "C1"
+            },
+            {
+              "start": 23,
+              "end": 28,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C1"
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "titled-last",
+      "group": "alias",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "Ms. Chen called.",
+          "mentions": [
+            {
+              "start": 4,
+              "end": 8,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C2"
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "middle-initial",
+      "group": "alias",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "Maria L. Lopez called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 14,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C1"
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "possessive",
+      "group": "alias",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "Maria Lopez's order.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 13,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C1"
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "inverted",
+      "group": "alias",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "Lopez, Maria called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 12,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C1"
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "repeated-last",
+      "group": "alias",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "Ms. Lopez called; Lopez returned.",
+          "mentions": [
+            {
+              "start": 4,
+              "end": 9,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C1"
+            },
+            {
+              "start": 18,
+              "end": 23,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C1"
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "homonym-no-context",
+      "group": "homonym",
+      "known": {
+        "C1": {
+          "name": "Alex Kim",
+          "email": "alex.one@example.org"
+        },
+        "C2": {
+          "name": "Alex Kim",
+          "email": "alex.two@example.org"
+        }
+      },
+      "documents": [
+        {
+          "text": "Alex Kim called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 8,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": null
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "homonym-row",
+      "group": "homonym",
+      "known": {
+        "C1": {
+          "name": "Alex Kim",
+          "email": "alex.one@example.org"
+        },
+        "C2": {
+          "name": "Alex Kim",
+          "email": "alex.two@example.org"
+        }
+      },
+      "documents": [
+        {
+          "text": "Alex Kim called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 8,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C2"
+            }
+          ],
+          "row": "C2",
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "homonym-two-anchors",
+      "group": "homonym",
+      "known": {
+        "C1": {
+          "name": "Alex Kim",
+          "email": "alex.one@example.org"
+        },
+        "C2": {
+          "name": "Alex Kim",
+          "email": "alex.two@example.org"
+        }
+      },
+      "documents": [
+        {
+          "text": "alex.one@example.org and alex.two@example.org; Alex Kim called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 20,
+              "category": "CONTACT",
+              "label": "email",
+              "owner": "C1"
+            },
+            {
+              "start": 25,
+              "end": 45,
+              "category": "CONTACT",
+              "label": "email",
+              "owner": "C2"
+            },
+            {
+              "start": 47,
+              "end": 55,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": null
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "homonym-row-and-agent",
+      "group": "homonym",
+      "known": {
+        "C1": {
+          "name": "Alex Kim",
+          "email": "alex.one@example.org"
+        },
+        "C2": {
+          "name": "Alex Kim",
+          "email": "alex.two@example.org"
+        }
+      },
+      "documents": [
+        {
+          "text": "Alex Kim called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 8,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": null
+            }
+          ],
+          "row": "C1",
+          "others": [
+            "C2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homonym-reversed-keys",
+      "group": "homonym",
+      "known": {
+        "C2": {
+          "name": "Alex Kim",
+          "email": "alex.two@example.org"
+        },
+        "C1": {
+          "name": "Alex Kim",
+          "email": "alex.one@example.org"
+        }
+      },
+      "documents": [
+        {
+          "text": "Alex Kim called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 8,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": null
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "shared-email",
+      "group": "shared_contact",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "family@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Daniel Lopez",
+          "email": "family@example.org",
+          "phone": "3128675309"
+        }
+      },
+      "documents": [
+        {
+          "text": "family@example.org",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 18,
+              "category": "CONTACT",
+              "label": "email",
+              "owner": null
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "shared-phone",
+      "group": "shared_contact",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "family@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Daniel Lopez",
+          "email": "family@example.org",
+          "phone": "3128675309"
+        }
+      },
+      "documents": [
+        {
+          "text": "312.867.5309",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 12,
+              "category": "CONTACT",
+              "label": "phone",
+              "owner": null
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "shared-not-an-anchor",
+      "group": "shared_contact",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "family@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Daniel Lopez",
+          "email": "family@example.org",
+          "phone": "3128675309"
+        }
+      },
+      "documents": [
+        {
+          "text": "family@example.org Ms. Lopez called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 18,
+              "category": "CONTACT",
+              "label": "email",
+              "owner": null
+            },
+            {
+              "start": 23,
+              "end": 28,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": null
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "shared-row-and-guardian",
+      "group": "shared_contact",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "family@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Daniel Lopez",
+          "email": "family@example.org",
+          "phone": "3128675309"
+        }
+      },
+      "documents": [
+        {
+          "text": "family@example.org for Maria Lopez and Daniel Lopez",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 18,
+              "category": "CONTACT",
+              "label": "email",
+              "owner": null
+            },
+            {
+              "start": 23,
+              "end": 34,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C1"
+            },
+            {
+              "start": 39,
+              "end": 51,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C2"
+            }
+          ],
+          "row": "C1",
+          "others": [
+            "C2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shared-row-only",
+      "group": "shared_contact",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "family@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Daniel Lopez",
+          "email": "family@example.org",
+          "phone": "3128675309"
+        }
+      },
+      "documents": [
+        {
+          "text": "family@example.org",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 18,
+              "category": "CONTACT",
+              "label": "email",
+              "owner": "C2"
+            }
+          ],
+          "row": "C2",
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "ambiguous-first",
+      "group": "homonym",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "Maria called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 5,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": null
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "two-people-date",
+      "group": "date",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "Maria Lopez and Maria Chen met on 2024-03-02",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 11,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C1"
+            },
+            {
+              "start": 16,
+              "end": 26,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C2"
+            },
+            {
+              "start": 34,
+              "end": 44,
+              "category": "DATE",
+              "label": "date",
+              "owner": null
+            }
+          ],
+          "row": "C1",
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "single-person-date",
+      "group": "date",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "Maria Chen ordered on 2024-03-02",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 10,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C2"
+            },
+            {
+              "start": 22,
+              "end": 32,
+              "category": "DATE",
+              "label": "date",
+              "owner": "C2"
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "row-date",
+      "group": "date",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "Ordered on 2024-03-02",
+          "mentions": [
+            {
+              "start": 11,
+              "end": 21,
+              "category": "DATE",
+              "label": "date",
+              "owner": "C1"
+            }
+          ],
+          "row": "C1",
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "unknown-date",
+      "group": "date",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "Ordered on 2024-03-02",
+          "mentions": [
+            {
+              "start": 11,
+              "end": 21,
+              "category": "DATE",
+              "label": "date",
+              "owner": null
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "known-birth",
+      "group": "date",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "DOB 1981-04-12",
+          "mentions": [
+            {
+              "start": 4,
+              "end": 14,
+              "category": "DATE",
+              "label": "birth_date",
+              "owner": "C1"
+            }
+          ],
+          "row": "C1",
+          "others": []
+        }
+      ],
+      "births": {
+        "C1": [
+          "1981-04-12"
+        ]
+      }
+    },
+    {
+      "id": "shared-birth",
+      "group": "date",
+      "known": {
+        "C1": {
+          "name": "Maria Lopez",
+          "email": "maria.one@example.org",
+          "phone": "3128675309"
+        },
+        "C2": {
+          "name": "Maria Chen",
+          "email": "maria.two@example.org",
+          "phone": "4159221830"
+        }
+      },
+      "documents": [
+        {
+          "text": "Maria Lopez and Maria Chen DOB 1981-04-12",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 11,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C1"
+            },
+            {
+              "start": 16,
+              "end": 26,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": "C2"
+            },
+            {
+              "start": 31,
+              "end": 41,
+              "category": "DATE",
+              "label": "birth_date",
+              "owner": null
+            }
+          ],
+          "row": "C1",
+          "others": []
+        }
+      ],
+      "births": {
+        "C1": [
+          "1981-04-12"
+        ],
+        "C2": [
+          "1981-04-12"
+        ]
+      }
+    },
+    {
+      "id": "unknown-full-across-docs",
+      "group": "no_table",
+      "known": {},
+      "documents": [
+        {
+          "text": "Ana Garcia called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 10,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": null
+            }
+          ],
+          "row": null,
+          "others": []
+        },
+        {
+          "text": "Ana Garcia called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 10,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": null
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "unknown-local-alias",
+      "group": "no_table",
+      "known": {},
+      "documents": [
+        {
+          "text": "Ana Garcia called; Ms. Garcia returned.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 10,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": null
+            },
+            {
+              "start": 23,
+              "end": 29,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": null
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "unknown-two-surnames",
+      "group": "no_table",
+      "known": {},
+      "documents": [
+        {
+          "text": "Ana Garcia and Eva Garcia; Ms. Garcia called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 10,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": null
+            },
+            {
+              "start": 15,
+              "end": 25,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": null
+            },
+            {
+              "start": 31,
+              "end": 37,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": null
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "unknown-contact",
+      "group": "no_table",
+      "known": {},
+      "documents": [
+        {
+          "text": "unknown@example.org called.",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 19,
+              "category": "CONTACT",
+              "label": "email",
+              "owner": null
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    },
+    {
+      "id": "cross-category-collision",
+      "group": "role_collision",
+      "known": {
+        "C1": {
+          "address": "Maria Lopez"
+        }
+      },
+      "documents": [
+        {
+          "text": "Maria Lopez",
+          "mentions": [
+            {
+              "start": 0,
+              "end": 11,
+              "category": "PERSON",
+              "label": "full_name",
+              "owner": null
+            }
+          ],
+          "row": null,
+          "others": []
+        }
+      ]
+    }
+  ]
+}

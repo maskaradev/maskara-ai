@@ -30,7 +30,8 @@ def get(name: str) -> System:
     raise KeyError(f"unknown system {name!r}; known: {', '.join(NAMES)}")
 
 
-NAMES = ["none", "oracle-redact", "presidio-redact", "presidio-fake", "presidio-fake-consistent", "opf-redact",
+NAMES = ["none", "oracle-redact", "presidio-redact", "presidio-fake", "presidio-fake-consistent",
+         "presidio-fake-global", "opf-redact",
          "gliner2-redact", "maskara", "maskara-text"]
 # maskara with a model on top, listed only when that model's package is installed.
 NAMES += [f"maskara-{m}" for m in ("gliner2", "opf") if importlib.util.find_spec(m) is not None]
