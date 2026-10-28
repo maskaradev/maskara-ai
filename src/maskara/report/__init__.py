@@ -87,6 +87,7 @@ def build(run: Run, *, preset: str, detectors: list[str]) -> Report:
         "replaced": privacy["detections"]["replaced"],
         "personas": len({m.persona for m in run.mentions if m.persona}),
         "unlinked": privacy["detections"]["unlinked"]["mentions"],
+        "identity_review": privacy["detections"]["identity"]["review_mentions"],
         "max_unique_share": max(unique) if unique else None, "max_linkage_rate": max(linkage) if linkage else None,
     }
     return Report({
@@ -110,6 +111,7 @@ def _not_measured(detectors: list[str], re_: dict) -> list[str]:
         "`maskara bench`."),
         ("Linkage across releases: two outputs masked with different vault keys could be matched on what they "
         "kept; not simulated."),
+        "Correctness of inferred identities and shared-event ownership; review counts are not accuracy scores.",
     ]
 
 
@@ -132,6 +134,8 @@ def headline_lines(data: dict) -> list[tuple[str, str]]:
     ]
     if h["max_unique_share"] is not None:
         lines.append(("k-anonymity", f"{_pct(h['max_unique_share'])} of rows unique on the quasi-identifiers kept"))
+    if "identity_review" in h:
+        lines.append(("review", f"{h['identity_review']} ownership decisions need review (review.json)"))
     return lines
 
 

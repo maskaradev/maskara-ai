@@ -105,6 +105,10 @@ def privacy(p: dict) -> str:
     u = d["unlinked"]
     body = _chips(u["by_category"]) if u["by_category"] else '<p class="lead" style="margin:0">None.</p>'
     cards.append(_card("Unlinked values", str(u["mentions"]), body, u, tone="warn" if u["mentions"] else ""))
+    if identity := d.get("identity"):
+        body = _chips(identity["by_resolution"]) + '<p>Review locations and reasons: <code>review.json</code></p>'
+        cards.append(_card("Identity review", str(identity["review_mentions"]), body, identity,
+                           tone="warn" if identity["review_mentions"] else ""))
     return f'<div class="cards">{"".join(cards)}</div>'
 
 

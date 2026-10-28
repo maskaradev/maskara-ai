@@ -1,16 +1,12 @@
-"""Mention -> subject: whose data each detected span is.
+"""Evidence-aware mention ownership.
 
-Subjects come from tables: a row's subject is its value in the subject key column(s) the caller names
-(`subjects={"users": "user_id"}`), so every table that carries `user_id` points at the same person.
-Free text is linked to those subjects through known values (`detect.known`), preferring, when a value
-is ambiguous (two customers named Maria), the subject of the text's own row and then subjects with a
-strong match elsewhere in the same text.
+Table keys establish row identities. Unique known values and unambiguous context can
+link text to those identities. Competing candidates abstain instead of choosing by
+sort order. Names without a known identity form provisional, document-local groups;
+name equality alone never establishes cross-document identity.
 
-Person mentions that match no table are clustered by normalized name over the whole run, so 'Maria
-Garcia' in two documents gets one persona and 'Ms. Garcia' joins her when that is unambiguous.
-
-Subject keys are internal strings ('subject:C042', 'name:maria garcia'); they hold originals and stay
-in memory. Only persona ids, which are keyed hashes, reach any output.
+Subjects and candidate keys hold originals in memory; API audit output uses only
+opaque persona ids, counts and fixed evidence codes.
 """
 
 from __future__ import annotations
@@ -41,9 +37,16 @@ class Link:
     """Who a detection refers to. `subject` None means nobody known: replaced keyed on its value."""
 
     subject: str | None
-    how: str            # 'row' | 'known' | 'context' | 'name' | 'value'
+    how: str            # row | known | context | name | value
     birth: bool = False  # a birth date, generalized to the persona's birth year instead of shifted
     name: tuple[str, ...] = ()  # normalized name tokens of an unlinked person, for clustering
+    resolution: str = "resolved"  # resolved | provisional | ambiguous | unresolved
+    evidence: tuple[str, ...] = ()
+    candidates: tuple[str, ...] = ()  # in memory only
+
+    def __post_init__(self):
+        if self.subject is None and self.resolution == "resolved":
+            self.resolution = "unresolved"
 
 
 class Resolver:
@@ -51,74 +54,91 @@ class Resolver:
         self.known = known
         self.birth_dates = birth_dates
 
-    def link(self, text: str, detections: list[Detection], row: str | None, others: list[str] = ()) -> list[Link]:
-        """One link per detection. Unlinked names get `how='name'` and a subject from `cluster`.
+    def link(self, text: str, detections: list[Detection], row: str | None,
+             others: list[str] = ()) -> list[Link]:
+        """Link only when the available evidence selects one candidate.
 
-        `row` is the subject of the text's own row; `others` are further subjects that row points to
-        (the agent on a ticket). Ambiguous values go to `row` first, then `others`, then subjects
-        with a strong match in the same text.
+        Row, foreign-key subjects and unique strong matches are peers: their order
+        must not break ties. Shared values cannot introduce a strong context anchor.
         """
-        strong = {k.subject for d in detections for k in self._entries(text, d) if k.strong}
-        first = ([row] if row else []) + [s for s in others if s != row]
-        context = first + sorted(strong - set(first))
-        people = sorted({s for d in detections if d.category == "PERSON"
-                         for s in self._candidates(text, d, context)[:1]} | ({row} if row else set()))
-        owner = row or (people[0] if len(people) == 1 else None)
-        links = [self._link(text, d, row, context, owner) for d in detections]
-        # The same value twice in one text is one value: every occurrence takes the link of the first
-        # that found an owner (a bare 'Saleh' follows 'Ms. Saleh'), so all get the same replacement.
-        best: dict[tuple[str, str], Link] = {}
-        for d, link in zip(detections, links):
-            key = (d.category, text[d.start:d.end])
-            if key not in best or (best[key].subject is None and link.subject is not None):
-                best[key] = link
-        return [best[(d.category, text[d.start:d.end])] for d in detections]
+        strong = set()
+        for d in detections:
+            subjects = {k.subject for k in self._entries(text, d) if k.strong}
+            if len(subjects) == 1:
+                strong.update(subjects)
+        context = set(others) | strong | ({row} if row else set())
+        links = [self._link(text, d, row, context) for d in detections]
+        # Propagate a resolved repeated name only if every accepted occurrence agrees
+        # and no occurrence carries competing candidates. Dates are never propagated.
+        groups = defaultdict(list)
+        for i, d in enumerate(detections):
+            if d.category == "PERSON":
+                groups[normalize(text[d.start:d.end])].append(i)
+        for indices in groups.values():
+            accepted = [links[i] for i in indices if links[i].resolution == "resolved"]
+            if len({link.subject for link in accepted}) == 1 and not any(
+                    links[i].resolution == "ambiguous" for i in indices):
+                for i in indices:
+                    links[i] = accepted[0]
+        return links
 
-    def _link(self, text: str, d: Detection, row: str | None, context: list[str], owner: str | None) -> Link:
+    @staticmethod
+    def choose(subjects: set[str], context: set[str], row: str | None, *,
+               unique: bool = True, evidence: str = "known_value") -> Link:
+        candidates = tuple(sorted(subjects))
+        selected = subjects & context
+        if len(subjects) == 1 and unique:
+            selected = subjects
+        if len(selected) == 1:
+            subject = next(iter(selected))
+            return Link(subject, "row" if subject == row else "known", evidence=(evidence,
+                        "unique_candidate" if len(subjects) == 1 else "unique_context"), candidates=candidates)
+        if len(subjects) > 1:
+            return Link(None, "value", resolution="ambiguous", evidence=(evidence, "multiple_candidates"),
+                        candidates=candidates)
+        return Link(None, "value", evidence=(evidence, "insufficient_context"), candidates=candidates)
+
+    def _link(self, text: str, d: Detection, row: str | None, context: set[str]) -> Link:
         span = text[d.start:d.end]
         if d.category in ("DATE", "DEMOGRAPHIC"):
+            birth = d.label == "birth_date"
             if d.category == "DATE" and (day := parse_date(span)):
-                births = [s for s in context if day in self.birth_dates.get(s, ())]
+                births = {s for s in context if day in self.birth_dates.get(s, ())}
                 if births:
-                    return Link(births[0], "known", birth=True)
-            return Link(owner, "row" if owner == row and row else "context", birth=d.label == "birth_date") \
-                if owner else Link(None, "value", birth=d.label == "birth_date")
-        found = self._candidates(text, d, context)
-        if found:
-            return Link(found[0], "row" if found[0] == row else "known")
+                    link = self.choose(births, context, row, evidence="known_birth_date")
+                    link.birth = True
+                    return link
+            link = self.choose(context, context, row, evidence="document_owner")
+            if link.subject and link.subject != row:
+                link.how = "context"
+            link.birth = birth
+            return link
+        entries = self._entries(text, d)
+        if d.category == "PERSON" and not entries:
+            entries = self._name_parts(span)
+        if entries:
+            unique = any(k.strong for k in entries) or (d.category == "PERSON" and (
+                titled(text, d.start) or all(k.role == "first_name" for k in entries)))
+            return self.choose({k.subject for k in entries}, context, row, unique=unique)
         if d.category == "PERSON":
-            return Link(None, "name", name=_name_tokens(span))
-        return Link(None, "value")
+            return Link(None, "name", name=_name_tokens(span), evidence=("name_only",))
+        return Link(None, "value", evidence=("no_known_owner",))
 
     def _entries(self, text: str, d: Detection) -> list[Known]:
         span = text[d.start:d.end]
-        if d.category == "PERSON":
-            return self.known.lookup(_strip_name(span))
+        roles = {"PERSON": PERSON_ROLES, "CONTACT": ("email", "phone"),
+                 "ADDRESS": ("address", "zip"), "LOCATION": ("city",),
+                 "ID": ("id",), "FINANCIAL": ("financial",)}.get(d.category, ())
         if d.category == "CONTACT" and "@" not in span:
             return [Known(s, "phone", True) for s in sorted(self.known.phone(span))]
-        entries = self.known.lookup(span)
+        entries = self.known.lookup(_strip_name(span) if d.category == "PERSON" else span)
+        entries = [k for k in entries if k.role in roles]
         if not entries and d.category in ("ADDRESS", "LOCATION"):
-            # 'Denver, CO 80216': the city part, then the street line of a longer address.
             parts = re.split(r",|\n", span)
             entries = self.known.lookup(parts[0]) or (self.known.lookup(parts[-1].split()[-1])
-                                                      if re.search(r"\d{5}\s*$", span) else [])
+                       if re.search(r"\d{5}\s*$", span) else [])
+            entries = [k for k in entries if k.role in ("address", "zip", "city")]
         return entries
-
-    def _candidates(self, text: str, d: Detection, context: list[str]) -> list[str]:
-        """Subjects this detection can refer to, best first."""
-        entries = self._entries(text, d)
-        if d.category == "PERSON" and not entries:
-            entries = self._name_parts(text[d.start:d.end])
-        subjects = sorted({k.subject for k in entries})
-        in_context = [s for s in context if s in subjects]
-        if in_context:
-            return in_context
-        if any(k.strong for k in entries):
-            return sorted({k.subject for k in entries if k.strong})
-        if d.category == "PERSON" and len(subjects) == 1 and (
-                titled(text, d.start) or all(k.role == "first_name" for k in entries)):
-            return subjects  # 'Ms. Lopez' or 'Handled by Alexis', and only one Lopez or Alexis anywhere
-        return []
 
     def _name_parts(self, span: str) -> list[Known]:
         """'Maria L. Lopez' or "Maria Lopez's" from a model: first and last token of one subject."""
@@ -130,31 +150,36 @@ class Resolver:
         return [Known(s, "name", True) for s in sorted(firsts & lasts)]
 
     @staticmethod
-    def cluster(links: list[list[Link]]) -> None:
-        """Give every unlinked name a run-wide cluster key, in place. `links` is one list per text.
+    def cluster(links: list[list[Link]], scopes: list[str] | None = None) -> None:
+        """Provisional name groups within each document; never a verified identity.
 
-        Full names cluster on their first and last token. A lone token joins a full name from the
-        same text that contains it, else the one full name in the run that does, else its own cluster.
+        A short alias can join one local full name. Multiple local candidates abstain.
+        Scope is the source/row/column location in the API, or the document index here.
         """
-        by_token: dict[str, set[str]] = defaultdict(set)
-        for text_links in links:
+        if scopes is not None and len(scopes) != len(links):
+            raise ValueError("one name scope is required per document")
+        for i, text_links in enumerate(links):
+            scope = scopes[i] if scopes is not None else str(i)
+            local = defaultdict(set)
             for link in text_links:
                 if link.how == "name" and len(link.name) >= 2:
-                    link.subject = "name:" + " ".join((link.name[0], link.name[-1]))
-                    by_token[link.name[0]].add(link.subject)
-                    by_token[link.name[-1]].add(link.subject)
-        for text_links in links:
-            local: dict[str, set[str]] = defaultdict(set)
-            for link in text_links:
-                if link.subject and link.how == "name":
-                    for tok in (link.name[0], link.name[-1]):
-                        local[tok].add(link.subject)
+                    # Keep middle names: first+last equality is not identity evidence.
+                    link.subject = "name:" + " ".join(link.name) + "\0" + scope
+                    link.resolution = "provisional"
+                    for token in (link.name[0], link.name[-1]):
+                        local[token].add(link.subject)
             for link in text_links:
                 if link.how != "name" or link.subject or not link.name:
                     continue
-                tok = link.name[0]
-                candidates = local.get(tok) or by_token.get(tok, set())
-                link.subject = min(candidates) if len(candidates) == 1 else f"name:{tok}"
+                candidates = local.get(link.name[0], set())
+                link.candidates = tuple(sorted(candidates))
+                if len(candidates) > 1:
+                    link.resolution = "ambiguous"
+                    link.evidence = ("name_only", "multiple_local_names")
+                else:
+                    link.subject = next(iter(candidates)) if candidates else "name:" + link.name[0] + "\0" + scope
+                    link.resolution = "provisional"
+                    link.evidence = ("name_only", "local_alias" if candidates else "local_name")
 
 
 def titled(text: str, start: int) -> bool:

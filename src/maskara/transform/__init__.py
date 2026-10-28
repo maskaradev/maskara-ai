@@ -73,7 +73,7 @@ class Replacer:
             attrs = self.attrs.get(subject)
             if attrs is None and subject.startswith("name:"):
                 # The name infers sex from the first name and keeps the persona off the original's names.
-                attrs = {"name": subject[5:].title(), **({"sex": sex} if sex else {})}
+                attrs = {"name": subject[5:].split("\0")[0].title(), **({"sex": sex} if sex else {})}
             self._personas[subject] = self.engine.persona_for(subject, attrs or {})
         return self._personas[subject]
 

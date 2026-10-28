@@ -35,10 +35,10 @@ from .detect.models import not_a_product
 from .persona import PersonaEngine
 from .persona.formats import parse_date
 from .report import Report, Run, build
-from .resolve import Link, Resolver, subject_key
+from .resolve import PERSON_BOUND, Link, Resolver, subject_key
 from .sources import TEXT, Source, load_table, load_texts, restore, write
 from .transform import ROLE_CATEGORY, ROLES, Edit, Replacer, infer, missing, rebuild
-from .vault import Vault, normalize
+from .vault import Vault
 
 SAMPLE_ROWS = 200  # rows read per column to infer its role
 KNOWN_ROLES = ("name", "first_name", "last_name", "email", "phone", "address", "zip", "city", "id", "financial")
@@ -78,9 +78,14 @@ class Mention:
                   row or text it is in), or None when nobody is known
     link          how the owner was found: 'row' (the row's subject column), 'known' (a value from
                   the tables), 'context' (the only person in that text), 'name' (clustered by name
-                  across the run), 'value' (no owner)
+                  within a document, provisionally), 'value' (no owner)
     changed       False when the policy keeps the value (a state the preset preserves, a country)
     replacement   the text written in its place (also present in the output itself)
+    resolution    resolved | provisional | ambiguous | unresolved | not_applicable;
+                  evidence states, not calibrated confidence or proof of identity
+    evidence      fixed reason codes, never original values or subject keys
+    candidate_count
+                  number of candidates considered, without exposing their identities
     """
 
     source: str
@@ -98,6 +103,9 @@ class Mention:
     link: str
     changed: bool
     replacement: str
+    resolution: str = "not_applicable"
+    evidence: tuple[str, ...] = ()
+    candidate_count: int = 0
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -117,6 +125,17 @@ class MaskResult:
     _personas: dict[str, dict] = field(default_factory=dict, repr=False)  # persona id -> synthetic fields
     _subjects: dict[str, str] = field(default_factory=dict, repr=False)   # input -> its subject column
 
+    @property
+    def review(self) -> list[dict]:
+        """Identity decisions requiring review: locations and reason codes, no input values.
+
+        Pending decisions still receive replacements. This is a review queue, not an
+        approval workflow or a claim that released output is safe.
+        """
+        return [{k: getattr(m, k) for k in ("source", "row", "column", "start", "end", "category",
+                                           "resolution", "evidence", "candidate_count")}
+                for m in self.mentions if m.resolution in ("ambiguous", "unresolved", "provisional")]
+
     def summary(self) -> dict:
         changed = [m for m in self.mentions if m.changed]
         people = [m for m in self.mentions if m.category == "PERSON" and m.start is not None]
@@ -129,12 +148,14 @@ class MaskResult:
             "by_category": dict(sorted(Counter(m.category for m in changed).items())),
             "by_detector": dict(sorted(Counter(m.detector for m in changed).items())),
             "personas": len({m.persona for m in self.mentions if m.persona}),
-            "text_names_linked_to_tables": round(sum(m.link in ("row", "known") for m in people) / len(people), 4)
+            "identity_review": len(self.review),
+            "text_names_linked_to_tables": round(sum(m.resolution == "resolved" and m.link in ("row", "known")
+                                                       for m in people) / len(people), 4)
             if people else None,
         }
 
     def save(self, out: str | os.PathLike) -> list[Path]:
-        """Write every masked input (same name and format as the input), `mentions.jsonl`, and the
+        """Write every masked input, `mentions.jsonl`, `review.json`, and the
         report as `report.json` and `report.html`.
 
         Files are written to a temporary directory first and moved into `out` only when all of them
@@ -153,11 +174,18 @@ class MaskResult:
             names = [p.name for p in staged]
             if len(set(names)) != len(names):
                 raise ValueError(f"two inputs would be written to the same file name: {sorted(names)}")
+            reserved = {"mentions.jsonl", "review.json", "report.json", "report.html"}
+            if collisions := set(names) & reserved:
+                raise ValueError(f"input output names conflict with audit files: {sorted(collisions)}")
             mentions = Path(tmp) / "mentions.jsonl"
             with mentions.open("w", encoding="utf-8") as f:
                 for m in self.mentions:
                     f.write(json.dumps(m.to_dict(), ensure_ascii=False) + "\n")
             staged.append(mentions)
+            review = Path(tmp) / "review.json"
+            review.write_text(json.dumps({"schema": "maskara.identity-review/1", "items": self.review},
+                                         indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+            staged.append(review)
             if self.report is not None:
                 staged.append(Path(tmp) / "report.json")
                 self.report.to_json(staged[-1])
@@ -268,26 +296,30 @@ def _run(sources, subjects, columns, engine, rules, models, notices) -> MaskResu
     roles = _roles(sources, subjects, columns)
     known, attrs, births = KnownValues(), {}, {}
     row_subjects: dict[str, list[str | None]] = {}
+    row_links: dict[str, list[Link]] = {}
     # Subject key value -> subject, so a row's other keys (the ticket's agent) can be recognized.
-    key_of: dict[str, str] = {}
+    keys_of: dict[str, set[str]] = {}
     for s in sources:
         column, scope = _subject_spec(subjects.get(s.name))
         for r in s.rows if column else ():
             if not missing(r.get(column)):
-                key_of.setdefault(str(r[column]), subject_key(r[column], scope))
+                keys_of.setdefault(str(r[column]), set()).add(subject_key(r[column], scope))
+    # Raw keys colliding across declared scopes cannot infer a foreign-key owner.
+    key_of = {value: next(iter(keys)) for value, keys in keys_of.items() if len(keys) == 1}
 
-    def collect(src: Source, i: int, subject: str) -> None:
+    def collect(src: Source, i: int, subject: str, *, index: bool = True) -> None:
         row, r = src.rows[i], roles[src.name]
         a = attrs.setdefault(subject, {})
         if full := _full_name(row, r):
-            known.add(subject, "name", full)
+            if index:
+                known.add(subject, "name", full)
             a.setdefault("name", full)  # the whole name, so the persona can avoid both parts
         for col, value in row.items():
             role = r.get(col)
             if missing(value) or isinstance(value, bool):
                 continue
             # A key of another subject in this row (a referral, the assigned agent) is not this person's.
-            if role in KNOWN_ROLES and key_of.get(str(value), subject) == subject:
+            if index and role in KNOWN_ROLES and (str(value) not in keys_of or subject in keys_of[str(value)]):
                 known.add(subject, role, value)
             if role in ATTR_ROLES or col.lower() in ATTR_HEADERS:
                 attr = ATTR_ROLES.get(role, col.lower())
@@ -307,21 +339,35 @@ def _run(sources, subjects, columns, engine, rules, models, notices) -> MaskResu
         if column:
             keys = [None if missing(r.get(column)) else subject_key(r.get(column), scope) for r in src.rows]
             row_subjects[src.name] = keys
+            row_links[src.name] = [Link(key, "row", evidence=("subject_key" if key else "missing_subject_key",),
+                                       candidates=(key,) if key else ()) for key in keys]
             for i, key in enumerate(keys):
                 if key:
                     collect(src, i, key)
     for src in sources:
         if src.name in row_subjects:
             continue
-        keys = []
+        decisions = []
         for i, row in enumerate(src.rows):
-            key = _row_subject(row, roles[src.name], known)
-            keys.append(key)
-            if key:
-                collect(src, i, key)
-        row_subjects[src.name] = keys
+            link = _row_subject(row, roles[src.name], known)
+            if link.resolution == "unresolved" and any(roles[src.name].get(c) in
+                    ("name", "first_name", "last_name", "email", "phone") and not missing(v)
+                    for c, v in row.items()):
+                # Keep the fields of this row coherent, without equating equal names across rows.
+                link = Link(f"row:{src.name}:{i}", "row", resolution="provisional", evidence=("row_only",))
+            decisions.append(link)
+        row_links[src.name] = decisions
+        row_subjects[src.name] = [link.subject for link in decisions]
 
-    # Detect and link every free-text cell, then cluster unlinked names over the whole run.
+    # Inferred rows must not change the evidence used to infer later rows.
+    for src in sources:
+        if _subject_spec(subjects.get(src.name))[0]:
+            continue
+        for i, link in enumerate(row_links[src.name]):
+            if link.subject:
+                collect(src, i, link.subject, index=False)
+
+    # Detect and link every free-text cell, then group provisional names within each cell.
     finder, resolver = KnownValueDetector(known), Resolver(known, births)
     found: dict[tuple[str, int, str], tuple[list, list[Link]]] = {}
     for src in sources:
@@ -340,7 +386,14 @@ def _run(sources, subjects, columns, engine, rules, models, notices) -> MaskResu
                 spans = merge(spans)
                 spans = merge(spans + repeats(text, spans))
                 found[(src.name, i, col)] = (spans, resolver.link(text, spans, subject, others))
-    Resolver.cluster([links for _, links in found.values()])
+    Resolver.cluster([links for _, links in found.values()], [repr(key) for key in found])
+    provisional = {link.subject for links in row_links.values() for link in links
+                   if link.subject and link.resolution == "provisional"}
+    for _, links in found.values():
+        for link in links:
+            if link.subject in provisional:
+                link.resolution = "provisional"
+                link.evidence += ("row_only",)
 
     replacer = Replacer(engine, attrs, known)
     mentions: list[Mention] = []
@@ -359,9 +412,12 @@ def _run(sources, subjects, columns, engine, rules, models, notices) -> MaskResu
                     # A key of another subject (the ticket's agent) belongs to that subject, not the row's.
                     owner = key_of.get(str(value), subject) if role == "id" else subject
                     persona = replacer.persona(owner).id if owner else None
+                    decision = row_links[src.name][i]
                     mentions.append(Mention(src.name, i, col, None, None, None, None, ROLE_CATEGORY[role], role,
                                             "column", 1.0, persona, "row" if persona else "value", new[col] != value,
-                                            str(new[col])))
+                                            str(new[col]),
+                                            decision.resolution if ROLE_CATEGORY[role] in PERSON_BOUND
+                                            else "not_applicable", decision.evidence, len(decision.candidates)))
             rows.append(new)
         out[src.name] = rows
 
@@ -377,9 +433,9 @@ def _run(sources, subjects, columns, engine, rules, models, notices) -> MaskResu
     )
 
 
-def _row_subject(row: dict, roles: dict[str, str], known: KnownValues) -> str | None:
-    """A row with no subject column: the known subject its email/phone/name points to, else the value itself."""
-    strong = {}
+def _row_subject(row: dict, roles: dict[str, str], known: KnownValues) -> Link:
+    """Intersect every known identity field; conflicting fields must not win by column order."""
+    candidates = []
     values = [(roles.get(c), v) for c, v in row.items() if not missing(v)]
     if full := _full_name(row, roles):
         values.append(("name", full))
@@ -387,14 +443,18 @@ def _row_subject(row: dict, roles: dict[str, str], known: KnownValues) -> str | 
         if role not in ("email", "phone", "name"):
             continue
         text = str(value)
-        hits = known.phone(text) if role == "phone" else {k.subject for k in known.lookup(text) if k.strong}
-        if len(hits) == 1:
-            return next(iter(hits))
-        strong.setdefault(role, text)
-    for role in ("email", "name", "phone"):
-        if role in strong:
-            return f"value:{role}:{normalize(strong[role])}"
-    return None
+        hits = known.phone(text) if role == "phone" else {
+            k.subject for k in known.lookup(text) if k.strong and k.role == role}
+        if hits:
+            candidates.append(hits)
+    if not candidates:
+        return Link(None, "value", evidence=("no_known_owner",))
+    common = set.intersection(*candidates)
+    if len(common) == 1:
+        return Link(next(iter(common)), "known", evidence=("consistent_row_values",), candidates=tuple(common))
+    return Link(None, "value", resolution="ambiguous",
+                evidence=("conflicting_row_values" if not common else "shared_row_values",),
+                candidates=tuple(sorted(set.union(*candidates))))
 
 
 def _full_name(row: dict, roles: dict[str, str]) -> str | None:
@@ -411,5 +471,7 @@ def _mask_text(text: str, spans, links: list[Link], replacer: Replacer, source: 
         persona = replacer.persona(link.subject).id if link.subject else None
         mentions.append(Mention(source, row, column, d.start, d.end, a, b, d.category, d.label, d.detector,
                                 round(d.score, 4), persona, link.how if link.subject else "value",
-                                e.replacement != text[d.start:d.end], e.replacement))
+                                e.replacement != text[d.start:d.end], e.replacement,
+                                link.resolution if d.category in PERSON_BOUND else "not_applicable",
+                                link.evidence, len(link.candidates)))
     return masked

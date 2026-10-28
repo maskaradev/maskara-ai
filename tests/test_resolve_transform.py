@@ -44,7 +44,7 @@ def test_birth_dates_are_marked_by_value_or_cue():
     assert links("DOB: 1/2/1990")["1/2/1990"].birth
 
 
-def test_unlinked_names_cluster_across_texts():
+def test_unlinked_names_are_provisional_and_local_to_each_text():
     _, resolver = setup()
     texts = ["My friend Ana Garcia called.", "Ms. Garcia called back.", "Ana Garcia again. Thanks, Ana."]
     all_links = []
@@ -52,8 +52,10 @@ def test_unlinked_names_cluster_across_texts():
         spans = merge(RulesDetector().detect(t))
         all_links.append([(t[d.start:d.end], link) for d, link in zip(spans, resolver.link(t, spans, None))])
     Resolver.cluster([[link for _, link in ls] for ls in all_links])
-    subjects = {span: link.subject for ls in all_links for span, link in ls}
-    assert subjects["Ana Garcia"] == subjects["Garcia"] == subjects["Ana"] == "name:ana garcia"
+    subjects = [{span: link.subject for span, link in ls} for ls in all_links]
+    assert subjects[2]["Ana Garcia"] == subjects[2]["Ana"]
+    assert len({subjects[0]["Ana Garcia"], subjects[1]["Garcia"], subjects[2]["Ana Garcia"]}) == 3
+    assert all(link.resolution == "provisional" for ls in all_links for _, link in ls)
 
 
 def test_a_lone_first_name_links_to_its_only_subject_and_repeats_share_a_link():

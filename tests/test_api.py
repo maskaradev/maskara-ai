@@ -164,8 +164,9 @@ def test_cli_exit_codes_and_atomic_output(tmp_path, monkeypatch, capsys):
     out = tmp_path / "out"
     assert cli.main(["mask", "--table", f"users={src}", "--subject", "users=user_id", "--seed", "s",
                      "--detector", "rules", "--out", str(out)]) == 0
-    assert sorted(p.name for p in out.iterdir()) == ["mentions.jsonl", "report.html", "report.json", "users.csv"]
-    for name in ("users.csv", "report.json", "report.html", "mentions.jsonl"):
+    assert sorted(p.name for p in out.iterdir()) == ["mentions.jsonl", "report.html", "report.json",
+                                                    "review.json", "users.csv"]
+    for name in ("users.csv", "report.json", "report.html", "mentions.jsonl", "review.json"):
         assert "Maria" not in (out / name).read_text() and "mlopez" not in (out / name).read_text()
     assert cli.main(["report", str(out), "--html"]) == 0 and "maskara report" in capsys.readouterr().out
     assert cli.main(["mask", "--table", f"users={src}", "--out", str(out), "--column", "users.name=nope",

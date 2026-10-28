@@ -307,11 +307,21 @@ def quasi_identifiers(run: Run) -> dict:
 def detections(run: Run) -> dict:
     changed = [m for m in run.mentions if m.changed]
     unlinked = [m for m in run.mentions if m.category in PERSON_BOUND and m.persona is None]
+    pending = [m for m in run.mentions if m.resolution in ("ambiguous", "unresolved", "provisional")]
     return {
         "replaced": len(changed), "kept_by_policy": len(run.mentions) - len(changed),
         "by_category": dict(sorted(Counter(m.category for m in changed).items())),
         "by_detector": dict(sorted(Counter(m.detector for m in changed).items())),
         "by_link": dict(sorted(Counter(m.link for m in run.mentions).items())),
+        "identity": {
+            "by_resolution": dict(sorted(Counter(m.resolution for m in run.mentions).items())),
+            "review_mentions": len(pending),
+            "by_reason": dict(sorted(Counter(reason for m in pending for reason in m.evidence).items())),
+            "measured": "Ownership decisions and review workload. Ambiguous/unresolved values use value-based "
+                        "replacement; provisional names are grouped only within a document. See review.json.",
+            "not_measured": "Identity accuracy needs gold owners; these are evidence states, not calibrated "
+                            "probabilities. Replacement equality does not establish person identity.",
+        },
         "unlinked": {
             "mentions": len(unlinked), "by_category": dict(sorted(Counter(m.category for m in unlinked).items())),
             "measured": "person-bound values (names, contacts, addresses, places, dates) no known person could "

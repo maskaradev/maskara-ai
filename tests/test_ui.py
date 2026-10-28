@@ -154,4 +154,4 @@ def test_server_runs_local_files(server, tmp_path):
     data = json.loads(body)
     assert status == 200 and data["bundle"]["meta"]["originals"] and not data["bundle"]["meta"]["synthetic"]
     assert data["bundle"]["inputs"][0]["file"] == "users.csv"
-    assert (tmp_path / "out" / "report.html").exists() and len(data["written"]) == 4
+    assert (tmp_path / "out" / "report.html").exists() and len(data["written"]) == 5
