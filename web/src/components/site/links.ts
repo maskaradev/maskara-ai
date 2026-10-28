@@ -1,4 +1,4 @@
-export const REPO_URL = "https://github.com/maskaradev/maskara"
+export const REPO_URL = "https://github.com/maskaradev/maskara-ai"
 export const DOCS_URL = `${REPO_URL}#readme`
 export const ROADMAP_URL = `${REPO_URL}/blob/main/intents.md#roadmap`
 export const QUICK_START_URL = `${REPO_URL}#quick-start`

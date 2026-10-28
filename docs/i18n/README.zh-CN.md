@@ -16,7 +16,7 @@
 <p align="center">
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-666666?labelColor=333333" alt="Apache 2.0 license" /></a>
   <img src="https://img.shields.io/badge/status-v0-666666?labelColor=333333" alt="status: v0" />
-  <a href="https://github.com/maskaradev/maskara/stargazers"><img src="https://img.shields.io/github/stars/maskaradev/maskara?labelColor=333333&color=666666&logo=github" alt="GitHub stars" /></a>
+  <a href="https://github.com/maskaradev/maskara-ai/stargazers"><img src="https://img.shields.io/github/stars/maskaradev/maskara-ai?labelColor=333333&color=666666&logo=github" alt="GitHub stars" /></a>
 </p>
 
 ---
@@ -41,7 +41,7 @@
 ## 快速开始
 
 ```bash
-pip install git+https://github.com/maskaradev/maskara   # python 3.11+
+pip install git+https://github.com/maskaradev/maskara-ai   # python 3.11+
 maskara demo        # mask the bundled sample store and print the report
 maskara ui --demo   # see it side by side in the browser
 ```
@@ -49,7 +49,7 @@ maskara ui --demo   # see it side by side in the browser
 发布到 PyPI 后，安装命令会变成 `pip install maskara-ai`。PyPI 上的 `maskara` 是另一个项目。如需 GLiNER2 模型：
 
 ```bash
-pip install "maskara-ai[gliner] @ git+https://github.com/maskaradev/maskara"
+pip install "maskara-ai[gliner] @ git+https://github.com/maskaradev/maskara-ai"
 ```
 
 ### Python
@@ -126,7 +126,7 @@ uv run python -m maskara.bench.hero --external docs/assets/hero-external.svg
 
 ## 安全
 
-maskara 在你的机器上运行，不向任何地方发送数据。只有你主动开启时才会联网：可选模型在首次使用时下载一次，`maskara bench` 会下载它的语料，`bench --qa llm` 会调用你配置的模型端点。v0 尚未经过安全审计，分享输出前请先看报告。安全问题请通过[私密 advisory](https://github.com/maskaradev/maskara/security/advisories/new) 报告。
+maskara 在你的机器上运行，不向任何地方发送数据。只有你主动开启时才会联网：可选模型在首次使用时下载一次，`maskara bench` 会下载它的语料，`bench --qa llm` 会调用你配置的模型端点。v0 尚未经过安全审计，分享输出前请先看报告。安全问题请通过[私密 advisory](https://github.com/maskaradev/maskara-ai/security/advisories/new) 报告。
 
 ## 致谢
 

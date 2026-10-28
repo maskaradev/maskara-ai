@@ -16,7 +16,7 @@
 <p align="center">
   <a href="../../LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-666666?labelColor=333333" alt="Apache 2.0 license" /></a>
   <img src="https://img.shields.io/badge/status-v0-666666?labelColor=333333" alt="status: v0" />
-  <a href="https://github.com/maskaradev/maskara/stargazers"><img src="https://img.shields.io/github/stars/maskaradev/maskara?labelColor=333333&color=666666&logo=github" alt="GitHub stars" /></a>
+  <a href="https://github.com/maskaradev/maskara-ai/stargazers"><img src="https://img.shields.io/github/stars/maskaradev/maskara-ai?labelColor=333333&color=666666&logo=github" alt="GitHub stars" /></a>
 </p>
 
 ---
@@ -41,7 +41,7 @@
 ## inicio rápido
 
 ```bash
-pip install git+https://github.com/maskaradev/maskara   # python 3.11+
+pip install git+https://github.com/maskaradev/maskara-ai   # python 3.11+
 maskara demo        # mask the bundled sample store and print the report
 maskara ui --demo   # see it side by side in the browser
 ```
@@ -49,7 +49,7 @@ maskara ui --demo   # see it side by side in the browser
 cuando esté publicado en pypi será `pip install maskara-ai`. el paquete `maskara` de pypi es otro proyecto. para el modelo gliner2:
 
 ```bash
-pip install "maskara-ai[gliner] @ git+https://github.com/maskaradev/maskara"
+pip install "maskara-ai[gliner] @ git+https://github.com/maskaradev/maskara-ai"
 ```
 
 ### python
@@ -126,7 +126,7 @@ esto es v0, y solo en inglés. las personas sintéticas salen de [NVIDIA Nemotro
 
 ## seguridad
 
-maskara se ejecuta en tu máquina y no envía nada a ningún sitio. la red solo se usa si tú lo eliges: un modelo opcional se descarga una vez en el primer uso, `maskara bench` descarga sus corpus y `bench --qa llm` llama al endpoint de modelo que configures. v0 no ha sido auditado, así que revisa el informe antes de compartir una salida. reporta problemas de seguridad mediante un [aviso privado](https://github.com/maskaradev/maskara/security/advisories/new).
+maskara se ejecuta en tu máquina y no envía nada a ningún sitio. la red solo se usa si tú lo eliges: un modelo opcional se descarga una vez en el primer uso, `maskara bench` descarga sus corpus y `bench --qa llm` llama al endpoint de modelo que configures. v0 no ha sido auditado, así que revisa el informe antes de compartir una salida. reporta problemas de seguridad mediante un [aviso privado](https://github.com/maskaradev/maskara-ai/security/advisories/new).
 
 ## agradecimientos
 

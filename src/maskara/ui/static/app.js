@@ -7,7 +7,7 @@
   "use strict";
   const CONFIG = JSON.parse(document.getElementById("maskara-config").textContent);
   const LOCAL = CONFIG.mode === "local";
-  const REPO = "https://github.com/maskaradev/maskara";
+  const REPO = "https://github.com/maskaradev/maskara-ai";
   const INSTALL = "pip install git+" + REPO;
   const WAITLIST = "https://maskara.dev/#waitlist";
   const LIMIT = 100;
