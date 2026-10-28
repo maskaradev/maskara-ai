@@ -6,3 +6,6 @@ export const QUICK_START_URL = `${REPO_URL}#quick-start`
 export const INSTALL_COMMAND = `pip install git+${REPO_URL}`
 /** The showroom: precomputed results on the bundled synthetic sample data (see src/proxy.ts). */
 export const DEMO_URL = "https://app.maskara.dev"
+export const SITE_URL = "https://maskara.dev"
+/** The landing page's team/on-prem waitlist form. */
+export const WAITLIST_URL = `${SITE_URL}/#waitlist`

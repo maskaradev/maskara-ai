@@ -1,0 +1,194 @@
+[
+  {
+    "corpus": "abcd",
+    "realism": "human-written role-play chats; identities come from scenario cards",
+    "documents": 1004,
+    "points": [
+      {
+        "system": "oracle-redact",
+        "label": "perfect detection + redact",
+        "documents": 1004,
+        "private": 1.0,
+        "direct_leak": 0.0,
+        "distinctness": 0.7125,
+        "consistency": 1.0
+      },
+      {
+        "system": "presidio-redact",
+        "label": "Presidio",
+        "documents": 1004,
+        "private": 0.8213,
+        "direct_leak": 0.1787,
+        "distinctness": 0.8445,
+        "consistency": 0.9839
+      },
+      {
+        "system": "gliner2-redact",
+        "label": "GLiNER2-PII",
+        "documents": 1004,
+        "private": 0.9181,
+        "direct_leak": 0.0819,
+        "distinctness": 0.938,
+        "consistency": 0.992
+      },
+      {
+        "system": "opf-redact",
+        "label": "OpenAI Privacy Filter",
+        "documents": 1004,
+        "private": 0.9348,
+        "direct_leak": 0.0652,
+        "distinctness": 0.644,
+        "consistency": 0.9943
+      },
+      {
+        "system": "presidio-fake-consistent",
+        "label": "Presidio + Faker",
+        "documents": 1004,
+        "private": 0.8204,
+        "direct_leak": 0.1796,
+        "distinctness": 0.9981,
+        "consistency": 0.9714
+      },
+      {
+        "system": "maskara-gliner2",
+        "label": "maskara",
+        "documents": 1004,
+        "private": 0.9756,
+        "direct_leak": 0.0244,
+        "distinctness": 0.9692,
+        "consistency": 0.9884
+      }
+    ]
+  },
+  {
+    "corpus": "nemotron-pii",
+    "realism": "synthetic documents, generated labels",
+    "documents": 1000,
+    "points": [
+      {
+        "system": "oracle-redact",
+        "label": "perfect detection + redact",
+        "documents": 1000,
+        "private": 1.0,
+        "direct_leak": 0.0,
+        "distinctness": 0.656,
+        "consistency": 1.0
+      },
+      {
+        "system": "presidio-redact",
+        "label": "Presidio",
+        "documents": 1000,
+        "private": 0.7814,
+        "direct_leak": 0.2186,
+        "distinctness": 0.7459,
+        "consistency": 0.9914
+      },
+      {
+        "system": "gliner2-redact",
+        "label": "GLiNER2-PII",
+        "documents": 1000,
+        "private": 0.8067,
+        "direct_leak": 0.1933,
+        "distinctness": 0.8856,
+        "consistency": 0.984
+      },
+      {
+        "system": "opf-redact",
+        "label": "OpenAI Privacy Filter",
+        "documents": 1000,
+        "private": 0.8158,
+        "direct_leak": 0.1842,
+        "distinctness": 0.6764,
+        "consistency": 0.9957
+      },
+      {
+        "system": "presidio-fake-consistent",
+        "label": "Presidio + Faker",
+        "documents": 1000,
+        "private": 0.7805,
+        "direct_leak": 0.2195,
+        "distinctness": 0.925,
+        "consistency": 0.9557
+      },
+      {
+        "system": "maskara-gliner2",
+        "label": "maskara",
+        "documents": 1000,
+        "private": 0.9507,
+        "direct_leak": 0.0493,
+        "distinctness": 0.9272,
+        "consistency": 0.9762
+      }
+    ]
+  },
+  {
+    "corpus": "tab",
+    "realism": "real text, human annotation",
+    "documents": 127,
+    "points": [
+      {
+        "system": "oracle-redact",
+        "label": "perfect detection + redact",
+        "documents": 127,
+        "private": 1.0,
+        "direct_leak": 0.0,
+        "distinctness": 0.2039,
+        "consistency": 0.996
+      },
+      {
+        "system": "presidio-redact",
+        "label": "Presidio",
+        "documents": 127,
+        "private": 0.6237,
+        "direct_leak": 0.3763,
+        "distinctness": 0.2264,
+        "consistency": 0.9942
+      },
+      {
+        "system": "gliner2-redact",
+        "label": "GLiNER2-PII",
+        "documents": 127,
+        "private": 0.5878,
+        "direct_leak": 0.4122,
+        "distinctness": 0.414,
+        "consistency": 0.9779
+      },
+      {
+        "system": "opf-redact",
+        "label": "OpenAI Privacy Filter",
+        "documents": 127,
+        "private": 0.4909,
+        "direct_leak": 0.5091,
+        "distinctness": 0.2161,
+        "consistency": 0.9984
+      },
+      {
+        "system": "presidio-fake-consistent",
+        "label": "Presidio + Faker",
+        "documents": 127,
+        "private": 0.6237,
+        "direct_leak": 0.3763,
+        "distinctness": 0.9957,
+        "consistency": 0.9884
+      },
+      {
+        "system": "maskara-gliner2",
+        "label": "maskara",
+        "documents": 127,
+        "private": 0.6272,
+        "direct_leak": 0.3728,
+        "distinctness": 0.9982,
+        "consistency": 0.9973
+      },
+      {
+        "system": "maskara-gliner2+echr",
+        "label": "maskara + echr pack",
+        "documents": 127,
+        "private": 0.9751,
+        "direct_leak": 0.0249,
+        "distinctness": 0.9983,
+        "consistency": 0.9974
+      }
+    ]
+  }
+]
